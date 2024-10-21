@@ -114,7 +114,7 @@ void parse_command(char *cmd)
 	
 	splited_cmd = pipex_split(cmd);
 
-
+	hyeyeom_function(splited_cmd);	
 }
 
 // cc -g dummy_main.c -lreadline ./libft/libft.a -o dummy_1020

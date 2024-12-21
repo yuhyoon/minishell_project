@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hyeyeom <hyeyeom@student.42gyeongsan.kr    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/21 20:41:23 by hyeyeom           #+#    #+#             */
+/*   Updated: 2024/12/22 01:09:56 by hyeyeom          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "main.h"
 
@@ -153,6 +164,7 @@ void parse_command(char *cmd, char **argv, char **envp)
 	char	**splited_cmd;
 	char	*p_splited_cmd;
 	int		count;
+	int		res;
 
 	splited_cmd = pipex_split(cmd);
 	p_splited_cmd = *splited_cmd;
@@ -162,7 +174,7 @@ void parse_command(char *cmd, char **argv, char **envp)
 	//SINGLE COMMEND
 	if (count == 1)
 	{
-		int res = execute_single(p_splited_cmd, argv, envp);
+		res = execute_single(p_splited_cmd, argv, envp);
 		printf("res : %d\n", res);
 	}	
 	//MULTIPLE COMMENDS
@@ -173,13 +185,50 @@ void parse_command(char *cmd, char **argv, char **envp)
 	// hyeyeom_function(splited_cmd);	
 }
 
-// cc -g main.h.c -lreadline ./libft/libft.a -o dummy_1020
+
+t_envp **customize_envps(char **envp)
+{
+	t_envp **custom_envps;
+	char *p_envp;
+	int	envp_count;
+
+	envp_count = 0;
+	p_envp = *envp;
+	while (*p_envp++)
+		envp_count++;
+	// p_envp = *envp;
+	
+	custom_envps = (t_envp **)malloc(sizeof(t_envp *) * (envp_count + 1));
+	if (!custom_envps)
+		return (NULL);
+	
+	//spilt 같이 생긴 친구 하나 만들어서 첫번째 = 기준으로 
+
+	while ()
+	{
+		custom_envps->key = ;
+		custom_envps->value = "/bin:/usr/bin";
+		custom_envps->next = NULL;
+	}		
+
+	return (custom_envps);
+}
+
+
+// cc -g main.c -lreadline ./libft/libft.a -o dummy_1020
+//envp - 따로 하나 관리용 struct 만들기
+// envp에서 path <-
 int main(int argc, char **argv, char **envp) {
     char *input;
+	char **custom_envps;
     
 	input = NULL;
 	// 프롬프트를 표시하고 사용자 입력을 받습니다.
+	
 	(void)argc;
+	// for (envp; *envp; envp++)
+	// 	printf("%s\n", *envp);
+	custom_envps = customize_envps(envp);
     while (input = readline("minishell> ")) 
 	{
         //ctrl d 처럼 입력이 널값이면 종료
@@ -198,6 +247,7 @@ int main(int argc, char **argv, char **envp) {
         // 입력을 히스토리에 추가
         add_history(input);
         
+		
         // 명령어를 파싱
         parse_command(input, argv, envp);
         
@@ -210,3 +260,5 @@ int main(int argc, char **argv, char **envp) {
     
     return 0;
 }
+
+//ㅠㅗㅑㅣ

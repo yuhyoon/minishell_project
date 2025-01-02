@@ -1,12 +1,4 @@
-# include "libft/libft.h"
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
+# include "table.h"
 
 typedef enum s_token
 {
@@ -23,17 +15,10 @@ typedef struct s_node
 	struct s_node	*next;
 }t_node;
 
-typedef struct s_table
-{
-	t_token	*tkn_type;
-	char	*name;
-	char	*obj;
-}t_table;
-
 typedef struct	s_lex
 {
 	t_token	tkn_type;
-	t_table	*tbl;
+	void	*tbl;
 }t_lex;
 
 int	child(char *mnp, t_lex *head)
@@ -49,18 +34,36 @@ int	parent()
 		error();
 }
 
-int get_token(char *input)
+int	circulate(void *mnp)
 {
-	char	*mnp_input;
+	if (is_pipe(mnp) == false)
+		mnp = (char *)mnp;
+	else
+		mnp = (t_pipe *)mnp;
+///todo: add - error handling///	
 	pid_t	pid;
 	t_lex	*head;
 
-	mnp_input = ft_strdup(input);
 	pid = fork();
 	if (pid == 0)
-		child(mnp_input, &head);
+		child(mnp, &head);
 	else
 		parent();
+}
+
+int	is_pipe(void *mnp)
+{
+	if (((t_pipe *)mnp)->is_pipe == 0)
+		return (false);
+	else
+		return (true);
+}
+
+int maniplte_input(char *input)
+{
+	void	*mnp;
+
+	mnp = manipulate(input);
 }
 
 int	main()

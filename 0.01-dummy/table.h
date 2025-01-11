@@ -17,7 +17,7 @@ typedef struct s_redrct
 	int		type; //input 0, output 1, heredoc 2, append 3
 	char	*obj;
 }t_redrct;
-
+ 
 typedef struct s_env_var
 {
 	char	*name;
@@ -25,7 +25,7 @@ typedef struct s_env_var
 
 typedef struct s_pipe
 {
-	int		is_pipe;
+	int		pipe_pos;
 	char	*left;
 	char	*right;
 }t_pipe;

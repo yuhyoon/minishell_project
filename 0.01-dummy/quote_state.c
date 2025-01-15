@@ -1,8 +1,6 @@
-
-char	*quote_state_zero(char *line)
-{
-	
-}
+#include "main_include.h"
+#include "parse_main.h"
+#include "table.h"
 
 int quote_state(char *line)
 {
@@ -32,6 +30,5 @@ int quote_state(char *line)
 				quot_state == 0;
 		}
 	}
-	if (quot_state ≠ 0)
 	unclose_quot();
 }

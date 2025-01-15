@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_error.c                                    :+:      :+:    :+:   */
+/*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyeyeom <hyeyeom@student.42gyeongsan.kr    +#+  +:+       +#+        */
+/*   By: yuhyoon <yuhyoon@42student.gyeongsan.      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/21 18:06:31 by hyeyeom           #+#    #+#             */
-/*   Updated: 2024/12/21 18:06:56 by hyeyeom          ###   ########.fr       */
+/*   Created: 2024/02/29 14:09:13 by yuhyoon           #+#    #+#             */
+/*   Updated: 2024/03/06 14:35:33 by yuhyoon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "main.h"
+#include "libft.h"
 
-int	error_msg()
+int	ft_isascii(int c)
 {
-	perror("ERROR!");
+	if (c >= 0 && c <= 127)
+	{
+		return (1);
+	}
+	return (0);
 }

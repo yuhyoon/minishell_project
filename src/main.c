@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyeyeom <hyeyeom@student.42gyeongsan.kr    +#+  +:+       +#+        */
+/*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:41:23 by hyeyeom           #+#    #+#             */
-/*   Updated: 2024/12/22 01:09:56 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/01/15 16:24:42 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,5 +260,3 @@ int main(int argc, char **argv, char **envp) {
     
     return 0;
 }
-
-//ㅠㅗㅑㅣ

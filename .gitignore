@@ -1,6 +1,7 @@
+.vscode/launch.json
 .vscode/settings.json
+.vscode/c_cpp_properties.json
 0.01-dummy/dummy_1020
-0.01-dummy/signal_test/*
-minitalk/*
-0.01-dummy/test_functions.c
 0.01-dummy/libft/*.o
+0.01-dummy/signal_test/*
+0.01-dummy/test_functions.c

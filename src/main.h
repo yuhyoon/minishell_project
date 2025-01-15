@@ -20,7 +20,6 @@ typedef struct s_envp
 	char	*key;
 	char	*value;
 	t_envp	*next;
-	
 }				t_envp;
 
 

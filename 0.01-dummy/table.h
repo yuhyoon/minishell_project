@@ -1,9 +1,7 @@
-# include "main_include.h"
-
 typedef struct s_cmd
 {
-	char	**path;
-	char	*obj;
+	char	*exe_path;
+	char	*name;
 }t_cmd;
 
 typedef struct s_builtin

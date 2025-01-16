@@ -2,6 +2,7 @@
 #include "parse_main.h"
 #include "table.h"
 
+//todo: uncorrect rdirect->obj. correct is rdirect->type
 t_redrct	*set_rediret(char *input)
 {
 	t_redrct	*rdirct;
@@ -24,7 +25,14 @@ t_redrct	*set_rediret(char *input)
 	//todo: rdirct->type = set_obj(redirect, input);
 }
 
-t_cmd	*set_cmd(char *input)
+t_cmd	*create_cmd(char *input)
 {
-	is_valid_cmd(input);
+	char	*exe_path;
+	t_cmd	*cmd;
+
+	exe_path = create_exepath(input);
+	cmd = malloc(sizeof(t_cmd));
+	cmd->exe_path = exe_path;
+	cmd->name = ft_strrchr(exe_path, '/') + 1;
+	return (cmd);
 }

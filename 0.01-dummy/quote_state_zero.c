@@ -23,7 +23,7 @@ int		get_tkntype_zero(char *input)
 void	*create_tbl(int tkn_type, char *input)
 {
 	if (tkn_type == cmd)
-		return (set_cmd(input));
+		return (create_cmd(input));
 	else if (tkn_type == redirct)
 		return (set_rediret(input));
 }
@@ -37,6 +37,7 @@ t_lex	*create_lex(int tkn_type, char *input)
 	lex = malloc(sizeof(t_lex));
 	lex->tkn_type = tkn_type;
 	lex->tbl = create_tbl(lex->tkn_type, input);
+	return (lex);
 }
 
 char	*quote_state_zero(char *input)

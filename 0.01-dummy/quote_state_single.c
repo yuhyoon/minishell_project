@@ -2,73 +2,33 @@
 #include "parse_main.h"
 #include "table.h"
 
-char	*combine_path(char *nul_terminated, char *anothr_terminated)
+//전제: meta characters are filtered.
+int create_exepath(char *input)
 {
-	int		nul_n;
-	int		another_n;
-	char	*combn;
-	int		flg;
+	char	**paths;
 	int		i;
-	int		j;
+	char	*cmd_path;
+	char	*exe_path;
 
-	nul_n = ft_strlen(nul_terminated);
-	another_n = ft_d_strlen(anothr_terminated, ' ');
-	flg = 0;
+	paths = ft_split(getenv("PATH"), ':');
+	cmd_path = get_cmdpath(input);
 	i = 0;
-	j = 0;
-	if (*anothr_terminated != '\\')
-		flg = 1;
-	combn = (char *)malloc(nul_n + another_n + flg);
-	while (i < nul_n + another_n)
+	while (paths[i] != NULL)
 	{
-		if (i < nul_n)
-			combn[i] = nul_terminated[i];
-		if (i == nul_n && flg == 1)
-		{
-			combn[i] = '\\';
-			i++;
-		}
-		while(i > nul_n)
-		{
-			combn[i] = anothr_terminated[j];
-			j++;
-			i = i + j;
-		}
+		exe_path = ft_strjoin(paths[i], cmd_path);
+		if (access(exe_path, X_OK) == 0)
+			break ;
+		free(exe_path);
+		exe_path = NULL;
 		i++;
 	}
+	//todo: double_free(paths);
+	free(cmd_path);
+	return (exe_path);
 }
 
-char	*get_accesspath(char *input, char *path_env)
-{
-	int	n;
-
-	if (*input == '\\')
-		n = ft_d_strlen(input, ' ');
-	else
-		n = ft_d_strlen(input, ' ') + 1; //If not path and only name, It should make to '/cmd'
-	
-
-}
-
-//전제: meta characters are filtered.
-int is_valid_cmd(char *input)
-{
-	// int		n;
-	// char	**words;
-
-	// n = get_size(input, ft_strlen(input), ' ');
-	// words = (char **)malloc(sizeof(char *) * (n + 1));
-	// if (words == NULL)
-	// 	return (-1);
-
-	char	*path_env;
-	char	*cmd_path;
-
-	path_env = getenv("PATH");
-	cmd_path = get_accesspath(input, path_env);
-	
-}
-
+//todo1: implement - evaluate same sequnced character
+//todo2: add - don't use meta character(e.g: ;)
 
 int ft_ismeta(char *input)
 {
@@ -83,19 +43,34 @@ int		get_tkntype_single(char *input)
 {
 	t_token	type;
 
-	if (ft_ismeta(input) > 0 && ft_isalpha(*input) > 0)
-		return (is_valid_cmd(input));
+	if (ft_ismeta(input) == 0 && ft_isalpha(*input) > 0)
+		return (1); //1 is cmd
 	else
 		return (0); //0 is none
 }
 
-char	*quote_state_single(char *input)
+void	*quote_state_single(char *input)
 {
 	int		tkn_type;
 	t_lex	*lex;
-	t_node	*node;
 
 	tkn_type = -1;
+	*input = '\0';
+	input++;
 	tkn_type = get_tkntype_single(input);
 	lex = create_lex(tkn_type, input);
+	if (lex == NULL)
+		//todo: error or return NULL
+	while (*input != '\'' || *input != '\0')
+		input++;
+	if (*input == '\'')
+	{
+		*input = '\0';
+		return (lex);
+	}	
+	else
+	{
+		free_tbl(lex, tkn_type);
+		error();
+	}
 }

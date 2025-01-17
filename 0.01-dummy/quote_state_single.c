@@ -11,7 +11,7 @@ int create_exepath(char *input)
 	char	*exe_path;
 
 	paths = ft_split(getenv("PATH"), ':');
-	cmd_path = get_cmdpath(input);
+	cmd_path = get_cmdpath(input); //todo: implement get_cmdpath()
 	i = 0;
 	while (paths[i] != NULL)
 	{
@@ -53,6 +53,8 @@ void	*quote_state_single(char *input)
 {
 	int		tkn_type;
 	t_lex	*lex;
+	t_node	*node;
+	int		i;
 
 	tkn_type = -1;
 	*input = '\0';
@@ -61,16 +63,18 @@ void	*quote_state_single(char *input)
 	lex = create_lex(tkn_type, input);
 	if (lex == NULL)
 		//todo: error or return NULL
-	while (*input != '\'' || *input != '\0')
-		input++;
-	if (*input == '\'')
-	{
-		*input = '\0';
-		return (lex);
-	}	
+	lex->tkn_start = input;
+	i = 0;
+	while (input[i] != '\'' || input[i] != '\n')
+		i++;
+	if (input[i] == '\'')
+		input[i] = '\0';
 	else
 	{
 		free_tbl(lex, tkn_type);
 		error();
 	}
+	lex->len = i;
+	node = ft_lstnew(lex);
+	return (node);
 }

@@ -24,5 +24,7 @@ typedef struct s_node
 typedef struct	s_lex
 {
 	t_token	tkn_type;
+	char	*tkn_start;
+	int		len;
 	void	*tbl;
 }t_lex;

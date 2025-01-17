@@ -1,57 +1,17 @@
-# include "table.h"
-
-
-
-int	child(char *mnp, t_lex *head)
-{
-	lex_analysis(mnp);
-}
-
-int	parent()
-{
-	if (syntax_analysis())
-		apply();
-	else
-		error();
-}
-
-int	apply_fork(t_eval_1 *mnp)
-{
-	pid_t	pid;
-	t_lex	*head;
-
-	pid = fork();
-	if (pid == 0)
-		child(mnp, &head);
-	else
-		parent();
-}
-
-t_eval_1 *f(char *input)
-{
-	char	*mnp;
-	t_eval_1	*eval_1;
-	
-	if (eval1_input(mnp, input))
-	{
-		//malloc t_eval_1
-	}
-
-}
+#include "main_include.h"
+#include "parse_main.h"
+#include "table.h"
 
 int	main()
 {
 	char	*input;
-	t_eval_1		*eval_1;
 	t_node	*head;
 
 	while (1)
 	{
 		input = readline("minishell> ");
-		eval_1 = f(input);
-		if (eval_1 == NULL)
-			exit();
-		apply_fork(eval_1);
+		*(ft_strrchr(input, '\0')) = '\n';
+		quote_state(input);
 		if (input == NULL)
 			break;
 		if (ft_strlen(input) == 0)

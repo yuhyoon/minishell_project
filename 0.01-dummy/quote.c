@@ -36,7 +36,7 @@ char *ft_strtok_quote(char *str, t_argp *argp)
 	dollar_cnt = 0;
 	if (str != NULL)
 	{
-		while (*str == ' ')
+		while ((*end >= '\t' && *end <= '\r') || *end == ' ')
 			str++;
 		start = str;
 	}
@@ -75,7 +75,7 @@ char *ft_strtok_quote(char *str, t_argp *argp)
 	else if (is_quote == false)
 	{
 		end = start;
-		while (*end != ' ' && (*end != '\"' && *end != '\'') && *end != '\0')
+		while (*end != '\"' && *end != '\0')
 			end++;
 		*end = '\0';
 	}

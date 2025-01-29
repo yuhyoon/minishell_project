@@ -9,6 +9,7 @@ typedef struct s_argp
 	int argc;
 	char **argv;
 	char *envp;
+	int		dollar;
 } t_argp;
 
 int	ft_strlen_delim(char *s, char delim)
@@ -29,8 +30,10 @@ char *ft_strtok_quote(char *str, t_argp *argp)
 	static char *end;
 	bool is_quote;
 	char *token;
+	int		dollar_cnt;;
 
 	is_quote = false;
+	dollar_cnt = 0;
 	if (str != NULL)
 	{
 		while (*str == ' ')
@@ -52,13 +55,21 @@ char *ft_strtok_quote(char *str, t_argp *argp)
 		{
 			end = start + 1;
 			while (*end != '\"' && *end != '\0')
+			{
+				if (*end == '$')//TODO: store the address of dollar
+					dollar_cnt++;
 				end++;
+			}
 			if (*end == '\"')
 			{
+				*start = '\0';
 				*end = '\0';
+				argp->dollar = dollar_cnt;
 			}
 			else if (*end == '\0')
-				return (NULL);//unclosed quotes
+			{
+				argp->dollar = 0;
+			}
 		}
 	}
 	else if (is_quote == false)

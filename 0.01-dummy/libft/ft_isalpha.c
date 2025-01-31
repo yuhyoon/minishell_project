@@ -12,6 +12,11 @@
 
 #include "libft.h"
 
+/*
+ASCII 
+65 = 'A'; 90 = 'Z';
+97 = 'a'; 122 = 'z';
+*/
 int	ft_isalpha(int c)
 {
 	if (c >= 65 && c <= 90)

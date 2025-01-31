@@ -24,6 +24,24 @@ int	ft_strlen_delim(char *s, char delim)
 	return (i);
 }
 
+	char	*str_range_copy_except(char *start, char *end, char except)
+{
+	int len;
+	int	i;
+	char	*copied;
+
+	if (*start == except)
+		start++;
+	if (*end == except)
+		end--;
+	len = (end) - start;
+	i = 0;
+	copied = malloc(sizeof(char) * (len + 1));
+	ft_memcpy(copied, start, len);
+	copied[len] = '\0';
+	return (copied);
+}
+
 char *ft_strtok_quote(char *str, t_argp *argp)
 {
 	static char *start;
@@ -31,6 +49,7 @@ char *ft_strtok_quote(char *str, t_argp *argp)
 	bool is_quote;
 	char *token;
 	int		dollar_cnt;;
+	static char	*store_quotes[2];
 
 	is_quote = false;
 	dollar_cnt = 0;
@@ -82,20 +101,29 @@ char *ft_strtok_quote(char *str, t_argp *argp)
 	return (start);
 }
 
+//memo: 파이프가 실행이 되기 전에 heredoc이 먼저 다 끝나야 함 
 void *init_argp(t_argp *argp, char *s)
 {
 
-	char **argv;
 	char *p;
-	int cnt;
+	static char	*start_quote;
+	static char	*end_quote;
+	bool	is_quote;
 
-	cnt = 0;
+	is_quote = false;
 	p = ft_strtok_quote(s, argp);
-	while (p != NULL && *p != '\n')
+	if (*p == '\"' || *p == '\'')
+		start_quote = p;
+	while (p != NULL && *p != '\n' && is_quote == false)
 	{
 		printf("%s\n", p);
-		cnt++;
 		p = ft_strtok_quote(NULL, argp);
+		if (*p == '\"' || *p == '\'')
+			start_quote = p;
+		if (start_quote != NULL)
+			end_quote = ft_strrchr(p, *start_quote);
+		if (start_quote != NULL && end_quote != NULL)
+			is_quote = true;
 	}
 	if (p == NULL)
 	{

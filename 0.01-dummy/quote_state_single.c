@@ -59,7 +59,7 @@ void	*quote_state_single(char *input)
 	tkn_type = -1;
 	*input = '\0';
 	input++;
-	tkn_type = get_tkntype_single(input);
+	//tkn_type = get_tkntype_single(input);
 	lex = create_lex(tkn_type, input);
 	if (lex == NULL)
 		//todo: error or return NULL

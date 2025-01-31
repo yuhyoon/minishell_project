@@ -2,7 +2,29 @@
 #include "parse_main.h"
 #include "table.h"
 
-int	main()
+t_exec_env	*create_exec_env()
+{
+	t_exec_env	*exec_env;
+
+	exec_env = malloc(sizeof(t_exec_env));
+	exec_env->input_fd = STDIN_FILENO;
+	exec_env->output_fd = STDOUT_FILENO;
+	exec_env->error_fd = STDERR_FILENO;
+	exec_env->exit_status = 0;
+	return(exec_env);
+}
+
+void	*parse_function(char *input)
+{
+	t_node	*node;
+	t_exec_env	*exec_env;
+
+	exec_env = create_exec_env();
+	node = quote_state(input);
+	
+}
+
+int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 	t_node	*head;

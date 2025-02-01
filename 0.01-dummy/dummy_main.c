@@ -1,5 +1,6 @@
 
 #include "dummy_main.h"
+#include <stdbool.h>
 
 #define MAX_COMMAND_LENGTH 1024
 
@@ -15,30 +16,48 @@
  pipex_quote remove all quotes (e.g: ls)
  (더블 쿼트 안에 스몰쿼트나 스몰쿼트 안에 더블쿼트가 있거나 상관없이 쿼트들을 전부다 지워버림)
 */
-int	pipex_quote(char *str_dup)
+char	*parse_quote(char *str)
 {
-	int		len;
-	int		i;
+	char	*start;
+	char	*end;
+	bool	is_quote;
+	char	*token;
+	int		cnt;
 
-	len = ft_strlen(str_dup);
-	i = 0;
-	while (i < len && str_dup[i] != '\0')
+	start = str;
+	
+	is_quote = false;
+	while (*str == ' ')
+		str++;
+	start = str;
+	if (*start == '\"' || *start == '\'')
+		is_quote = true;
+	if (is_quote == true)
 	{
-		if (ft_strspn(str_dup + i, "\'\""))
+		if (*start == '\"')
 		{
-			str_dup[i] = '\0';
-			i++;
-			i += ft_strcspn(str_dup + i, "\'\"");
-			str_dup[i] = '\0';
+			start++;
+			end = start;
+			while (*end != '\"')
+				end++;
+			
 		}
-		if (str_dup[i] == ' ')
-			str_dup[i] = '\0';
-		i++;
+		if (*start == '\'')
+		{
+			end++;
+		}
 	}
-	return (i);
+	if (is_quote == false)
+	{
+		while (*str != ' ' || (*str != '\"' && *str != '\''))
+			end++;
+		end = '\0';
+		cnt++;
+	}
+	
 }
 
-int	pipex_get_size(char *s, int len)
+int	get_count_null(char *s, int len)
 {
 	int		i;
 	int		cnt;
@@ -60,7 +79,7 @@ int	pipex_get_size(char *s, int len)
 	return (cnt);
 }
 
-char	**pipex_splited(char *s_dup, int w, char **abs)
+char	**init_argv(char *s_dup, int w, char **abs)
 {
 	int		cnt;
 	int		index_jump;
@@ -79,43 +98,35 @@ char	**pipex_splited(char *s_dup, int w, char **abs)
 	return (abs);
 }
 
-char	**pipex_split(char *s)
+char	**create_argv(char *s)
 {
 	int		s_len;
 	char	*s_dup;
 	int		w;
-	char	**abs;
+	char	**argv;
 
 	s_len = ft_strlen(s);
 	s_dup = ft_strdup(s);
-	if (s_len < pipex_quote(s_dup))
+	if (s_len < ft_strtok(s_dup))
 	{
 		free(s_dup);
 		s_dup = NULL;
 		return (NULL);
 	}
-	w = pipex_get_size(s_dup, s_len);
-	abs = (char **)malloc(sizeof(char *) * (w + 1));
-	if (!abs)
+	w = get_count_null(s_dup, s_len);
+	argv = (char **)malloc(sizeof(char *) * (w + 1));
+	if (!argv)
 		return (0);
-	pipex_splited(s_dup, w, abs);
-	for (int i; i < w; i++)
-	{
-		printf("%s\n", abs[i]);
-
-	}
-	return (abs);
+	init_argv(s_dup, w, argv);
+	return (argv);
 }
 
 
 void parse_command(char *cmd) 
 {
-	char	**splited_cmd;
 	
-	splited_cmd = pipex_split(cmd);
-
-
 }
+
 
 // cc -g dummy_main.c -lreadline ./libft/libft.a -o dummy_1020
 int main() {

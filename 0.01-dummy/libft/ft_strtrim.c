@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuhyoon <yuhyoon@42student.gyeongsan.      +#+  +:+       +#+        */
+/*   By: yuhyoon <yuhyoon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:02:01 by yuhyoon           #+#    #+#             */
-/*   Updated: 2024/03/28 16:28:51 by yuhyoon          ###   ########.fr       */
+/*   Updated: 2025/01/31 15:12:41 by yuhyoon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,13 @@ char	*ft_strtrim(char const *s1, char const *set)
 		return (0);
 	ft_strlcpy(tmp, s_1 + i, (j - i) + 1);
 	return (tmp);
+}
+
+#include <stdio.h>
+int main()
+{
+	char a[] = "\"da\"sdf\"";
+
+	printf("%s\n",a);
+	printf("%s\n", ft_strtrim(a, "\""));
 }

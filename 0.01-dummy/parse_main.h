@@ -5,26 +5,27 @@ typedef enum s_token
 	builtin,
 	redirct,
 	env_var,
-	pipe
+	PIPE
 }t_token;
 
-typedef struct s_eval_1
-{
-	char	*mnp;
-	int		pipe;
-	int		*pipe_pos;
-}t_eval_1;
-
-typedef struct s_node
-{
-	void	*content;
-	struct s_node	*next;
-}t_node;
+//필요없을수도..
+// typedef struct exec_env
+// {
+// 	int	input_fd;
+// 	int	output_fd;
+// 	int	error_fd;
+// 	int	exit_status;
+// }t_exec_env;
 
 typedef struct	s_lex
 {
 	t_token	tkn_type;
-	char	*tkn_start;
-	int		len;
 	void	*tbl;
 }t_lex;
+
+typedef struct s_node
+{
+	struct s_lex	*content;
+	struct s_node	*next;
+}t_node;
+

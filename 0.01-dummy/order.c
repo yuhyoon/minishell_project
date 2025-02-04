@@ -51,12 +51,16 @@ int f(char *s, int fd, t_stack *stack)
 		}
 		else if (ft_isquote(*s) == true)
 		{
-			if (valid_quote(s, &quote_stack))
+			quote_flg = valid_quote(s, &quote_stack);
+			if (quote_flg == 1)
 			{
 				push(*s, &meta_stack, quote_flg);
 			}	
 			else
+			{
+				clear_stack();
 				ft_putchar_fd(*s, fd);
+			}
 		}
 		else if (is_whitespace(*s) == true)
 		{

@@ -1,9 +1,7 @@
 # minishell
-----
 
 ## Manual
 https://www.gnu.org/software/bash/manual/bash.html#Tilde-Expansion
-
 
 
 ## 협업을 위한 사이트

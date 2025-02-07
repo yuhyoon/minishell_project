@@ -6,3 +6,13 @@
 0.01-dummy/signal_test/*
 0.01-dummy/test_functions.c
 _practice
+.DS_Store
+lib/libft/libft.h.gch
+src/a.out
+src/mini.h.gch
+src/a.out.dSYM/Contents/Info.plist
+src/a.out.dSYM/Contents/Resources/DWARF/a.out
+src/libft.a
+src/mini.h
+src/minilib.c
+src/test.c

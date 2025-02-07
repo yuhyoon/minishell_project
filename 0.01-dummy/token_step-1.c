@@ -18,7 +18,6 @@ typedef struct s_stack
 
 typedef struct s_char_state
 {
-	char	meta;
 	char		quote;
 	char	*current;
 }t_char_state;
@@ -36,7 +35,6 @@ void	set_char_state(char *s, t_char_state *char_state)
 	quote_flg = is_quote(*s);
 	if (quote_flg > 0)
 		char_state->quote = valid_quote();
-	char_state->meta = is_meta();
 	char_state->current = s;
 }
 
@@ -71,10 +69,11 @@ void	handle_putchar(t_char_state *char_state, int fd)
 				else
 					ft_putchar_fd(*buf, fd);
 			}
-			size = read(fd + 1, buf, 1);
+			size += read(fd + 1, buf, 1);
 		}
 		close(fd + 1);
 		char_state->quote = 0;
+		char_state->current += size;
 	}
 }
 
@@ -85,11 +84,11 @@ int write_replace_spaces(char *s, int replace_fd)
 	
 	init_char_state(&char_state);
 	i = 0;
-	while (s[i] != '\0')
+	while (*(char_state.current) != '\0')
 	{
-		set_char_state(&s[i], &char_state);
+		set_char_state(char_state.current, &char_state);
 		handle_putchar(&char_state, replace_fd);
-		i++;
+		(char_state.current)++;
     }
 	if (*s == '\0')
 		ft_putchar_fd('\n', replace_fd);

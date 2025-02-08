@@ -1,14 +1,5 @@
-# include "libft/libft.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
-#include <stdbool.h>
 #include "parse_main.h"
-#include <string.h>
-# include <fcntl.h>
+
 
 void	init_char_state(t_char_state *state)
 {

@@ -10,12 +10,6 @@
 #include <string.h>
 # include <fcntl.h>
 
-typedef struct s_char_state
-{
-	char		quote;
-	char	*current;
-}t_char_state;
-
 void	init_char_state(t_char_state *state)
 {
 	state->current = NULL;
@@ -24,7 +18,7 @@ void	init_char_state(t_char_state *state)
 
 int is_whitespace(char c)
 {
-    if (c >= '\t' && c <= '\r' && c == ' ' )
+    if ((c >= '\t' && c <= '\r') || c == ' ' )
         return (1);
     return (0);
 }
@@ -37,4 +31,18 @@ int	is_quote(char c)
 	else if (c == '\"')
 		return ('\"');
 	return (0);
+}
+
+int ft_ismeta(char *input)
+{
+    if (*input == '<')
+		return (IN_RD);
+	else if (*input == '>')
+		return (OUT_RD);
+	else if (*input == '$')
+		return (DOLLAR);
+	else if (*input == '|')
+		return (PIPE);
+	else
+		return (0);
 }

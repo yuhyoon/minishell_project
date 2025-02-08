@@ -9,20 +9,14 @@
 #include "parse_main.h"
 #include <string.h>
 # include <fcntl.h>
+# include "gnl_realreal_final.c"
+# include "token_step-1_utils.c"
 
 typedef struct s_stack
 {
 	char    arr[1024];
 	int     top;
 }t_stack;
-
-typedef struct s_char_state
-{
-	//int인데 깜빡한 듯?
-	// char	quote;
-	int		quote;
-	char	*current;
-}t_char_state;
 
 typedef struct s_str
 {
@@ -117,6 +111,7 @@ void	handle_putchar(t_char_state *char_state, int fd)
 			size += read(fd + 1, buf, 1);
 		}
 		close(fd + 1);
+		unlink(fd + 1);
 		char_state->quote = 0;
 		char_state->current += size;
 	}
@@ -150,4 +145,5 @@ int main()
 	write_replace_spaces(s, replace_fd);
 	ready_str = get_next_line(replace_fd);
 	close(replace_fd);
+	
 }

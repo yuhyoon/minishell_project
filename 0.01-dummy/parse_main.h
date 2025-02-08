@@ -1,3 +1,19 @@
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
+# include "libft/libft.h"
+#include <stdio.h>
+#include <string.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <signal.h>
+#include <stdbool.h>
+#include "parse_main.h"
+#include <string.h>
+# include <fcntl.h>
+# include "gnl_realreal_final.c"
+# include "token_step-1_utils.c"
+
 typedef enum s_token
 {
 	NONE,
@@ -27,3 +43,4 @@ typedef struct s_node
 	struct s_node	*next;
 }t_node;
 
+#endif

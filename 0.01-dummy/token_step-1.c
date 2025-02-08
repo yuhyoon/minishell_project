@@ -1,16 +1,4 @@
-# include "libft/libft.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
-#include <stdbool.h>
 #include "parse_main.h"
-#include <string.h>
-# include <fcntl.h>
-# include "gnl_realreal_final.c"
-# include "token_step-1_utils.c"
 
 typedef struct s_stack
 {

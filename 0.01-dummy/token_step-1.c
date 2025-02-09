@@ -74,7 +74,8 @@ void	handle_putchar(t_char_state *char_state, int fd)
 	else
 	{
 		i = 0;
-		while (char_state->quote_seq--)
+		printf("char_state->quote_seq: %d\n", char_state->quote_seq);
+		while (char_state->quote_seq >= 0)
 		{
 			if (char_state->quote < 0)
 			{
@@ -91,6 +92,7 @@ void	handle_putchar(t_char_state *char_state, int fd)
 					ft_putchar_fd(*(char_state->current), fd);
 			}
 			char_state->current++;
+			char_state->quote_seq--;
 		}
 		char_state->quote = 0;
 		//char_state->current += char_state->quote_seq;
@@ -118,7 +120,7 @@ int write_replace_spaces(char *s, int replace_fd)
 
 int main()
 {
-	char s[] = " grep \"a1 e\"";
+	char s[] = " \"a1 e\"";
 	int	replace_fd;
 	char	*ready_str;
 

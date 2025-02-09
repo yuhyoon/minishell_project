@@ -13,6 +13,7 @@ typedef struct s_str
 	char    *end;
 }t_str;
 
+/*
 void	valid_quote(char *s, int quote_flag, t_char_state *state)
 {
 	char *start;
@@ -53,6 +54,56 @@ void	valid_quote(char *s, int quote_flag, t_char_state *state)
 	if ((single_quote_open % 2 != 0) || (double_quote_open % 2 != 0))
 		state->quote *= -1;
 }
+*/
+
+int	vaild_quote_single_double(int quote_flag, char s, int *single_quote_open, int *double_quote_open)
+{
+	if (quote_flag == '\"')
+	{
+		if (s == '\'')
+			(*single_quote_open)++;
+		else if (s == '\"')
+		{
+			(*double_quote_open)++;
+			if ((*double_quote_open) == 2)
+				return (2);
+		}
+	}
+	else if (quote_flag == '\'')
+	{
+		if (s == '\"')
+			(*double_quote_open)++;
+		else if (s == '\'')
+		{
+			(*single_quote_open)++;
+			if ((*single_quote_open) == 2)
+				return (1);
+		}
+	}
+    return (0);
+}
+
+void	vaild_quote(char *s, int quote_flag, t_char_state *state)
+{
+	char *start;
+ 	int single_quote_open;
+	int double_quote_open;
+	int	i;
+
+	single_quote_open = 0;
+	double_quote_open = 0;
+	i = 0;
+	while (s[i] != '\0') 
+	{
+		if (vaild_quote_single_double(quote_flag, s[i], &single_quote_open, &double_quote_open) == 1
+		|| vaild_quote_single_double(quote_flag, s[i], &single_quote_open, &double_quote_open) == 2)
+			break;
+		i++;
+	}
+	state->quote_seq = i;
+	if ((single_quote_open % 2 != 0) || (double_quote_open % 2 != 0))
+		state->quote *= -1;
+}
 
 void	set_char_state(char *s, t_char_state *char_state)
 {
@@ -62,8 +113,7 @@ void	set_char_state(char *s, t_char_state *char_state)
 	//*s -> s로 변경
 	char_state->quote = is_quote(*s);
 	if (quote_flg > 0)
-		valid_quote(s, quote_flg, char_state);
-	//char_state->current = s;
+		char_state->quote_seq = valid_quote(s, quote_flg, char_state);
 }
 
 void	handle_putchar(t_char_state *char_state, int fd)
@@ -72,7 +122,7 @@ void	handle_putchar(t_char_state *char_state, int fd)
 
 	if (char_state->quote == 0)
 	{
-		if ((is_whitespace(*(char_state->current))))
+		if (*(is_whitespace(char_state->current)))
 			ft_putchar_fd('\0', fd);
 		else
 			ft_putchar_fd(*(char_state->current), fd);
@@ -109,7 +159,7 @@ int write_replace_spaces(char *s, int replace_fd)
 	t_char_state	char_state;
 	int				i;
 	
-	init_char_state(&char_state, s);
+	init_char_state(&char_state);
 	i = 0;
 	while (*(char_state.current) != '\0')
 	{

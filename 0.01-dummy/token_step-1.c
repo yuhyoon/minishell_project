@@ -125,7 +125,8 @@ int main()
 
 	replace_fd = open("split_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	write_replace_spaces(s, replace_fd);
+	close(replace_fd);
+	replace_fd = open("split_fd", O_RDONLY);
 	ready_str = get_next_line(replace_fd);
 	printf("%s", ready_str);
-	close(replace_fd);
 }

@@ -90,6 +90,7 @@ char    *create_str(t_gnl_node *head)
         size++;
         tmp = tmp->next;
     }
+    printf("size: %d\n", size);
     str = malloc(sizeof(char) * (size + 1));
 	i = 0;
     while (i < size)
@@ -131,9 +132,10 @@ char *get_next_line(int fd)
         if (read_size == 0)
             eof = 1;
 	    head = consumer2(read_size, &q, head);
+	    printf("%d\n", (int)head->c);
 	}
 	result = create_str(head);
-	if (*result == '\0')
-		result = dengling(result);
+	//if (*result == '\0')
+	//	result = dengling(result);
 	return (result);
 }

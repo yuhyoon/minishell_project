@@ -27,7 +27,8 @@ typedef struct s_char_state
 {
 	//int인데 깜빡한 듯?
 	// char	quote;
-	int		quote;
+	char	quote;
+	int		quote_seq;
 	char	*current;
 }t_char_state;
 

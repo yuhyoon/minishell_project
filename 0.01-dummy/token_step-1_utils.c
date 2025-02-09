@@ -5,6 +5,7 @@ void	init_char_state(t_char_state *state)
 {
 	state->current = NULL;
 	state->quote = 0;
+	state->quote_seq = -1;
 }
 
 int is_whitespace(char c)

@@ -62,8 +62,8 @@ void	set_char_state(char *s, t_char_state *char_state)
 	//*s -> s로 변경
 	char_state->quote = is_quote(*s);
 	if (quote_flg > 0)
-		char_state->quote_seq = valid_quote(char_state, quote_flg, char_state);
-	char_state->current = s;
+		valid_quote(s, quote_flg, char_state);
+	//char_state->current = s;
 }
 
 void	handle_putchar(t_char_state *char_state, int fd)
@@ -72,7 +72,7 @@ void	handle_putchar(t_char_state *char_state, int fd)
 
 	if (char_state->quote == 0)
 	{
-		if (*(is_whitespace(char_state->current)))
+		if ((is_whitespace(*(char_state->current))))
 			ft_putchar_fd('\0', fd);
 		else
 			ft_putchar_fd(*(char_state->current), fd);

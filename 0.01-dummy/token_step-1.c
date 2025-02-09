@@ -112,7 +112,7 @@ int write_replace_spaces(char *s, int replace_fd)
 		handle_putchar(&char_state, replace_fd);
 		(char_state.current)++;
 	}
-	if (*s == '\0')
+	if (*(char_state.current) == '\0')
 		ft_putchar_fd('\n', replace_fd);
 	return (0);
 }
@@ -126,5 +126,6 @@ int main()
 	replace_fd = open("split_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	write_replace_spaces(s, replace_fd);
 	ready_str = get_next_line(replace_fd);
+	printf("%s", ready_str);
 	close(replace_fd);
 }

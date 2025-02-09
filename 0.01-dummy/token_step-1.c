@@ -95,8 +95,7 @@ void	handle_putchar(t_char_state *char_state, int fd)
 			char_state->quote_seq--;
 		}
 		char_state->quote = 0;
-		//char_state->current += char_state->quote_seq;
-		char_state->current = 0;
+		char_state->quote_seq = 0;
 	}
 }
 

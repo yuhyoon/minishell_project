@@ -24,29 +24,21 @@ void	valid_quote(char *s, int quote_flag, t_char_state *state)
 	single_quote_open = 0;
 	double_quote_open = 0;
 	i = 0;
-	while (s[i] != '\0') 
+	while (s[i] != '\0' && double_quote_open != 2 && single_quote_open != 2) 
 	{
 		if (s[0] == '\"')
 		{
 			if (s[i] == '\'')
 				single_quote_open++;
 			else if (s[i] == '\"')
-			{
 				double_quote_open++;
-				if (double_quote_open == 2)
-					break;
-			}
 		}
 		else if (s[0] == '\'')
 		{
 			if (s[i] == '\"')
 				double_quote_open++;
 			else if (s[i] == '\'')
-			{
 				single_quote_open++;
-				if (single_quote_open == 2)
-					break;
-			}
 		}
 		i++;
 	}
@@ -126,7 +118,7 @@ int write_replace_spaces(char *s, int replace_fd)
 
 int main()
 {
-	char s[] = "    grep \"a1 e\"";
+	char s[] = " grep \"a1 e\"";
 	int	replace_fd;
 	char	*ready_str;
 

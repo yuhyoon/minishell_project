@@ -56,7 +56,7 @@ void	set_char_state(char *s, t_char_state *char_state)
 
 	//*s -> s로 변경
 	char_state->quote = is_quote(*s);
-	if (quote_flg > 0)
+	if (char_state->quote > 0)
 		valid_quote(s, char_state->quote, char_state);
 }
 

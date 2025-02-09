@@ -75,7 +75,7 @@ void	handle_putchar(t_char_state *char_state, int fd)
 	{
 		i = 0;
 		printf("char_state->quote_seq: %d\n", char_state->quote_seq);
-		while (char_state->quote_seq >= 0)
+		while (char_state->quote_seq > 0)
 		{
 			if (char_state->quote < 0)
 			{

@@ -83,7 +83,7 @@ int	vaild_quote_single_double(int quote_flag, char s, int *single_quote_open, in
     return (0);
 }
 
-void	vaild_quote(char *s, int quote_flag, t_char_state *state)
+void	valid_quote(char *s, int quote_flag, t_char_state *state)
 {
 	char *start;
  	int single_quote_open;

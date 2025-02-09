@@ -1,9 +1,9 @@
 #include "parse_main.h"
 
 
-void	init_char_state(t_char_state *state)
+void	init_char_state(t_char_state *state, char *s)
 {
-	state->current = NULL;
+	state->current = s;
 	state->quote = 0;
 	state->quote_seq = -1;
 }

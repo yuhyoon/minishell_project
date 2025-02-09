@@ -109,7 +109,7 @@ int write_replace_spaces(char *s, int replace_fd)
 	t_char_state	char_state;
 	int				i;
 	
-	init_char_state(&char_state);
+	init_char_state(&char_state, s);
 	i = 0;
 	while (*(char_state.current) != '\0')
 	{

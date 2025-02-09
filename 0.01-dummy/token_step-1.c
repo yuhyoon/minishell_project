@@ -1,4 +1,5 @@
 #include "parse_main.h"
+#include "token_step-1_utils.c"
 
 typedef struct s_stack
 {
@@ -12,7 +13,7 @@ typedef struct s_str
 	char    *end;
 }t_str;
 
-void	vaild_quote(char *s, int quote_flag, t_char_state *state)
+void	valid_quote(char *s, int quote_flag, t_char_state *state)
 {
 	char *start;
  	int single_quote_open;
@@ -59,7 +60,7 @@ void	set_char_state(char *s, t_char_state *char_state)
 	int	quote_flg;
 
 	//*s -> s로 변경
-	char_state->quote = is_quote(s);
+	char_state->quote = is_quote(*s);
 	if (quote_flg > 0)
 		char_state->quote_seq = valid_quote(char_state, quote_flg, char_state);
 	char_state->current = s;
@@ -71,7 +72,7 @@ void	handle_putchar(t_char_state *char_state, int fd)
 
 	if (char_state->quote == 0)
 	{
-		if (is_whitespace(char_state->current))
+		if (*(is_whitespace(char_state->current)))
 			ft_putchar_fd('\0', fd);
 		else
 			ft_putchar_fd(*(char_state->current), fd);

@@ -62,8 +62,8 @@ void	handle_putchar(t_char_state *char_state, int fd)
 	{
 		if ((is_whitespace(*(char_state->current))))
 			ft_putchar_fd(NONE, fd);
-		else if (ft_ismeta(*(char_state->current)))
-			ft_putchar_fd(ft_ismeta(*(char_state->current)), fd);
+		else if (ft_ismeta((char_state->current)))
+			ft_putchar_fd(ft_ismeta((char_state->current)), fd);
 		else
 			ft_putchar_fd(TEXT, fd);
 	}	
@@ -76,18 +76,19 @@ void	handle_putchar(t_char_state *char_state, int fd)
 			{
 				if (is_whitespace(*(char_state->current)))
 					ft_putchar_fd(NONE, fd);
-				else if (ft_ismeta(*(char_state->current)))
-					ft_putchar_fd(ft_ismeta(*(char_state->current)), fd);
+				else if (ft_ismeta((char_state->current)))
+					ft_putchar_fd(ft_ismeta((char_state->current)), fd);
 				else
 					ft_putchar_fd(TEXT, fd);
 			}
-			else
+			else if (char_state->quote > 0)
 			{
-				ft_putchar_fd(TEXT, fd);
-				if (char_state->quote == '\"' && ft_ismeta(*(char_state->current)) == DOLLAR)
+				if (char_state->quote == '\"' && ft_ismeta((char_state->current)) == DOLLAR)
 					ft_putchar_fd(DOLLAR, fd);
-				if (*(char_state->current) == char_state->quote)
-					ft_putchar_fd(NONE, fd);
+				else if (*(char_state->current) == char_state->quote)
+				{	ft_putchar_fd(NONE, fd); printf("quote :%d\n", NONE);}
+				else
+					ft_putchar_fd(TEXT, fd);
 			}
 			char_state->current++;
 			char_state->quote_seq--;
@@ -101,6 +102,7 @@ int write_replace_spaces(char *s, int replace_fd)
 {
 	t_char_state	char_state;
 	int				i;
+	int	len;
 	
 	init_char_state(&char_state, s);
 	i = 0;
@@ -117,18 +119,24 @@ int write_replace_spaces(char *s, int replace_fd)
 
 int main()
 {
-	char s[] = " \"a1 $HOME<\"";
+	char s[] = " \"a1 HOME<\"";
 	int	replace_fd;
-	int	*mask;
+	char	*mask;
 	int	len;
 
 	replace_fd = open("split_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	write_replace_spaces(s, replace_fd);
 	close(replace_fd);
 	replace_fd = open("split_fd", O_RDONLY);
-	mask = (int *)get_next_line(replace_fd);
-	len = ft_strlen_delim((char *)mask, '\n');
+	mask = get_next_line(replace_fd);
+	len = ft_strlen_delim(mask, '\n');
+	printf("s len: %d\n", ft_strlen(s));
+	printf("mask len: %d\n", len);
 	for (int i = 0; i < len; i++) {
-        printf("%d ", mask[i]);
+        	printf("%c ", s[i]);
+    }
+	printf("\n");
+	for (int i = 0; i < len; i++) {
+		printf("%d ", mask[i]);
     }
 }

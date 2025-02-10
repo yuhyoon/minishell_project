@@ -90,7 +90,7 @@ char    *create_str(t_gnl_node *head)
         size++;
         tmp = tmp->next;
     }
-    printf("size: %d\n", size);
+    printf("create str size: %d\n", size);
     str = malloc(sizeof(char) * (size + 1));
 	i = 0;
     while (i < size)
@@ -102,6 +102,11 @@ char    *create_str(t_gnl_node *head)
 		free(tmp);
     }
 	str[i] = head->c;
+//	for (int i = 0; i < size; i++ )
+//	{
+//		printf("%d ", str[i] + '0');
+//	}
+//		printf("\n");
 	free(head);
 	return (str);
 }
@@ -132,7 +137,7 @@ char *get_next_line(int fd)
         if (read_size == 0)
             eof = 1;
 	    head = consumer2(read_size, &q, head);
-	    printf("%d\n", (int)head->c);
+	    //printf("%d\n", (int)head->c);
 	}
 	result = create_str(head);
 	//if (*result == '\0')

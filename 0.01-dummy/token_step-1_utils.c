@@ -1,5 +1,16 @@
 #include "parse_main.h"
 
+int	ft_strlen_delim(char *s, char delim)
+{
+	int i;
+
+	i = 0;
+	while (s[i] != delim)
+	{
+		i++;
+	}
+	return (i);
+}
 
 void	init_char_state(t_char_state *state, char *s)
 {

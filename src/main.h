@@ -1,6 +1,7 @@
 #ifndef MAIN_H
 # define MAIN_H
 
+// # include "../lib/libft/libft.h"
 # include "libft/libft.h"
 # include <stdio.h>
 # include <stdlib.h>
@@ -13,14 +14,34 @@
 //사용가능한가?
 # include <errno.h>
 
+// typedef	struct s_env_node
+// {
+// 	t_envp	node_env;
+// 	t_envp	node_export;
+// 	char	**envps;
+// }				t_env_node;
+
 //환경변수 관리용 구조체
 typedef struct s_envp
 {
-	// char	*head;
+	char	**o_envp; //원래 envp;
+	int		count;
+	char	**path;
 	char	*key;
 	char	*value;
 	t_envp	*next;
 }				t_envp;
+
+
+// 시그널 관리 구조체
+typedef struct	s_signal
+{
+	int				sigint;
+	int				sigquit;
+	int				exit_status;
+	pid_t			pid;
+}				t_signal;
+
 
 
 #endif

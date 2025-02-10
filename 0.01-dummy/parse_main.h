@@ -16,6 +16,7 @@
 typedef enum s_token
 {
 	NONE,
+	TEXT,
 	IN_RD,
 	OUT_RD,
 	DOLLAR,

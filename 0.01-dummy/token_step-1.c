@@ -56,8 +56,11 @@ void	set_char_state(char *s, t_char_state *char_state)
 		valid_quote(s, char_state->quote, char_state);
 }
 
-void	handle_putchar(t_char_state *char_state, int fd)
+int	handle_putchar(t_char_state *char_state, int fd)
 {
+	int	i;
+
+	i = 0;
 	if (char_state->quote == 0)
 	{
 		if ((is_whitespace(*(char_state->current))))
@@ -66,9 +69,11 @@ void	handle_putchar(t_char_state *char_state, int fd)
 			ft_putchar_fd(ft_ismeta((char_state->current)), fd);
 		else
 			ft_putchar_fd(TEXT, fd);
+		i++;
 	}	
 	else
 	{
+		i = char_state->quote_seq;
 		printf("char_state->quote_seq: %d\n", char_state->quote_seq);
 		while (char_state->quote_seq > 0)
 		{
@@ -96,6 +101,7 @@ void	handle_putchar(t_char_state *char_state, int fd)
 		char_state->quote = 0;
 		char_state->quote_seq = 0;
 	}
+	return (i);
 }
 
 int write_replace_spaces(char *s, int replace_fd)
@@ -109,8 +115,8 @@ int write_replace_spaces(char *s, int replace_fd)
 	while (*(char_state.current) != '\0')
 	{
 		set_char_state(char_state.current, &char_state);
-		handle_putchar(&char_state, replace_fd);
-		(char_state.current)++;
+		(char_state.current) += handle_putchar(&char_state, replace_fd);
+		
 	}
 	if (*(char_state.current) == '\0')
 		ft_putchar_fd('\n', replace_fd);

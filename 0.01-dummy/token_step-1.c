@@ -72,6 +72,7 @@ void	store_quote_seq(t_char_state *char_state, int len, char *ss)
 			}
 		i++;
 	}
+	//char_state->quote = 0;
 }
 
 int	valid_quote(char *s, int quote, t_char_state *state)
@@ -84,10 +85,15 @@ int	valid_quote(char *s, int quote, t_char_state *state)
 	init_stack(&stack, NULL, ft_strlen(s));
 	ss = s;
 	push(&stack, *ss);
+	printf("stack\n");
 	while (is_emthy(&stack) == false && ss[i] != '\0')
 	{
+
 		if (is_quote(ss[i]) == quote)
+		{	
+			printf("%d %d\n", i, ss[i]);
 			pop(&stack);
+		}
 		i++;		
 	}
 	if (is_emthy(&stack) == false && ss[i] == '\0')
@@ -152,10 +158,13 @@ int write_replace_spaces(char *s, int replace_fd)
 	
 	init_char_state(&char_state, s);
 	i = 0;
+	printf("charstate.current\n");
 	while (*(char_state.current) != '\0')
 	{
+		printf("%s start\n", char_state.current);
 		set_char_state(char_state.current, &char_state);
 		(char_state.current) += handle_putchar(&char_state, replace_fd);
+		printf("%s\n", char_state.current);
 	}
 	if (*(char_state.current) == '\0')
 	{		ft_putchar_fd('\n', replace_fd); printf("newline put\n");}
@@ -164,7 +173,7 @@ int write_replace_spaces(char *s, int replace_fd)
 
 int main()
 {
-	char s[] = " \"a1 HOME< asdf 'abd'";
+	char s[] = " \"a1\" HOME< 'a'sdf 'abd'";
 	int	replace_fd;
 	char	*mask;
 	int	len;

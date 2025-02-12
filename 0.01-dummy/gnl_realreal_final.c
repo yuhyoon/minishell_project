@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <stdbool.h>
 
-#define BUFFER_SIZE 3
+#define BUFFER_SIZE 1024
 
 typedef struct s_gnlque
 {

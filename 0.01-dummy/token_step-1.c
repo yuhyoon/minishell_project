@@ -173,7 +173,7 @@ int write_replace_spaces(char *s, int replace_fd)
 
 int main()
 {
-	char s[] = " \"a1\" HOME< 'a'sdf 'abd'";
+	char s[] = " \"a1 b2 csa   $HOME      \" < 'a d'sdf 'abd ba";
 	int	replace_fd;
 	char	*mask;
 	int	len;

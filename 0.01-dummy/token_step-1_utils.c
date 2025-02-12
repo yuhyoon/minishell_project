@@ -5,8 +5,10 @@ int	ft_strlen_delim(char *s, char delim)
 	int i;
 
 	i = 0;
+	printf("\nstrlen delim\n");
 	while (s[i] != delim)
 	{
+		printf("%d ", s[i]);
 		i++;
 	}
 	return (i);

@@ -26,20 +26,28 @@ int producer(int fd, t_gnlque *q)
 	int n;
     int i;
 
-    i = 0;
+
+	printf("producer\n");
 	if (q->r == q->f)
 	{
 	    //q->r++;//원래는 (r + 1) % m이 맞지만 생략함
         //이러허게 하면 r이랑 f가 3일때 오류가 발생하므로 수정함
-        q->r = (q->r + 1) % q->m;
 		n = read(fd, &q->buf[q->r], BUFFER_SIZE);
-		//todo: if (n == 0)
-		// 	q->r = q->r - 1;
-		while (i < n - 1)
+	
+		//for(int i = q->r; i < BUFFER_SIZE + 1; i++ )
+		//{
+		//	printf("%d", q->buf[i]);
+		//}
+		i = 0;
+		// if (n == 0)
+		// {	q->r = q->r - 1;}
+		while (i < n)
 		{
+			printf("%d ", q->buf[q->r]);
 		    q->r = (q->r + 1) % q->m;
 			i++;
 		}
+		printf("\n");
 	}
 	else
 		n = q->r - q->f;
@@ -64,15 +72,18 @@ void *consumer2(int read_size, t_gnlque *q, t_gnl_node *head)
     if (read_size == 0)
         return (head);
 	i = 0;
+	printf("consumer head\n");
 	while (q->f != q->r && head->c != '\n' && i < read_size)
 	{
 		new_lst = (t_gnl_node *)malloc(sizeof(t_gnl_node));
-		q->f = ((q->f + 1) % q->m);
 		new_lst->c = q->buf[q->f];
 		new_lst->next = head;
 		head = new_lst;
+		q->f = ((q->f + 1) % q->m);
+		printf("%d ", head->c);
 		i++;
 	}
+	printf("\n");
 	return (head);
 }
 
@@ -102,11 +113,11 @@ char    *create_str(t_gnl_node *head)
 		free(tmp);
     }
 	str[i] = head->c;
-//	for (int i = 0; i < size; i++ )
-//	{
-//		printf("%d ", str[i] + '0');
-//	}
-//		printf("\n");
+	for (int i = 0; i < size + 1; i++ )
+	{
+		printf("%d ", str[i]);
+	}
+		printf("\n");
 	free(head);
 	return (str);
 }
@@ -134,10 +145,10 @@ char *get_next_line(int fd)
 	while (head->c != '\n' && eof == 0)
 	{
 	    read_size = producer(fd, &q);
-        if (read_size == 0)
-            eof = 1;
+	    if (read_size == 0)
+		    eof = 1;
 	    head = consumer2(read_size, &q, head);
-	    //printf("%d\n", (int)head->c);
+	    //printf("%d\n", head->c);
 	}
 	result = create_str(head);
 	//if (*result == '\0')

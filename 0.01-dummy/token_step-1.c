@@ -92,7 +92,7 @@ int	valid_quote(char *s, int quote, t_char_state *state)
 	}
 	if (is_emthy(&stack) == false && ss[i] == '\0')
 		state->quote *= -1;
-	store_quote_seq(state->quote, i, ss);
+	store_quote_seq(state, i, ss);
 }
 
 void	set_char_state(char *s, t_char_state *char_state)
@@ -129,12 +129,15 @@ int	handle_putchar(t_char_state *char_state, int fd)
 		close(quote_fd);
 		quote_fd = open("quote_fd", O_RDONLY, 0644);
 		buf = malloc(sizeof(char) * size);
-		read(quote_fd, buf, 1);
+		read(quote_fd, buf, size);
+
 		while (i < size)
 		{
+			printf("%d", buf[i]);
 			ft_putchar_fd(buf[i], fd);
 			i++;
 		}
+		printf("\n");
 		close(quote_fd);
 		free(buf);
 	}
@@ -155,30 +158,27 @@ int write_replace_spaces(char *s, int replace_fd)
 		(char_state.current) += handle_putchar(&char_state, replace_fd);
 	}
 	if (*(char_state.current) == '\0')
-		ft_putchar_fd('\n', replace_fd);
+	{		ft_putchar_fd('\n', replace_fd); printf("newline put\n");}
 	return (0);
 }
 
 int main()
 {
-	char s[] = " \"a1 HOME<\"";
+	char s[] = " \"a1 HOME< asdf 'abd'";
 	int	replace_fd;
 	char	*mask;
 	int	len;
 
+	printf("s len: %d\n", ft_strlen(s));
 	replace_fd = open("split_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	write_replace_spaces(s, replace_fd);
 	close(replace_fd);
 	replace_fd = open("split_fd", O_RDONLY);
 	mask = get_next_line(replace_fd);
 	len = ft_strlen_delim(mask, '\n');
-	printf("s len: %d\n", ft_strlen(s));
-	printf("mask len: %d\n", len);
-	for (int i = 0; i < len; i++) {
+	printf("\nmask len: %d\n", len);
+	for (int i = 0; i < ft_strlen(s); i++) {
         	printf("%c ", s[i]);
     }
 	printf("\n");
-	for (int i = 0; i < len; i++) {
-		printf("%d ", mask[i]);
-    }
 }

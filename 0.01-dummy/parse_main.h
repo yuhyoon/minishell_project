@@ -48,7 +48,7 @@ typedef struct s_node
 typedef struct s_stack
 {
 	int	size;
-	struct t_node *top;
+	struct t_list *top;
 }t_stack;
 
 #endif

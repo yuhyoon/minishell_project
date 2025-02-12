@@ -14,12 +14,12 @@ int		is_emthy(t_stack *stack)
 		return (false);
 }
 
-void    push(t_stack *stack, void *data)
+void    push(t_stack *stack, char data)
 {
 	t_list	*new;
 
 	new = malloc(sizeof(t_list));
-	new->content = data;
+	new->content = &data;
 	new->next = stack->top;
 	stack->top = new;
 	stack->size++;

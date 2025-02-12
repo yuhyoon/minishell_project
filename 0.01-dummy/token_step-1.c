@@ -1,11 +1,6 @@
 #include "parse_main.h"
 #include "token_step-1_utils.c"
-
-typedef struct s_stack
-{
-	char    arr[1024];
-	int     top;
-}t_stack;
+#include "token_step-1_stack.c"
 
 typedef struct s_str
 {
@@ -14,7 +9,8 @@ typedef struct s_str
 }t_str;
 
 
-void	valid_quote(char *s, int quote_flag, t_char_state *state)
+/*
+void	valid_quote_hye(char *s, int quote_flag, t_char_state *state)
 {
 	char *start;
  	int single_quote_open;
@@ -46,8 +42,58 @@ void	valid_quote(char *s, int quote_flag, t_char_state *state)
 	if ((single_quote_open % 2 != 0) || (double_quote_open % 2 != 0))
 		state->quote *= -1;
 }
+*/
 
+void	store_quote_seq(t_char_state *char_state, int len, char *ss)
+{
+	int		quote_fd;
+	int	i = 0;
 
+	quote_fd = open("quote_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	while (i < len)
+	{
+		if (char_state->quote < 0)
+			{
+				if (is_whitespace(char_state->current[i]))
+					ft_putchar_fd(NONE, quote_fd);
+				else if (ft_ismeta(&(char_state->current[i])))
+					ft_putchar_fd(ft_ismeta(&(char_state->current[i])), quote_fd);
+				else
+					ft_putchar_fd(TEXT, quote_fd);
+			}
+		else if (char_state->quote > 0)
+			{
+				if (char_state->quote == '\"' && ft_ismeta(&(char_state->current[i])) == DOLLAR)
+					ft_putchar_fd(DOLLAR, quote_fd);
+				else if (char_state->current[i] == char_state->quote)
+				{	ft_putchar_fd(NONE, quote_fd); printf("quote :%d\n", NONE);}
+				else
+					ft_putchar_fd(TEXT, quote_fd);
+			}
+		i++;
+	}
+}
+
+int	valid_quote(char *s, int quote, t_char_state *state)
+{
+	t_stack stack;
+	
+	char	*ss;
+	int		i = 1;
+
+	init_stack(&stack, NULL, ft_strlen(s));
+	ss = s;
+	push(&stack, *ss);
+	while (is_emthy(&stack) == false && ss[i] != '\0')
+	{
+		if (is_quote(ss[i]) == quote)
+			pop(&stack);
+		i++;		
+	}
+	if (is_emthy(&stack) == false && ss[i] == '\0')
+		state->quote *= -1;
+	store_quote_seq(state->quote, i, ss);
+}
 
 void	set_char_state(char *s, t_char_state *char_state)
 {
@@ -58,9 +104,13 @@ void	set_char_state(char *s, t_char_state *char_state)
 
 int	handle_putchar(t_char_state *char_state, int fd)
 {
-	int	i;
+	off_t	size;
+	char	*buf;
+	struct stat st;
+	int		quote_fd;
+	int		i = 0;
 
-	i = 0;
+	size = 0;
 	if (char_state->quote == 0)
 	{
 		if ((is_whitespace(*(char_state->current))))
@@ -69,39 +119,26 @@ int	handle_putchar(t_char_state *char_state, int fd)
 			ft_putchar_fd(ft_ismeta((char_state->current)), fd);
 		else
 			ft_putchar_fd(TEXT, fd);
-		i++;
+		size++;
 	}	
 	else
 	{
-		i = char_state->quote_seq;
-		printf("char_state->quote_seq: %d\n", char_state->quote_seq);
-		while (char_state->quote_seq > 0)
+		quote_fd = fd + 1;
+		fstat(quote_fd, &st);
+		size = st.st_size;
+		close(quote_fd);
+		quote_fd = open("quote_fd", O_RDONLY, 0644);
+		buf = malloc(sizeof(char) * size);
+		read(quote_fd, buf, 1);
+		while (i < size)
 		{
-			if (char_state->quote < 0)
-			{
-				if (is_whitespace(*(char_state->current)))
-					ft_putchar_fd(NONE, fd);
-				else if (ft_ismeta((char_state->current)))
-					ft_putchar_fd(ft_ismeta((char_state->current)), fd);
-				else
-					ft_putchar_fd(TEXT, fd);
-			}
-			else if (char_state->quote > 0)
-			{
-				if (char_state->quote == '\"' && ft_ismeta((char_state->current)) == DOLLAR)
-					ft_putchar_fd(DOLLAR, fd);
-				else if (*(char_state->current) == char_state->quote)
-				{	ft_putchar_fd(NONE, fd); printf("quote :%d\n", NONE);}
-				else
-					ft_putchar_fd(TEXT, fd);
-			}
-			char_state->current++;
-			char_state->quote_seq--;
+			ft_putchar_fd(buf[i], fd);
+			i++;
 		}
-		char_state->quote = 0;
-		char_state->quote_seq = 0;
+		close(quote_fd);
+		free(buf);
 	}
-	return (i);
+	return (size);
 }
 
 int write_replace_spaces(char *s, int replace_fd)
@@ -116,7 +153,6 @@ int write_replace_spaces(char *s, int replace_fd)
 	{
 		set_char_state(char_state.current, &char_state);
 		(char_state.current) += handle_putchar(&char_state, replace_fd);
-		
 	}
 	if (*(char_state.current) == '\0')
 		ft_putchar_fd('\n', replace_fd);

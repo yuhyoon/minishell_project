@@ -11,6 +11,7 @@
 #include "parse_main.h"
 #include <string.h>
 # include <fcntl.h>
+#include <sys/stat.h>
 # include "gnl_realreal_final.c"
 
 typedef enum s_token
@@ -43,5 +44,11 @@ typedef struct s_node
 	struct s_lex	*content;
 	struct s_node	*next;
 }t_node;
+
+typedef struct s_stack
+{
+	int	size;
+	struct t_node *top;
+}t_stack;
 
 #endif

@@ -30,8 +30,6 @@ int producer(int fd, t_gnlque *q)
 	printf("producer\n");
 	if (q->r == q->f)
 	{
-	    //q->r++;//원래는 (r + 1) % m이 맞지만 생략함
-        //이러허게 하면 r이랑 f가 3일때 오류가 발생하므로 수정함
 		n = read(fd, &q->buf[q->r], BUFFER_SIZE);
 	
 		//for(int i = q->r; i < BUFFER_SIZE + 1; i++ )

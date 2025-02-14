@@ -2,48 +2,6 @@
 #include "token_step-1_utils.c"
 #include "token_step-1_stack.c"
 
-typedef struct s_str
-{
-	char    *start;
-	char    *end;
-}t_str;
-
-
-/*
-void	valid_quote_hye(char *s, int quote_flag, t_char_state *state)
-{
-	char *start;
- 	int single_quote_open;
-	int double_quote_open;
-	int	i;
-
-	single_quote_open = 0;
-	double_quote_open = 0;
-	i = 0;
-	while (s[i] != '\0' && double_quote_open != 2 && single_quote_open != 2) 
-	{
-		if (s[0] == '\"')
-		{
-			if (s[i] == '\'')
-				single_quote_open++;
-			else if (s[i] == '\"')
-				double_quote_open++;
-		}
-		else if (s[0] == '\'')
-		{
-			if (s[i] == '\"')
-				double_quote_open++;
-			else if (s[i] == '\'')
-				single_quote_open++;
-		}
-		i++;
-	}
-	state->quote_seq = i;
-	if ((single_quote_open % 2 != 0) || (double_quote_open % 2 != 0))
-		state->quote *= -1;
-}
-*/
-
 void	store_quote_seq(t_char_state *char_state, int len, char *ss)
 {
 	int		quote_fd;
@@ -162,9 +120,8 @@ int write_replace_spaces(char *s, int replace_fd)
 	return (0);
 }
 
-int main()
+char *generate_mask(char *s)
 {
-	char s[] = "cat << EOF >> manual_input.log | ";
 	int	mask_fd;
 	char	*mask;
 	int	len;
@@ -183,5 +140,5 @@ int main()
         	printf("%c ", s[i]);
     }
 	printf("\n");
-	free(mask);
+	return (mask);
 }

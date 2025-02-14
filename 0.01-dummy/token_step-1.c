@@ -182,4 +182,5 @@ int main()
         	printf("%c ", s[i]);
     }
 	printf("\n");
+	free(mask);
 }

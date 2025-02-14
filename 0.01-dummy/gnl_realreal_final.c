@@ -149,6 +149,7 @@ char *get_next_line(int fd)
 	    //printf("%d\n", head->c);
 	}
 	result = create_str(head);
+	free(q.buf);
 	//if (*result == '\0')
 	//	result = dengling(result);
 	return (result);

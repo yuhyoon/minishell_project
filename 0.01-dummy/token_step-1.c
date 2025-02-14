@@ -164,7 +164,7 @@ int write_replace_spaces(char *s, int replace_fd)
 
 int main()
 {
-	char s[] = " \"a1 b2 csa   $HOME      \" < 'a d'sdf 'abd ba";
+	char s[] = "cat << EOF >> manual_input.log | ";
 	int	mask_fd;
 	char	*mask;
 	int	len;
@@ -173,7 +173,7 @@ int main()
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	write_replace_spaces(s, mask_fd);
 	close(mask_fd);
-	mask_fd = open("v", O_RDONLY);
+	mask_fd = open("mask_fd", O_RDONLY);
 	mask = get_next_line(mask_fd);
 	len = ft_strlen_delim(mask, '\n');
 	unlink("mask_fd");

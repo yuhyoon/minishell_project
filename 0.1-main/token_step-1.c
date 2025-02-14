@@ -177,6 +177,7 @@ int main()
 	mask = get_next_line(mask_fd);
 	len = ft_strlen_delim(mask, '\n');
 	unlink("mask_fd");
+	close(mask_fd);
 	printf("\nmask len: %d\n", len);
 	for (int i = 0; i < ft_strlen(s); i++) {
         	printf("%c ", s[i]);

@@ -25,11 +25,10 @@ typedef struct s_dollar
 
 
 //return length
-int	create_lex(char *src, char *mask, t_ready **rdy)
+int	create_meta(char *src, char *mask, t_ready **rdy)
 {
 	int	i;
 	t_list	*io;
-	t_list	*cmd;
 	t_list	*dolar;
 
 	init_ready();
@@ -62,29 +61,32 @@ int	execute_meta(t_ready **rdy)
 	
 }
 
-void    f(char *src, char *mask, int len)
+void *parsing(char *src, char *mask, int len)
 {
 	int		i;
-	t_ready	*head;
+	t_ready	*rdy;
 	t_exe_info *exe_head;
 
-	create_ready(&head);
+	create_ready(&rdy);
 	i = 0;
 	while (i < len)
 	{
-		i += create_lex(src, mask, &head);
+		i += create_meta(src, mask, &rdy);
 		if (mask[i] == PIPE)
 		{
-			execute_meta(&head);
-			create_exeinfo(head, &exe_head, src, mask);
+			execute_meta(&rdy);
+			create_text(rdy, &exe_head, src, mask);
+			create_exeinfo(rdy, &exe_head, src, mask);
 			i++;
 		}
 	}
 	if (exe_head == NULL)
 	{
-		execute_meta(&head);
-		create_exeinfo(head, &exe_head, src, mask);
+		execute_meta(&rdy);
+		create_text(rdy, &exe_head, src, mask);
+		create_exeinfo(rdy, &exe_head, src, mask);
 	}
+	return (rdy);
 }
 
 int main()

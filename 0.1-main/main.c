@@ -5,6 +5,7 @@
 int main() {
     char *input;
     char	*mask;
+    t_exe_info	*exe_info;
     
     while (1) {
         input = readline("minishell> ");

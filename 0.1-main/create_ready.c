@@ -40,50 +40,28 @@ int create_io(char *src, char *mask, int rd, t_ready **head)
 	return (i + len);
 }
 
-int	redirect_in(char *file)
+void    create_text(t_ready *rdy, t_exe_info **head, char *src, char *mask)
 {
-	int	fd;
+    int i;
+    t_str   str_info;
+    t_list  **head;
+    t_list  *lst;
+    char    *r;
 
-	fd = open(file, O_RDONLY);
-	return (fd);
+    i = 0;
+    str_info.src = src;
+    *head = NULL;
+    while (mask[i] != '\n')
+    {
+        str_info.start = ft_strcspn(&src[i], "02345");
+        str_info.end = ft_strspn(str_info.start, "1");
+        r = malloc(sizeof(char) * ((str_info.end) - (str_info.start) + 1));
+        ft_memset(r, 0, ((str_info.end) - (str_info.start) + 1));
+        ft_memcpy(r, &mask[str_info.start], (str_info.end) - (str_info.start));
+        lst = ft_lstnew(r);
+        ft_lstadd_back(head, lst);
+        i += str_info.end;
+    }
+    
 }
 
-int	here_doc(char *delim)
-{
-	char	*line;
-	int		tmp_fd;
-	int		len;
-
-	tmp_fd = open(".tmp_heredoc", O_TMPFILE, 0600);
-	while (1)
-	{
-		line = readline("> ");
-		len = ft_strlen(line);
-		if (!line || !ft_strncmp(line, delim, len));
-		{
-			free(line);
-			break ;
-		}
-		write(tmp_fd, line, len);
-		write(tmp_fd, "\n", 1);
-		free(line);
-	}
-	return (tmp_fd);
-}
-
-void execute_rd(t_ready *rdy)
-{
-	t_redrct	*rd;
-	int	in;
-
-	rd = rdy->io;
-	if (rd->parts == 2)
-		in = here_doc(rd->obj);
-	else if (rd->parts == 1)
-		in = redirect_in(rd->obj);
-	if (in == -1)
-	{
-		//error
-	}
-	
-}

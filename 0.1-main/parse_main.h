@@ -2,7 +2,9 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
-#include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdio.h>
 #include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -26,8 +28,6 @@ typedef enum s_token
 
 typedef struct s_char_state
 {
-	//int인데 깜빡한 듯?
-	// char	quote;
 	int	quote;
 	int		quote_seq;
 	char	*current;
@@ -67,11 +67,17 @@ typedef struct s_dollar
 	char	*str;
 }t_dollar;
 
-
 typedef struct s_stack
 {
 	int	size;
 	struct t_list *top;
 }t_stack;
+
+typedef struct s_str
+{
+	char	*src;
+	int	start;
+	int	end;
+}t_str;
 
 #endif

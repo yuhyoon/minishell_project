@@ -150,6 +150,7 @@ char *get_next_line(int fd)
 	}
 	result = create_str(head);
 	free(q.buf);
+	q.buf = NULL;
 	//if (*result == '\0')
 	//	result = dengling(result);
 	return (result);

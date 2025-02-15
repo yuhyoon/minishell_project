@@ -75,7 +75,7 @@ void *parsing(char *src, char *mask, int len)
 		if (mask[i] == PIPE)
 		{
 			execute_meta(&rdy);
-			create_text(rdy, &exe_head, src, mask);
+			create_text(rdy, src, mask);
 			create_exeinfo(rdy, &exe_head, src, mask);
 			i++;
 		}
@@ -83,13 +83,8 @@ void *parsing(char *src, char *mask, int len)
 	if (exe_head == NULL)
 	{
 		execute_meta(&rdy);
-		create_text(rdy, &exe_head, src, mask);
+		create_text(rdy, src, mask);
 		create_exeinfo(rdy, &exe_head, src, mask);
 	}
 	return (rdy);
-}
-
-int main()
-{
-
 }

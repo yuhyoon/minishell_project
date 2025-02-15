@@ -40,28 +40,51 @@ int create_io(char *src, char *mask, int rd, t_ready **head)
 	return (i + len);
 }
 
-void    create_text(t_ready *rdy, t_exe_info **head, char *src, char *mask)
+int create_text_1(char *s1, char *s2, t_list **head)
+{
+    int i;
+	char	*rsult;
+	t_list	*new;
+
+    i = 0;
+    while (s1[i] == *s2)
+        i++;
+	rsult = malloc(sizeof(char) * (i + 1));
+	ft_memset(rsult, 0, i);
+	ft_memcpy(rsult, s1, i);
+	new = ft_lstnew(rsult);
+	ft_lstadd_back(head, new);
+    return (i);
+}
+
+// int	create_text_4()
+// {
+
+// }
+
+void    create_text(t_ready *rdy, char *src, char *mask)
 {
     int i;
     t_str   str_info;
-    t_list  **head;
+    t_list  *head;
     t_list  *lst;
     char    *r;
+    int n;
 
     i = 0;
     str_info.src = src;
-    *head = NULL;
+    head = NULL;
     while (mask[i] != '\n')
     {
-        str_info.start = ft_strcspn(&src[i], "02345");
-        str_info.end = ft_strspn(str_info.start, "1");
-        r = malloc(sizeof(char) * ((str_info.end) - (str_info.start) + 1));
-        ft_memset(r, 0, ((str_info.end) - (str_info.start) + 1));
-        ft_memcpy(r, &mask[str_info.start], (str_info.end) - (str_info.start));
-        lst = ft_lstnew(r);
-        ft_lstadd_back(head, lst);
-        i += str_info.end;
+        if (mask[i] == 1)
+        {
+            i += create_text_1(&mask[i], "1", &head);
+		}
+		else if (mask[i] == 4)
+		{
+			//i += create_text_4();
+		}
     }
-    
+	rdy->text = head;    
 }
 

@@ -45,18 +45,18 @@ int create_io(char *src, char *mask, int rd, t_ready **head)
 	return (i + len);
 }
 
-int create_text_1(char *s1, char *s2, t_list **head)
+int create_text_1(char *s1, char *s2, char *src, t_list **head)
 {
     int i;
 	char	*rsult;
 	t_list	*new;
 
     i = 0;
-    while (s1[i] == *s2)
+    while (s1[i] == (*s2 - '0'))
         i++;
 	rsult = malloc(sizeof(char) * (i + 1));
-	ft_memset(rsult, 0, i);
-	ft_memcpy(rsult, s1, i);
+	ft_memcpy(rsult, src, i);
+	rsult[i] = '\0';
 	new = ft_lstnew(rsult);
 	ft_lstadd_back(head, new);
     return (i);
@@ -81,15 +81,17 @@ void    create_text(t_ready *rdy, char *src, char *mask)
     head = NULL;
     while (mask[i] != '\n')
     {
+	if (mask[i] == 0)
+		i++;
         if (mask[i] == 1)
         {
-            i += create_text_1(&mask[i], "1", &head);
+            i += create_text_1(&mask[i], "1", &src[i], &head);
 		}
 		else if (mask[i] == 4)
 		{
 			//i += create_text_4();
 		}
     }
-	rdy->text = head;    
+	rdy->text = head;  printf("%s\n", (char *)rdy->text->content);  
 }
 

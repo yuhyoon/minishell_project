@@ -1,5 +1,7 @@
 #include "parse_main.h"
+#include "token_step-1_utils.h"
 #include "token_step-1_stack.c"
+# include "gnl_realreal_final.c"
 
 void	store_quote_seq(t_char_state *char_state, int len, char *ss)
 {

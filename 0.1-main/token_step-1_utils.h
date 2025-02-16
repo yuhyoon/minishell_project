@@ -9,4 +9,4 @@ int is_whitespace(char c);
 int	is_quote(char c);
 int ft_ismeta(char *input);
 
-# endif TOKEN_UTILS_1_H
+# endif

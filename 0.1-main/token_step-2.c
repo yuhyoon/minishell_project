@@ -33,7 +33,6 @@ int	create_meta(char *src, char *mask, t_ready **rdy)
 	t_list	*io;
 	t_list	*dolar;
 
-	init_ready();
 	i = 0;
 	if (mask[i] <= 1)
 	{
@@ -41,7 +40,7 @@ int	create_meta(char *src, char *mask, t_ready **rdy)
 	}
 	else if (mask[i] == IN_RD || mask[i] == OUT_RD)
 	{
-		i += create_io(src, mask, rdy);
+		i += create_io(src, mask, mask[i], rdy);
 	}
 	else if (mask[i] == DOLLAR)
 	{
@@ -52,13 +51,13 @@ int	create_meta(char *src, char *mask, t_ready **rdy)
 
 int	execute_meta(t_ready **rdy)
 {
-	while (is_empty((*rdy)->io) == false)
+	while (((*rdy)->io) != NULL)
 	{
-		ft_lstclear(&(*rdy)->io, execute_rd());
+		//ft_lstclear(&(*rdy)->io, execute_rd());
 	}
-	while (is_empty((*rdy)->dolar) == false)
+	while (((*rdy)->dolar) != NULL)
 	{
-		ft_lstclear(&(*rdy)->dolar, execute_rd());
+		//ft_lstclear(&(*rdy)->dolar, execute_rd());
 	}
 	
 }
@@ -66,10 +65,10 @@ int	execute_meta(t_ready **rdy)
 void *parsing(char *src, char *mask, int len)
 {
 	int		i;
-	t_ready	*rdy_head;
+	t_ready	*rdy;
 	t_exe_info *exe_head;
 
-	create_ready(&rdy);
+	create_rdy(rdy);
 	i = 0;
 	while (i < len)
 	{
@@ -78,7 +77,7 @@ void *parsing(char *src, char *mask, int len)
 		{
 			execute_meta(&rdy);
 			create_text(rdy, src, mask);
-			create_exeinfo(rdy, &exe_head, src, mask);
+			//create_exeinfo(rdy, &exe_head, src, mask);
 			i++;
 		}
 	}
@@ -86,7 +85,7 @@ void *parsing(char *src, char *mask, int len)
 	{
 		execute_meta(&rdy);
 		create_text(rdy, src, mask);
-		create_exeinfo(rdy, &exe_head, src, mask);
+		//create_exeinfo(rdy, &exe_head, src, mask);
 	}
 	return (rdy);
 }

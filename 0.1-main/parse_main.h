@@ -13,7 +13,6 @@
 #include <string.h>
 # include <fcntl.h>
 #include <sys/stat.h>
-# include "gnl_realreal_final.c"
 # include "table.h"
 
 typedef enum s_token

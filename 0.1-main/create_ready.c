@@ -12,6 +12,11 @@ void    *create_rdy(t_ready *head)
     return (rdy);
 }
 
+int	create_dolar(char *src, char *mask, t_ready *rdy)
+{
+
+}
+
 int create_io(char *src, char *mask, int rd, t_ready **head)
 {
     int i;

@@ -1,6 +1,6 @@
 #include "parse_main.h"
 
-void    *create_rdy(t_ready *head)
+void    *create_rdy()
 {
     t_ready *rdy;
 
@@ -79,7 +79,7 @@ void    create_text(t_ready *rdy, char *src, char *mask)
     i = 0;
     str_info.src = src;
     head = NULL;
-    while (mask[i] != '\n')
+    while (mask[i] != '\n' && mask[i] != PIPE)
     {
 		if (mask[i] == 0)
 			i++;

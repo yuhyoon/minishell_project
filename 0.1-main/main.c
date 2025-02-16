@@ -7,7 +7,7 @@
 int main() {
     char *input;
     char	*mask;
-    t_exe_info	*exe_info;
+    t_list	*rdy_head;
     
     while (1) {
         input = readline("minishell> ");
@@ -23,7 +23,17 @@ int main() {
         }
         add_history(input);
         mask = generate_mask(input);
-        parsing(input, mask, ft_strlen_delim(mask, '\n'));
+        rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
+	
+	t_ready	*rdy;
+	char	*txt;
+	while (rdy_head)
+	{
+		rdy = (t_ready *)rdy_head->content;
+		txt = (char *)(rdy->text->content);
+		printf("%s\n", txt);
+		rdy_head = rdy_head->next;
+	}
 		free(mask);
         free(input);
     }

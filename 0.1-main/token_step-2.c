@@ -3,9 +3,9 @@
 #include "create_ready.c"
 #include "execute_meta.c"
 
-void	del_text(char *txt)
+void	del_text(void *txt)
 {
-	free(txt);
+	free((char *)txt);
 	txt = NULL;
 }
 
@@ -23,9 +23,9 @@ void	del_dollar(t_dollar *dolr)
 
 void	clean_ready(t_ready **rdy)
 {
-	ft_lstclear((*rdy)->text, del_text((*rdy)->text->content));
-	ft_lstclear((*rdy)->io, del_redrct((*rdy)->io->content));
-	ft_lstclear((*rdy)->dolar, del_dollar((*rdy)->dolar->content));
+	ft_lstclear(&(*rdy)->text, del_text);
+//	ft_lstclear((*rdy)->io, del_redrct((*rdy)->io->content));
+//	ft_lstclear((*rdy)->dolar, del_dollar((*rdy)->dolar->content));
 
 }
 
@@ -82,7 +82,7 @@ char    **create_str_2(t_list **head)
 		i++;
 		tmp = tmp->next;
     }
-	ft_lstclear(head, del_text)
+	ft_lstclear(head, del_text);
 	return (str);
 }
 
@@ -100,30 +100,33 @@ void *parsing(char *src, char *mask, int len)
 {
 	int		i;
 	t_ready	*rdy;
+	t_list	*rdy_head;
 	t_list	*new;
+	int	save;
 
-	rdy = create_rdy(rdy);
+	rdy = create_rdy();
 	i = 0;
-	exe_head = NULL;
+	save = i;
+	rdy_head = NULL;
+	new = ft_lstnew(rdy);
+	ft_lstadd_back(&rdy_head, new);
 	while (i < len)
 	{
 		i += create_meta(src, mask, &rdy);
 		if (mask[i] == PIPE)
 		{
 			execute_meta(&rdy);
-			create_text(rdy, src, mask);
-			exe = create_exeinfo(rdy, src, mask);
-			new = ft_lstnew(exe);
-			ft_lstadd_back(&exe_head, new);
+			create_text(rdy, &src[save], &mask[save]);
+			rdy = create_rdy();
+			new = ft_lstnew(rdy);
+			ft_lstadd_back(&rdy_head, new);
 			i++;
+			save = i;
 		}
 	}
-	if (exe_head == NULL)
-	{
-		execute_meta(&rdy);
-		create_text(rdy, src, mask);
-		//create_exeinfo(rdy, &exe_head, src, mask);
-	}
+	execute_meta(&rdy);
+	create_text(rdy, &src[save], &mask[save]);
 	//clean_ready(&rdy);
-	return (exe_head);
+	
+	return (rdy_head);
 }

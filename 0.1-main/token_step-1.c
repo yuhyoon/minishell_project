@@ -1,5 +1,4 @@
 #include "parse_main.h"
-#include "token_step-1_utils.c"
 #include "token_step-1_stack.c"
 
 void	store_quote_seq(t_char_state *char_state, int len, char *ss)

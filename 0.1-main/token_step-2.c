@@ -1,27 +1,28 @@
 #include "parse_main.h"
-#include "token_step-1_utils.c"
+#include "create_ready.c"
+#include "execute_meta.c"
 
-typedef struct s_ready
-{
-	t_list	*text;
-	t_list	*io;
-	t_list	*dolar;
-	struct s_ready	*next;	
-}t_ready;
+// typedef struct s_ready
+// {
+// 	t_list	*text;
+// 	t_list	*io;
+// 	t_list	*dolar;
+// 	struct s_ready	*next;	
+// }t_ready;
 
-typedef struct s_exe_info
-{
-	char	**cmd;
-	int	in;
-	int	out;
-	struct s_exe_info	*next;
-}t_exe_info;
+// typedef struct s_exe_info
+// {
+// 	char	**cmd;
+// 	int	in;
+// 	int	out;
+// 	struct s_exe_info	*next;
+// }t_exe_info;
 
-typedef struct s_dollar
-{
-	char	pos;
-	char	*str;
-}t_dollar;
+// typedef struct s_dollar
+// {
+// 	char	pos;
+// 	char	*str;
+// }t_dollar;
 
 
 //return length
@@ -64,7 +65,7 @@ int	execute_meta(t_ready **rdy)
 void *parsing(char *src, char *mask, int len)
 {
 	int		i;
-	t_ready	*rdy;
+	t_ready	*rdy_head;
 	t_exe_info *exe_head;
 
 	create_ready(&rdy);

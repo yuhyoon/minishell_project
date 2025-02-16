@@ -1,5 +1,6 @@
 #include "parse_main.h"
 #include "token_step-1.c"
+#include "token_step-2.c"
 
 // cc -g dummy_main.c -lreadline libft/libft.a
 int main() {

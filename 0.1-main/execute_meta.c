@@ -14,7 +14,7 @@ int	here_doc(char *delim)
 	int		tmp_fd;
 	int		len;
 
-	tmp_fd = open(".tmp_heredoc", O_TMPFILE, 0600);
+	tmp_fd = open(".tmp_heredoc", O_RDWR, 0600);
 	while (1)
 	{
 		line = readline("> ");
@@ -36,7 +36,7 @@ void execute_rd(t_ready *rdy)
 	t_redrct	*rd;
 	int	in;
 
-	rd = rdy->io;
+	rd = (t_redrct *)rdy->io->content;
 	if (rd->parts == 2)
 		in = here_doc(rd->obj);
 	else if (rd->parts == 1)

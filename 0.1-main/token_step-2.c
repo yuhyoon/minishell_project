@@ -68,8 +68,9 @@ void *parsing(char *src, char *mask, int len)
 	t_ready	*rdy;
 	t_exe_info *exe_head;
 
-	create_rdy(rdy);
+	rdy = create_rdy(rdy);
 	i = 0;
+	exe_head = NULL;
 	while (i < len)
 	{
 		i += create_meta(src, mask, &rdy);

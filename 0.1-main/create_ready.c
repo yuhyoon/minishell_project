@@ -81,9 +81,9 @@ void    create_text(t_ready *rdy, char *src, char *mask)
     head = NULL;
     while (mask[i] != '\n')
     {
-	if (mask[i] == 0)
-		i++;
-        if (mask[i] == 1)
+		if (mask[i] == 0)
+			i++;
+    	else if (mask[i] == 1)
         {
             i += create_text_1(&mask[i], "1", &src[i], &head);
 		}

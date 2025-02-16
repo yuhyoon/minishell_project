@@ -3,28 +3,31 @@
 #include "create_ready.c"
 #include "execute_meta.c"
 
-// typedef struct s_ready
-// {
-// 	t_list	*text;
-// 	t_list	*io;
-// 	t_list	*dolar;
-// 	struct s_ready	*next;	
-// }t_ready;
+void	del_text(char *txt)
+{
+	free(txt);
+	txt = NULL;
+}
 
-// typedef struct s_exe_info
-// {
-// 	char	**cmd;
-// 	int	in;
-// 	int	out;
-// 	struct s_exe_info	*next;
-// }t_exe_info;
+void	del_redrct(t_redrct *redrct)
+{
+	free(redrct->obj);
+	redrct->obj = NULL;
+}
 
-// typedef struct s_dollar
-// {
-// 	char	pos;
-// 	char	*str;
-// }t_dollar;
+void	del_dollar(t_dollar *dolr)
+{
+	free(dolr->str);
+	dolr->str = NULL;
+}
 
+void	clean_ready(t_ready **rdy)
+{
+	ft_lstclear((*rdy)->text, del_text((*rdy)->text->content));
+	ft_lstclear((*rdy)->io, del_redrct((*rdy)->io->content));
+	ft_lstclear((*rdy)->dolar, del_dollar((*rdy)->dolar->content));
+
+}
 
 //return length
 int	create_meta(char *src, char *mask, t_ready **rdy)
@@ -62,11 +65,14 @@ int	execute_meta(t_ready **rdy)
 	
 }
 
+
 void *parsing(char *src, char *mask, int len)
 {
 	int		i;
 	t_ready	*rdy;
-	t_exe_info *exe_head;
+	t_list *exe_head;
+	t_exe_info	*exe;
+	t_list	*new;
 
 	rdy = create_rdy(rdy);
 	i = 0;
@@ -78,7 +84,9 @@ void *parsing(char *src, char *mask, int len)
 		{
 			execute_meta(&rdy);
 			create_text(rdy, src, mask);
-			//create_exeinfo(rdy, &exe_head, src, mask);
+			exe = create_exeinfo(rdy, src, mask);
+			new = ft_lstnew(exe);
+			ft_lstadd_back(&exe_head, new);
 			i++;
 		}
 	}
@@ -88,5 +96,6 @@ void *parsing(char *src, char *mask, int len)
 		create_text(rdy, src, mask);
 		//create_exeinfo(rdy, &exe_head, src, mask);
 	}
-	return (rdy);
+	//clean_ready(&rdy);
+	return (exe_head);
 }

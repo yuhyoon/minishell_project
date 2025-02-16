@@ -65,13 +65,41 @@ int	execute_meta(t_ready **rdy)
 	
 }
 
+char    **create_str_2(t_list **head)
+{
+    int size;
+    char    **str;
+    t_list  *tmp;
+	int	i;
+    
+	size = ft_lstsize(*head);
+    str = malloc(sizeof(char *) * (size));
+	i = 0;
+	tmp = *head;
+    while (i < size)
+    {
+        str[i] = ft_strdup((char *)tmp->content);
+		i++;
+		tmp = tmp->next;
+    }
+	ft_lstclear(head, del_text)
+	return (str);
+}
+
+void	*create_exeinfo(t_ready *rdy, char *src, char *mask)
+{
+	t_exe_info	*exe;
+
+	exe = malloc(sizeof(exe));
+	exe->cmd = create_str_2(&(rdy->text));
+	return (exe);
+}
+
 
 void *parsing(char *src, char *mask, int len)
 {
 	int		i;
 	t_ready	*rdy;
-	t_list *exe_head;
-	t_exe_info	*exe;
 	t_list	*new;
 
 	rdy = create_rdy(rdy);

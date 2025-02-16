@@ -92,6 +92,6 @@ void    create_text(t_ready *rdy, char *src, char *mask)
 			//i += create_text_4();
 		}
     }
-	rdy->text = head;  printf("%s\n", (char *)rdy->text->content);  
+	rdy->text = head;   
 }
 

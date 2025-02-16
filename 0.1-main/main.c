@@ -3,7 +3,7 @@
 #include "token_step-1.c"
 #include "token_step-2.c"
 
-// cc -g dummy_main.c -lreadline libft/libft.a
+// cc -g main.c token_step-1_utils.h libft/libft.a -lreadline
 int main() {
     char *input;
     char	*mask;
@@ -24,14 +24,21 @@ int main() {
         add_history(input);
         mask = generate_mask(input);
         rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
-	
+
+	//print 
 	t_ready	*rdy;
+	t_list	*lst;
 	char	*txt;
 	while (rdy_head)
 	{
 		rdy = (t_ready *)rdy_head->content;
-		txt = (char *)(rdy->text->content);
-		printf("%s\n", txt);
+		lst = (rdy->text);
+		while (lst)
+		{
+			txt = (char *)lst->content;
+			printf("%s\n", txt);
+			lst = lst->next;
+		}
 		rdy_head = rdy_head->next;
 	}
 		free(mask);

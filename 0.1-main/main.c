@@ -3,7 +3,15 @@
 #include "token_step-1.c"
 #include "token_step-2.c"
 
-// cc -g main.c token_step-1_utils.h libft/libft.a -lreadline
+/*****
+ * 
+ * 실행순서
+ * 1. libft 폴더 내부에서 make bonus 실행 (o 파일은 gitignore되어있음)
+ * 2. 0.1-main 내부에서 아래 명령어 실행
+ * cc -g main.c token_step-1_utils.c libft/libft.a -lreadline
+ *
+ */
+
 int main() {
     char *input;
     char	*mask;

@@ -12,7 +12,8 @@ void    *create_rdy()
     return (rdy);
 }
 
-int	create_dolar(char *src, char *mask, t_ready *rdy)
+// 이전 : int	create_dolar(char *src, char *mask, t_ready *rdy)
+int	create_dolar(char *src, char *mask, t_ready **rdy)
 {
 
 }

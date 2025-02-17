@@ -127,7 +127,7 @@ char *generate_mask(char *s)
 	char	*mask;
 	int	len;
 
-	printf("s len: %d\n", ft_strlen(s));
+	printf("s len: %ld\n", ft_strlen(s));
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	write_replace_spaces(s, mask_fd);
 	close(mask_fd);

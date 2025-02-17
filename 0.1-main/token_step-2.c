@@ -54,7 +54,7 @@ int	execute_meta(t_ready **rdy)
 		//ft_lstclear(&(*rdy)->io, execute_rd());
 	}
 }
-
+/*
 char    **create_str_2(t_list **head)
 {
     int size;
@@ -84,7 +84,7 @@ void	*create_exeinfo(t_ready *rdy, char *src, char *mask)
 	exe->cmd = create_str_2(&(rdy->text));
 	return (exe);
 }
-
+*/
 
 void *parsing(char *src, char *mask, int len)
 {

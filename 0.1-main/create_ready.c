@@ -8,7 +8,6 @@ void    *create_rdy()
     rdy->text = NULL;
     rdy->io = NULL;
     rdy->dolar = NULL;
-    rdy->next = NULL;
     return (rdy);
 }
 
@@ -82,7 +81,7 @@ int	create_text_4(char *mask, char *src, t_list **head)
 	{
 		while (mask[i] == 1)
 			i++;
-		tmp = ft_substr(&src[i - 1], 0, i - 1); //$HOME| 처럼 뒤에 바로 파이프가 올수도있으니까..
+		tmp = ft_substr(&src[i - (i - 1)], 0, i - 1); //$HOME| 처럼 뒤에 바로 파이프가 올수도있으니까..
 		rsult = ft_strdup(getenv(tmp)); //널반환하는지 확인
 		new = ft_lstnew(rsult);
 		ft_lstadd_back(head, new);

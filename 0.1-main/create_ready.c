@@ -62,6 +62,21 @@ int create_text_1(char *s1, char *s2, char *src, t_list **head)
     return (i);
 }
 
+char	*valid_env(char *tmp)
+{
+	char	*env;
+
+	env = getenv(tmp);
+	if (env == NULL)
+	{
+		env = malloc(sizeof(char));
+		*env = '\0';
+	}
+	else
+		env = ft_strdup(env);
+	return (env);
+}
+
 int	create_text_4(char *mask, char *src, t_list **head)
 {
 	int	i;
@@ -82,7 +97,7 @@ int	create_text_4(char *mask, char *src, t_list **head)
 		while (mask[i] == 1)
 			i++;
 		tmp = ft_substr(&src[i - (i - 1)], 0, i - 1); //$HOME| 처럼 뒤에 바로 파이프가 올수도있으니까..
-		rsult = ft_strdup(getenv(tmp)); //널반환하는지 확인
+		rsult = valid_env(tmp); //널반환하는지 확인
 		new = ft_lstnew(rsult);
 		ft_lstadd_back(head, new);
 		free(tmp);

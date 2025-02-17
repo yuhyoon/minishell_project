@@ -36,13 +36,13 @@ int	create_meta(char *src, char *mask, t_ready **rdy)
 	t_list	*io;
 
 	i = 0;
-	if (mask[i] <= 1)
-	{
-		i++;	
-	}
-	else if (mask[i] == IN_RD || mask[i] == OUT_RD)
+	if (mask[i] == IN_RD || mask[i] == OUT_RD)
 	{
 		i += create_io(src, mask, mask[i], rdy);
+	}
+	else 
+	{
+		i++;	
 	}
 	return (i);
 }

@@ -3,7 +3,7 @@
 #include "token_step-1.c"
 #include "token_step-2.c"
 
-// cc -g dummy_main.c -lreadline libft/libft.a
+// cc -g main.c token_step-1_utils.c -lreadline libft/libft.a
 int main() {
     char *input;
     char	*mask;

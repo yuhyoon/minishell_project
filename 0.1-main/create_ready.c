@@ -12,11 +12,6 @@ void    *create_rdy()
     return (rdy);
 }
 
-int	create_dolar(char *src, char *mask, t_ready *rdy)
-{
-
-}
-
 int create_io(char *src, char *mask, int rd, t_ready **head)
 {
     int i;
@@ -62,22 +57,41 @@ int create_text_1(char *s1, char *s2, char *src, t_list **head)
     return (i);
 }
 
-// int	create_text_4()
-// {
+int	create_text_4(char *mask, char *src, t_list **head)
+{
+	int	i;
+	char	*rsult;
+	char	*tmp;
+	t_list	*new;
 
-// }
+	i = 0;
+	i++;
+	if (src[i] == '?')
+	{
+		new = ft_lstnew(ft_strdup("$?"));
+		ft_lstadd_back(head, new);
+		i++;
+	}
+	else
+	{
+		while (mask[i] == 1)
+			i++;
+		tmp = ft_substr(&src[i - 1], 0, i - 1); //$HOME| 처럼 뒤에 바로 파이프가 올수도있으니까..
+		rsult = ft_strdup(getenv(tmp)); //널반환하는지 확인
+		new = ft_lstnew(rsult);
+		ft_lstadd_back(head, new);
+		free(tmp);
+	}
+	return (i);
+}
 
 void    create_text(t_ready *rdy, char *src, char *mask)
 {
     int i;
-    t_str   str_info;
     t_list  *head;
     t_list  *lst;
-    char    *r;
-    int n;
 
     i = 0;
-    str_info.src = src;
     head = NULL;
     while (mask[i] != '\n' && mask[i] != PIPE)
     {
@@ -89,9 +103,9 @@ void    create_text(t_ready *rdy, char *src, char *mask)
 		}
 		else if (mask[i] == 4)
 		{
-			//i += create_text_4();
+			i += create_text_4(&mask[i], &src[i], &head);
 		}
     }
-	rdy->text = head;  printf("%s\n", (char *)rdy->text->content);  
+	rdy->text = head;  
 }
 

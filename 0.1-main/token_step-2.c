@@ -34,7 +34,6 @@ int	create_meta(char *src, char *mask, t_ready **rdy)
 {
 	int	i;
 	t_list	*io;
-	t_list	*dolar;
 
 	i = 0;
 	if (mask[i] <= 1)
@@ -45,10 +44,6 @@ int	create_meta(char *src, char *mask, t_ready **rdy)
 	{
 		i += create_io(src, mask, mask[i], rdy);
 	}
-	else if (mask[i] == DOLLAR)
-	{
-		i += create_dolar(src, mask, rdy);
-	}
 	return (i);
 }
 
@@ -58,11 +53,6 @@ int	execute_meta(t_ready **rdy)
 	{
 		//ft_lstclear(&(*rdy)->io, execute_rd());
 	}
-	while (((*rdy)->dolar) != NULL)
-	{
-		//ft_lstclear(&(*rdy)->dolar, execute_rd());
-	}
-	
 }
 
 char    **create_str_2(t_list **head)

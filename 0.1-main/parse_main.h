@@ -32,33 +32,21 @@ typedef struct s_char_state
 	char	*current;
 }t_char_state;
 
-// typedef struct	s_lex
-// {
-// 	t_token	tkn_type;
-// 	void	*tbl;
-// }t_lex;
-
-// typedef struct s_node
-// {
-// 	struct s_lex	*content;
-// 	struct s_node	*next;
-// }t_node;
 
 typedef struct s_ready
 {
 	t_list	*text;
 	t_list	*io;
 	t_list	*dolar;
-	struct s_ready	*next;	
 }t_ready;
 
-typedef struct s_exe_info
-{
-	char	**cmd;
-	int	in;
-	int	out;
-	struct s_exe_info	*next;
-}t_exe_info;
+// typedef struct s_exe_info
+// {
+// 	char	**cmd;
+// 	int	in;
+// 	int	out;
+// 	struct s_exe_info	*next;
+// }t_exe_info;
 
 typedef struct s_dollar
 {

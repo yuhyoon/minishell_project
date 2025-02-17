@@ -57,7 +57,7 @@ typedef struct s_dollar
 typedef struct s_stack
 {
 	int	size;
-	struct t_list *top;
+	struct s_list *top;
 }t_stack;
 
 typedef struct s_str

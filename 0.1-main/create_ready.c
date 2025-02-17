@@ -12,6 +12,12 @@ void    *create_rdy()
     return (rdy);
 }
 
+// 이전 : int	create_dolar(char *src, char *mask, t_ready *rdy)
+int	create_dolar(char *src, char *mask, t_ready **rdy)
+{
+
+}
+
 int create_io(char *src, char *mask, int rd, t_ready **head)
 {
     int i;
@@ -106,6 +112,6 @@ void    create_text(t_ready *rdy, char *src, char *mask)
 			i += create_text_4(&mask[i], &src[i], &head);
 		}
     }
-	rdy->text = head;  
+	rdy->text = head;   
 }
 

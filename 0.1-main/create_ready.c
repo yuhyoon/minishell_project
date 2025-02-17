@@ -71,6 +71,11 @@ char	*valid_env(char *tmp)
 	{
 		env = malloc(sizeof(char));
 		*env = '\0';
+		if (*tmp == '?')
+		{
+			free(env);
+			env = ft_strjoin("$", tmp);
+		}
 	}
 	else
 		env = ft_strdup(env);
@@ -86,14 +91,7 @@ int	create_text_4(char *mask, char *src, t_list **head)
 
 	i = 0;
 	i++;
-	if (src[i] == '?')
-	{
-		new = ft_lstnew(ft_strdup("$?"));
-		ft_lstadd_back(head, new);
-		i++;
-	}
-	else
-	{
+
 		while (mask[i] == 1)
 			i++;
 		tmp = ft_substr(&src[i - (i - 1)], 0, i - 1); //$HOME| 처럼 뒤에 바로 파이프가 올수도있으니까..
@@ -101,7 +99,7 @@ int	create_text_4(char *mask, char *src, t_list **head)
 		new = ft_lstnew(rsult);
 		ft_lstadd_back(head, new);
 		free(tmp);
-	}
+	
 	return (i);
 }
 

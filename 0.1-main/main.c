@@ -19,61 +19,86 @@
 // 	if (exit_status)
 		
 // }
-#include <sys/stat.h>
+// #include <sys/stat.h>
 #include <errno.h>
-#include <stdlib.h>
-#include <stdio.h>
+// #include <stdlib.h>
+// #include <stdio.h>
 
-void	set_signal(void)
+
+// ctrl-C 시그널을 처리할 핸들러
+void handle_ctrl_c(int sig)
 {
-	signal(SIGINT, do_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	ft_putstr_fd("\n", 2);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
+
+void handle_ctrl_back(int sig)
+{
+	// cat grep 과 같이 
+	// ft_putstr_fd("\n", 2);
+	return ;	
+}
+
+
+// 시그널 핸들러 설정
+void set_signal()
+{
+	signal(SIGINT, handle_ctrl_c);
+	signal(SIGQUIT, handle_ctrl_back); 
+}
+
 
 int main() 
 {
-    char *input;
-    char	*mask;
-    t_list	*rdy_head;
+	char *input;
+	char	*mask;
+	t_list	*rdy_head;
 
-    while (1) 
+	while (1) 
 	{
 		set_signal();
-        input = readline("minishell> ");
-        if (input == NULL) 
-        {
-            printf("\n입력이 널이면 종료\n");
-            break;
-        }
-        if (ft_strlen(input) == 0) 
-        {
-            free(input);
-            continue;
-        }
-        add_history(input);
-        mask = generate_mask(input);
-        rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
-
-		//print 
-		t_ready	*rdy;
-		t_list	*lst;
-		char	*txt;
-		while (rdy_head)
+		input = readline("minishell> ");
+		
+		if (input != NULL) 
 		{
-			rdy = (t_ready *)rdy_head->content;
-			lst = (rdy->text);
-			while (lst)
-			{
-				txt = (char *)lst->content;
-				printf("%s\n", txt);
-				lst = lst->next;
-			}
-			rdy_head = rdy_head->next;
+			add_history(input);
+			mask = generate_mask(input);
+			rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
+			// printf("\n입력이 널이면 종료\n");
+			// break;
 		}
-			free(mask);
+		else
+		{
+			printf("%s\n","ctrl + D");
+			break;
+		}
+		if (ft_strlen(input) == 0) 
+		{
 			free(input);
-    }
-    // rl_clear_history();
-    
-    return 0;
+			continue;
+		}
+		// //print 
+		// t_ready	*rdy;
+		// t_list	*lst;
+		// char	*txt;
+		// while (rdy_head)
+		// {
+		// 	rdy = (t_ready *)rdy_head->content;
+		// 	lst = (rdy->text);
+		// 	while (lst)
+		// 	{
+		// 		txt = (char *)lst->content;
+		// 		printf("%s\n", txt);
+		// 		lst = lst->next;
+		// 	}
+		// 	rdy_head = rdy_head->next;
+		// }
+		// 	free(mask);
+		// 	free(input);
+	}
+	// rl_clear_history();
+	
+	return 0;
 }

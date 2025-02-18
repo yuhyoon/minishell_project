@@ -54,6 +54,7 @@ int	valid_quote(char *s, int quote, t_char_state *state)
 	if (is_emthy(&stack) == false && ss[i] == '\0')
 		state->quote *= -1;
 	store_quote_seq(state, i, ss);
+	return (0);
 }
 
 void	set_char_state(char *s, t_char_state *char_state)

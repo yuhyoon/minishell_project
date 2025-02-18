@@ -12,10 +12,10 @@ void    *create_rdy()
 }
 
 // 이전 : int	create_dolar(char *src, char *mask, t_ready *rdy)
-int	create_dolar(char *src, char *mask, t_ready **rdy)
-{
+// int	create_dolar(char *src, char *mask, t_ready **rdy)
+// {
 
-}
+// }
 
 int create_io(char *src, char *mask, int rd, t_ready **head)
 {

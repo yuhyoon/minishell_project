@@ -53,8 +53,9 @@ int	execute_meta(t_ready **rdy)
 	{
 		//ft_lstclear(&(*rdy)->io, execute_rd());
 	}
+	return (0);
 }
-/*
+/* *
 char    **create_str_2(t_list **head)
 {
     int size;

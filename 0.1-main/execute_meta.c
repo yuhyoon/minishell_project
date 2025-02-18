@@ -20,7 +20,7 @@ int	here_doc(char *delim)
 	{
 		line = readline("> ");
 		len = ft_strlen(line);
-		if (!line || !ft_strncmp(line, delim, len));
+		if (!line || !ft_strncmp(line, delim, len))
 		{
 			free(line);
 			break ;

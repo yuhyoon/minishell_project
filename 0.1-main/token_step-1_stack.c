@@ -35,4 +35,5 @@ int pop(t_stack *stack)
     stack->top = tmp->next;
 	free(tmp);
 	stack->size--;
+	return (0);
 }

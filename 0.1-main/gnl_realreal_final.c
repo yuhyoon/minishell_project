@@ -27,7 +27,7 @@ int producer(int fd, t_gnlque *q)
     int i;
 
 
-	// printf("producer\n");
+	printf("producer\n");
 	if (q->r == q->f)
 	{
 		n = read(fd, &q->buf[q->r], BUFFER_SIZE);
@@ -70,7 +70,7 @@ void *consumer2(int read_size, t_gnlque *q, t_gnl_node *head)
     if (read_size == 0)
         return (head);
 	i = 0;
-	// printf("consumer head\n");
+	printf("consumer head\n");
 	while (q->f != q->r && head->c != '\n' && i < read_size)
 	{
 		new_lst = (t_gnl_node *)malloc(sizeof(t_gnl_node));
@@ -81,7 +81,7 @@ void *consumer2(int read_size, t_gnlque *q, t_gnl_node *head)
 		printf("%d ", head->c);
 		i++;
 	}
-	// printf("\n");
+	printf("\n");
 	return (head);
 }
 
@@ -99,7 +99,7 @@ char    *create_str(t_gnl_node *head)
         size++;
         tmp = tmp->next;
     }
-    // printf("create str size: %d\n", size);
+    printf("create str size: %d\n", size);
     str = malloc(sizeof(char) * (size + 1));
 	i = 0;
     while (i < size)
@@ -115,7 +115,7 @@ char    *create_str(t_gnl_node *head)
 	{
 		printf("%d ", str[i]);
 	}
-		// printf("\n");
+		printf("\n");
 	free(head);
 	return (str);
 }

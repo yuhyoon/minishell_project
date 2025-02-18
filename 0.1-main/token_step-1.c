@@ -128,7 +128,7 @@ char *generate_mask(char *s)
 	char	*mask;
 	int	len;
 
-	// printf("s len: %ld\n", ft_strlen(s));
+	printf("s len: %ld\n", ft_strlen(s));
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	write_replace_spaces(s, mask_fd);
 	close(mask_fd);
@@ -137,10 +137,10 @@ char *generate_mask(char *s)
 	len = ft_strlen_delim(mask, '\n');
 	unlink("mask_fd");
 	close(mask_fd);
-	// printf("\nmask len: %d\n", len);
-	// for (int i = 0; i < ft_strlen(s); i++) {
-    //     	printf("%c ", s[i]);
-    // }
-	// printf("\n");
+	printf("\nmask len: %d\n", len);
+	for (int i = 0; i < ft_strlen(s); i++) {
+        	printf("%c ", s[i]);
+    }
+	printf("\n");
 	return (mask);
 }

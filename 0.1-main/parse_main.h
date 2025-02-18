@@ -45,14 +45,14 @@ typedef struct s_ready
 	t_list	*dolar;
 }t_ready;
 
-typedef struct s_exe_info
-{
-	//REDIRECTION...
-	char	**cmd;
-	int	in;
-	int	out;
-	struct s_exe_info	*next;
-}t_exe_info;
+// typedef struct s_exe_info
+// {
+// 	//REDIRECTION...
+// 	char	**cmd;
+// 	int	in;
+// 	int	out;
+// 	struct s_exe_info	*next;
+// }t_exe_info;
 
 typedef struct s_dollar
 {

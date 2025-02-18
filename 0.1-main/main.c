@@ -11,75 +11,61 @@
  * cc -g main.c token_step-1_utils.c libft/libft.a -lreadline
  *
  * 	맥북 실행시,
- * 1. readline 이슈,
+ * 1. readline 이슈, rl_clear_history()때문에 작동 불가 -> 주석처리 후 작업
  */
 
-// void	change_exit_status(int exit_status)
-// {
-// 	if (exit_status)
-		
-// }
-// #include <sys/stat.h>
 #include <errno.h>
-// #include <stdlib.h>
-// #include <stdio.h>
 
-
-// ctrl-C 시그널을 처리할 핸들러
-void handle_ctrl_c(int sig)
+void	before_readline(int signal)
 {
-	ft_putstr_fd("\n", 2);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (signal == SIGINT)
+	{
+		//버퍼 삭제... (이걸로 되려나..)
+		write(STDOUT_FILENO, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		//종료 값 설정
+	}
+	//없어도 될 것 같지만 차일을 위해 남겨둠
+	// else if (signal == SIGQUIT)
+	// {
+	// 	(void)signal;
+	// }
 }
 
-void handle_ctrl_back(int sig)
+void	set_signal(void *handler)
 {
-	// cat grep 과 같이 
-	// ft_putstr_fd("\n", 2);
-	return ;	
+	signal(SIGINT, handler);
+	signal(SIGQUIT, SIG_IGN);
 }
-
-
-// 시그널 핸들러 설정
-void set_signal()
-{
-	signal(SIGINT, handle_ctrl_c);
-	signal(SIGQUIT, handle_ctrl_back); 
-}
-
 
 int main() 
 {
-	char *input;
-	char	*mask;
-	t_list	*rdy_head;
+	char 		*input;
+	char		*mask;
+	t_list		*rdy_head;
+	// t_exe_info 	*converted;
 
 	while (1) 
 	{
-		set_signal();
+		set_signal(before_readline);
 		input = readline("minishell> ");
-		
-		if (input != NULL) 
+		if (input == NULL)
 		{
-			add_history(input);
-			mask = generate_mask(input);
-			rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
-			// printf("\n입력이 널이면 종료\n");
-			// break;
-		}
-		else
-		{
-			printf("%s\n","ctrl + D");
+			//cat grep에서는 다르게 동작함 (그건 fork 후에 처리하는 구간에서 추가)
+			printf("%s\n","exit");
 			break;
 		}
+		add_history(input);
+		mask = generate_mask(input);
+		rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
 		if (ft_strlen(input) == 0) 
 		{
 			free(input);
 			continue;
 		}
-		// //print 
+		//print 
 		// t_ready	*rdy;
 		// t_list	*lst;
 		// char	*txt;
@@ -95,10 +81,9 @@ int main()
 		// 	}
 		// 	rdy_head = rdy_head->next;
 		// }
-		// 	free(mask);
-		// 	free(input);
+		//  free(mask);
+		//  free(input);
 	}
-	// rl_clear_history();
-	
+    rl_clear_history();
 	return 0;
 }

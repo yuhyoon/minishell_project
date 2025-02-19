@@ -29,7 +29,7 @@ int	count_text(char *mask)
 	return (i);
 }
 
-int create_io(char *src, char *mask, int rd, t_list **head)
+int create_rdrct(char *src, char *mask, int rd, t_list **head)
 {
     int i;
 	t_redrct	*new;

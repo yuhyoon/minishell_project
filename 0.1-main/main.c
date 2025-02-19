@@ -65,29 +65,8 @@ int main()
 			free(input);
 			continue;
 		}
-<<<<<<< HEAD
-		//print 
-		// t_ready	*rdy;
-		// t_list	*lst;
-		// char	*txt;
-		// while (rdy_head)
-		// {
-		// 	rdy = (t_ready *)rdy_head->content;
-		// 	lst = (rdy->text);
-		// 	while (lst)
-		// 	{
-		// 		txt = (char *)lst->content;
-		// 		printf("%s\n", txt);
-		// 		lst = lst->next;
-		// 	}
-		// 	rdy_head = rdy_head->next;
-		// }
-		//  free(mask);
-		//  free(input);
-=======
 		// 	free(mask);
 		// 	free(input);
->>>>>>> rdrct_div
 	}
     rl_clear_history();
 	return 0;

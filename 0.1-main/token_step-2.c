@@ -146,7 +146,7 @@ void *parsing(char *src, char *mask, int len)
 	{
 		if (mask[i] == IN_RD || mask[i] == OUT_RD)
 		{
-			i += create_io(&src[i], &mask[i], mask[i], &rdrct);
+			i += create_rdrct(&src[i], &mask[i], mask[i], &rdrct);
 		}
 		else if (mask[i] == PIPE)
 		{

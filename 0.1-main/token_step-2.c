@@ -44,9 +44,11 @@ void	init_first(t_list **in, t_list **out, t_list **rd_list)
 	t_redrct	*rd;
 
 	tmp = rd_list;
+	printf("\nrd_list\n");
 	while (*tmp)
 	{
 		rd = (t_redrct *)(*tmp)->content;
+		printf("%s\n", rd->obj);
 		if (rd->type == IN_RD && *in == NULL)
 		{
 			*in = *tmp;
@@ -160,7 +162,6 @@ void *parsing(char *src, char *mask, int len)
 			i++;
 	}
 	divide_rdrct(&rdrct);
-	printf("%d\n", save);
 	create_text(rdy, &src[save], &mask[save]);
 	//clean_ready(&rdy);
 	

@@ -17,6 +17,18 @@ void    *create_rdy()
 
 // }
 
+int	count_text(char *mask)
+{
+	int	i;
+
+	i = 0;
+	while (mask[i] != PIPE && mask[i] != '\n' && mask[i] != NONE)
+	{
+		i++;
+	}
+	return (i);
+}
+
 int create_io(char *src, char *mask, int rd, t_list **head)
 {
     int i;
@@ -35,9 +47,9 @@ int create_io(char *src, char *mask, int rd, t_list **head)
 	new = malloc(sizeof(t_redrct));
 	new->type = rd;
 	new->parts = i;
-    while(mask[i] == 0) //todo: 39~ 43 고치기
+	while (mask[i] == NONE)
 		i++;
-	len = ft_strlen(&mask[i]);
+	len = count_text(&mask[i]);
 	ft_memset(&mask[i], rd, len);
 	str = malloc(sizeof(char) * (len + 1));
 	str = ft_memcpy(str, &src[i], len);
@@ -114,9 +126,8 @@ void    create_text(t_ready *rdy, char *src, char *mask)
 
     i = 0;
     head = NULL;
-    while (mask[i] != '\n' && mask[i] != PIPE && i < 10)
+    while (mask[i] != '\n' && mask[i] != PIPE )
     {
-	    printf("%d\n", mask[i]);
     	if (mask[i] == 1)
         {
             i += create_text_1(&mask[i], "1", &src[i], &head);

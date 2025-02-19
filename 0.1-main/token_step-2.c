@@ -33,15 +33,8 @@ void	clean_ready(t_ready **rdy)
 int	f(char *src, char *mask, t_list **io)
 {
 	int	i;
-	t_list	*io;
 
 	i = 0;
-	if (mask[i] == IN_RD || mask[i] == OUT_RD)
-	{
-		i += create_io(src, mask, mask[i], io);
-	}
-	else
-		i++;
 	return (i);
 }
 
@@ -56,34 +49,35 @@ void	init_first(t_list **in, t_list **out, t_list **rd_list)
 		rd = (t_redrct *)(*tmp)->content;
 		if (rd->type == IN_RD && *in == NULL)
 		{
-			*in = rd;
+			*in = *tmp;
 		}
 		else if (rd->type == OUT_RD && *out == NULL)
 		{
-			*out = rd;
+			*out = *tmp;
 		}
-		tmp = tmp->next;
+		*tmp = (*tmp)->next;
 	}
 }
 
-void	maniplt_next(t_list **first, int t)
+void	maniplt_next(t_list **fst, int t)
 {
 	t_list	*tmp;
 	t_redrct	*rd;
-	t_list	**first_backup;
+	t_list	*first;
 
-	first_backup = first; 
-	rd = (t_redrct *)(*first)->content;
-	while (*first)
+	if (*fst == NULL)
+		return ;
+	first = *fst; 
+	while (first)
 	{
+		rd = (t_redrct *)(first)->content;
 		if (rd->type == t)
 		{
-			tmp = *first;
+			tmp = first;
 			tmp = tmp->next;
 		}
-		(*first) = (*first)->next;
+		(first) = (first)->next;
 	}
-	return (first_backup);
 }
 
 int	divide_rdrct(t_list **rd_list)
@@ -145,10 +139,14 @@ void *parsing(char *src, char *mask, int len)
 	rdy_head = NULL;
 	new = ft_lstnew(rdy);
 	ft_lstadd_back(&rdy_head, new);
+	rdrct = NULL;
 	while (i < len)
 	{
-		i += f(src, mask, &rdrct);
-		if (mask[i] == PIPE)
+		if (mask[i] == IN_RD || mask[i] == OUT_RD)
+		{
+			i += create_io(&src[i], &mask[i], mask[i], &rdrct);
+		}
+		else if (mask[i] == PIPE)
 		{
 			divide_rdrct(&rdrct);
 			create_text(rdy, &src[save], &mask[save]);
@@ -158,8 +156,11 @@ void *parsing(char *src, char *mask, int len)
 			i++;
 			save = i;
 		}
+		else
+			i++;
 	}
 	divide_rdrct(&rdrct);
+	printf("%d\n", save);
 	create_text(rdy, &src[save], &mask[save]);
 	//clean_ready(&rdy);
 	

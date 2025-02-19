@@ -17,12 +17,25 @@ void    *create_rdy()
 
 // }
 
-int create_io(char *src, char *mask, int rd, t_ready **head)
+int	count_text(char *mask)
+{
+	int	i;
+
+	i = 0;
+	while (mask[i] != PIPE && mask[i] != '\n' && mask[i] != NONE)
+	{
+		i++;
+	}
+	return (i);
+}
+
+int create_io(char *src, char *mask, int rd, t_list **head)
 {
     int i;
 	t_redrct	*new;
 	char	*str;
 	int		len;
+	t_list	*lst;
 
     i = 0;
     while (mask[i] == rd)
@@ -32,16 +45,18 @@ int create_io(char *src, char *mask, int rd, t_ready **head)
 		//todo: error handling
     }
 	new = malloc(sizeof(t_redrct));
-	new->type = *mask;
+	new->type = rd;
 	new->parts = i;
-    while(mask[i] == 0)
+	while (mask[i] == NONE)
 		i++;
-	len = ft_strlen(&mask[i]);
+	len = count_text(&mask[i]);
 	ft_memset(&mask[i], rd, len);
 	str = malloc(sizeof(char) * (len + 1));
 	str = ft_memcpy(str, &src[i], len);
 	str[len] = '\0';
 	new->obj = str;
+	lst = ft_lstnew(new);
+	ft_lstadd_back(head, lst);
 	return (i + len);
 }
 
@@ -111,18 +126,19 @@ void    create_text(t_ready *rdy, char *src, char *mask)
 
     i = 0;
     head = NULL;
-    while (mask[i] != '\n' && mask[i] != PIPE)
+    while (mask[i] != '\n' && mask[i] != PIPE )
     {
-		if (mask[i] == 0)
-			i++;
-    	else if (mask[i] == 1)
+    	if (mask[i] == 1)
         {
             i += create_text_1(&mask[i], "1", &src[i], &head);
-		}
-		else if (mask[i] == 4)
-		{
-			i += create_text_4(&mask[i], &src[i], &head);
-		}
+	}
+	else if (mask[i] == 4)
+	{
+		i += create_text_4(&mask[i], &src[i], &head);
+	}
+	else
+		i++;
+	
     }
 	rdy->text = head;   
 }

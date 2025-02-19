@@ -30,30 +30,69 @@ void	clean_ready(t_ready **rdy)
 }
 
 //return length
-int	create_meta(char *src, char *mask, t_ready **rdy)
+int	f(char *src, char *mask, t_list **io)
 {
 	int	i;
-	t_list	*io;
 
 	i = 0;
-	if (mask[i] == IN_RD || mask[i] == OUT_RD)
-	{
-		i += create_io(src, mask, mask[i], rdy);
-	}
-	else 
-	{
-		i++;	
-	}
 	return (i);
 }
 
-int	execute_meta(t_ready **rdy)
+void	init_first(t_list **in, t_list **out, t_list **rd_list)
 {
-	while (((*rdy)->io) != NULL)
+	t_list		**tmp;
+	t_redrct	*rd;
+
+	tmp = rd_list;
+	printf("\nrd_list\n");
+	while (*tmp)
 	{
-		//ft_lstclear(&(*rdy)->io, execute_rd());
+		rd = (t_redrct *)(*tmp)->content;
+		printf("%s\n", rd->obj);
+		if (rd->type == IN_RD && *in == NULL)
+		{
+			*in = *tmp;
+		}
+		else if (rd->type == OUT_RD && *out == NULL)
+		{
+			*out = *tmp;
+		}
+		*tmp = (*tmp)->next;
 	}
-	return (0);
+}
+
+void	maniplt_next(t_list **fst, int t)
+{
+	t_list	*tmp;
+	t_redrct	*rd;
+	t_list	*first;
+
+	if (*fst == NULL)
+		return ;
+	first = *fst; 
+	while (first)
+	{
+		rd = (t_redrct *)(first)->content;
+		if (rd->type == t)
+		{
+			tmp = first;
+			tmp = tmp->next;
+		}
+		(first) = (first)->next;
+	}
+}
+
+int	divide_rdrct(t_list **rd_list)
+{
+	t_list	*in;
+	t_list	*out;
+
+	in = NULL;
+	out = NULL;
+	init_first(&in, &out, rd_list);
+	maniplt_next(&in, IN_RD);
+	maniplt_next(&out, OUT_RD);
+	//ft_lstclear(&(*rdy)->io, execute_rd());
 }
 /* *
 char    **create_str_2(t_list **head)
@@ -94,6 +133,7 @@ void *parsing(char *src, char *mask, int len)
 	t_list	*rdy_head;
 	t_list	*new;
 	int	save;
+	t_list  *rdrct;
 
 	rdy = create_rdy();
 	i = 0;
@@ -101,12 +141,16 @@ void *parsing(char *src, char *mask, int len)
 	rdy_head = NULL;
 	new = ft_lstnew(rdy);
 	ft_lstadd_back(&rdy_head, new);
+	rdrct = NULL;
 	while (i < len)
 	{
-		i += create_meta(src, mask, &rdy);
-		if (mask[i] == PIPE)
+		if (mask[i] == IN_RD || mask[i] == OUT_RD)
 		{
-			execute_meta(&rdy);
+			i += create_io(&src[i], &mask[i], mask[i], &rdrct);
+		}
+		else if (mask[i] == PIPE)
+		{
+			divide_rdrct(&rdrct);
 			create_text(rdy, &src[save], &mask[save]);
 			rdy = create_rdy();
 			new = ft_lstnew(rdy);
@@ -114,8 +158,10 @@ void *parsing(char *src, char *mask, int len)
 			i++;
 			save = i;
 		}
+		else
+			i++;
 	}
-	execute_meta(&rdy);
+	divide_rdrct(&rdrct);
 	create_text(rdy, &src[save], &mask[save]);
 	//clean_ready(&rdy);
 	

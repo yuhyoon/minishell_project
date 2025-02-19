@@ -65,6 +65,7 @@ int main()
 			free(input);
 			continue;
 		}
+<<<<<<< HEAD
 		//print 
 		// t_ready	*rdy;
 		// t_list	*lst;
@@ -83,6 +84,10 @@ int main()
 		// }
 		//  free(mask);
 		//  free(input);
+=======
+		// 	free(mask);
+		// 	free(input);
+>>>>>>> rdrct_div
 	}
     rl_clear_history();
 	return 0;

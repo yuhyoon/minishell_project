@@ -18,6 +18,8 @@ typedef struct s_redrct
 	char	type;
 	int		parts;
 	char	*obj;
+	int		access;
+	int		hrd_fd;
 }t_redrct;
 
 typedef struct s_char_state

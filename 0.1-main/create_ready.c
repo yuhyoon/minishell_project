@@ -12,12 +12,6 @@ void    *create_rdy()
     return (rdy);
 }
 
-// 이전 : int	create_dolar(char *src, char *mask, t_ready *rdy)
-// int	create_dolar(char *src, char *mask, t_ready **rdy)
-// {
-
-// }
-
 int	count_text(char *mask)
 {
 	int	i;
@@ -28,6 +22,20 @@ int	count_text(char *mask)
 		i++;
 	}
 	return (i);
+}
+
+//todo: < a 나 > b 에서 실행파일도 리디렉션 적용되는지 확인
+int	access_file(t_redrct *rdrct)
+{
+	int	mode;
+
+	if (rdrct->type == IN_RD && rdrct->parts == 2)
+		mode = here_doc(rdrct);
+	else if (rdrct->type == OUT_RD && rdrct->parts == 1)
+		mode = access(rdrct->obj, W_OK);
+	else if (rdrct->type == IN_RD && rdrct->parts == 1)
+		mode = access(rdrct->obj, R_OK);
+	rdrct->access = mode;
 }
 
 int create_rdrct(char *src, char *mask, t_list **head)
@@ -52,8 +60,7 @@ int create_rdrct(char *src, char *mask, t_list **head)
 	str = ft_memcpy(str, &src[i], len);
 	str[len] = '\0';
 	new->obj = str;
-	// if (new->parts == 2 && new->type == IN_RD)
-	// 	here_doc(str);
+	access_file(new);
 	lst = ft_lstnew(new);
 	ft_lstadd_back(head, lst);
 	return (i + len);

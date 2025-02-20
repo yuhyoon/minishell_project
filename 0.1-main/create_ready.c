@@ -30,7 +30,7 @@ int	count_text(char *mask)
 	return (i);
 }
 
-int create_rdrct(char *src, char *mask, int rd, t_list **head)
+int create_rdrct(char *src, char *mask, t_list **head)
 {
     int i;
 	t_redrct	*new;
@@ -39,23 +39,21 @@ int create_rdrct(char *src, char *mask, int rd, t_list **head)
 	t_list	*lst;
 
     i = 0;
-    while (mask[i] == rd)
-        i++;
-    if (i >= 3)
-    {
-		//todo: error handling
-    }
 	new = malloc(sizeof(t_redrct));
-	new->type = rd;
+	new->type = mask[i];
+    while (mask[i] == new->type)
+        i++;
 	new->parts = i;
 	while (mask[i] == NONE)
 		i++;
 	len = count_text(&mask[i]);
-	ft_memset(&mask[i], rd, len);
+	ft_memset(&mask[i], new->type, len);
 	str = malloc(sizeof(char) * (len + 1));
 	str = ft_memcpy(str, &src[i], len);
 	str[len] = '\0';
 	new->obj = str;
+	// if (new->parts == 2 && new->type == IN_RD)
+	// 	here_doc(str);
 	lst = ft_lstnew(new);
 	ft_lstadd_back(head, lst);
 	return (i + len);

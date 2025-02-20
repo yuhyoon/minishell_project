@@ -1,6 +1,7 @@
 minitalk/
 0.01-dummy/libft
 *.a
+*.o
 lib/libft/ft_atoi.o
 lib/libft/ft_bzero.o
 lib/libft/ft_calloc.o

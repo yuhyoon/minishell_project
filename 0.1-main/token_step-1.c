@@ -127,16 +127,19 @@ char *generate_mask(char *s)
 	int	mask_fd;
 	char	*mask;
 	int	len;
+	struct stat	st;
 
 	printf("s len: %ld\n", ft_strlen(s));
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	write_replace_spaces(s, mask_fd);
 	close(mask_fd);
 	mask_fd = open("mask_fd", O_RDONLY);
-	mask = get_next_line(mask_fd);
-	len = ft_strlen_delim(mask, '\n');
-	unlink("mask_fd");
+	fstat(mask_fd, &st);
+	len = (int)st.st_size;
+	mask = malloc(sizeof(char) * len);
+	read(mask_fd, mask, len);
 	close(mask_fd);
+	unlink("mask_fd");
 	printf("\nmask len: %d\n", len);
 	for (int i = 0; i < ft_strlen(s); i++) {
         	printf("%c ", s[i]);

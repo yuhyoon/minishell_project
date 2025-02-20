@@ -85,7 +85,7 @@ void *consumer2(int read_size, t_gnlque *q, t_gnl_node *head)
 	return (head);
 }
 
-char    *create_str(t_gnl_node *head)
+char    *create_str(t_gnl_node *head )
 {
     int size;
     char    *str;
@@ -96,6 +96,7 @@ char    *create_str(t_gnl_node *head)
 	size = 0;
     while (tmp->next != NULL)
     {    
+		//todo: syntax error
         size++;
         tmp = tmp->next;
     }

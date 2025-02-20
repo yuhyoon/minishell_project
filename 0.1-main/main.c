@@ -67,6 +67,7 @@ int		read_input(t_minish *sh)
 	}
 	add_history(input);
 	mask = generate_mask(input);
+	exit_code = 
 	rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
 	sh->ready = rdy_head;
 	 

@@ -3,11 +3,12 @@
 void    *create_rdy()
 {
     t_ready *rdy;
+	static	int	num; //study: 폴더 최대 몇개까지 만들 수 있는지 
 
     rdy = malloc(sizeof(t_ready));
     rdy->text = NULL;
     rdy->rdrct = NULL;
-    rdy->dir = NULL;
+    rdy->dir = opendir(ft_itoa(num));
     return (rdy);
 }
 

@@ -1,3 +1,4 @@
+#include "main.h"
 #include "parse_main.h"
 # include "token_step-1_utils.h"
 #include "token_step-1.c"
@@ -25,7 +26,7 @@ void	before_readline(int signal)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		//종료 값 설정
+		//exitcode 
 	}
 	//없어도 될 것 같지만 차일을 위해 남겨둠
 	// else if (signal == SIGQUIT)
@@ -40,20 +41,43 @@ void	set_signal(void *handler)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-int main() 
+void	init_minish(t_minish *sh)
+{
+	set_signal(before_readline);
+	ft_memset(sh, 0, sizeof(t_minish));
+
+}
+
+int		read_input(t_minish *sh)
 {
 	char 		*input;
 	char		*mask;
 	t_list		*rdy_head;
-	// t_exe_info 	*converted;
+	
+	input = readline("minishell> ");
+	if (input == NULL)
+		printf("%s\n","exit"); //todo: exit
+	if (ft_strlen(input) == 0) 
+		free(input); //todo: continue
+	add_history(input);
+	mask = generate_mask(input);
+	rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
+	sh->ready = rdy_head;
+	 
+}
 
+int main() 
+{
+	t_minish	sh;
+
+	init_minish(&sh);
+	/*
 	while (1) 
 	{
 		set_signal(before_readline);
 		input = readline("minishell> ");
 		if (input == NULL)
 		{
-			//cat grep에서는 다르게 동작함 (그건 fork 후에 처리하는 구간에서 추가)
 			printf("%s\n","exit");
 			break;
 		}
@@ -67,6 +91,13 @@ int main()
 		}
 		// 	free(mask);
 		// 	free(input);
+	}
+	*/
+	while (1)
+	{
+		if (read_input(&sh) != 0)
+			execute_ready(&sh);
+		
 	}
     rl_clear_history();
 	return 0;

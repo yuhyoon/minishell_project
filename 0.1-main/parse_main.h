@@ -1,18 +1,7 @@
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef PARSER_H
+# define PARSER_H
 
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <stdbool.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "libft/libft.h"
-#include "table.h"
+# include "main.h"
 
 typedef enum s_token
 {
@@ -24,6 +13,13 @@ typedef enum s_token
 	PIPE
 }t_token;
 
+typedef struct s_redrct
+{
+	char	type;
+	int		parts;
+	char	*obj;
+}t_redrct;
+
 typedef struct s_char_state
 {
 	int	quote;
@@ -32,27 +28,12 @@ typedef struct s_char_state
 }t_char_state;
 
 
-// typedef struct s_list
-// {
-// 	void			*content;
-// 	struct s_list	*next;
-// }t_list;
-
 typedef struct s_ready
 {
 	t_list	*text;
-	t_list	*io;
-	t_list	*dolar;
+	t_list	*rdrct;
+	DIR		*dir;
 }t_ready;
-
-// typedef struct s_exe_info
-// {
-// 	//REDIRECTION...
-// 	char	**cmd;
-// 	int	in;
-// 	int	out;
-// 	struct s_exe_info	*next;
-// }t_exe_info;
 
 typedef struct s_dollar
 {

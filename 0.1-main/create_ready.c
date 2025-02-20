@@ -6,8 +6,8 @@ void    *create_rdy()
 
     rdy = malloc(sizeof(t_ready));
     rdy->text = NULL;
-    rdy->io = NULL;
-    rdy->dolar = NULL;
+    rdy->rdrct = NULL;
+    rdy->dir = NULL;
     return (rdy);
 }
 

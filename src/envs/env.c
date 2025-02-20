@@ -19,7 +19,6 @@ int	free_node(t_envp **stack)
 	return (0);
 }
 
-
 int	free_double_char(char **double_char)
 {
     int i;
@@ -31,7 +30,6 @@ int	free_double_char(char **double_char)
         free(double_char[i]);
     free(double_char); 
 }
-
 
 // t_envp	*new_node(char **envp, int idx)
 t_envp	*new_node(char **envp, int idx)

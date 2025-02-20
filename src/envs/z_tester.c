@@ -17,7 +17,7 @@ t_envp	*new_node(char **envp, int idx)
 	return (first);
 }
 
-int	f_count_char_env(char **envp)
+int	f_count_char(char **envp)
 {
 	int count;
 
@@ -33,7 +33,7 @@ void	f_init_env(char **envp, t_envp **n_envps)
 	int		i;
 	t_envp	*tmp;
 
-	count = f_envp_count(envp);
+	count = f_count_char_env(envp);
 	printf("var count : %d\n", count);
 	*n_envps = new_node(envp, 0);
 	tmp = *n_envps;
@@ -41,6 +41,7 @@ void	f_init_env(char **envp, t_envp **n_envps)
 	while (++i < count)
 	{
 		tmp->next = new_node(envp, i);
+        tmp->o_envp = envp;
 		tmp->count = count;
 		tmp = tmp->next;
 	}
@@ -158,7 +159,7 @@ int f_set_env(t_envp **n_envps, char *key, char *value)
 void    *del(t_envp node)
 {
     node.count = 0;
-    free_double_char(node.path);
+    // free_double_char(node.path);
     free_double_char(node.o_envp);
     free(node.key);
     free(node.value);

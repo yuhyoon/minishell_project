@@ -2,7 +2,7 @@
 # define MAIN_H
 
 // # include "../lib/libft/libft.h"
-# include "libft/libft.h"
+# include "../lib/libft/libft.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -26,10 +26,10 @@ typedef struct s_envp
 {
 	char	**o_envp; //원래 envp;
 	int		count;
-	char	**path;
+	// char	**path;
 	char	*key;
 	char	*value;
-	t_envp	*next;
+	struct s_envp	*next;
 }				t_envp;
 
 

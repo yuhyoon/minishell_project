@@ -3,6 +3,21 @@
 #include "token_step-1_stack.c"
 # include "gnl_realreal_final.c"
 
+int	putchar_quote_state_zero(char *current, int fd)
+{
+	int	size;
+
+	size = 0;
+	if ((is_whitespace(*(current))))
+		ft_putchar_fd(NONE, fd);
+	else if (ft_ismeta((current)))
+		ft_putchar_fd(ft_ismeta((current)), fd);
+	else
+		ft_putchar_fd(TEXT, fd);
+	size++;
+	return (size);
+}
+
 void	store_quote_seq(t_char_state *char_state, int len, char *ss)
 {
 	int		quote_fd;
@@ -12,26 +27,20 @@ void	store_quote_seq(t_char_state *char_state, int len, char *ss)
 	while (i < len)
 	{
 		if (char_state->quote < 0)
-			{
-				if (is_whitespace(char_state->current[i]))
-					ft_putchar_fd(NONE, quote_fd);
-				else if (ft_ismeta(&(char_state->current[i])))
-					ft_putchar_fd(ft_ismeta(&(char_state->current[i])), quote_fd);
-				else
-					ft_putchar_fd(TEXT, quote_fd);
-			}
+		{
+			putchar_quote_state_zero(&(char_state->current[i]), quote_fd);
+		}
 		else if (char_state->quote > 0)
 			{
 				if (char_state->quote == '\"' && ft_ismeta(&(char_state->current[i])) == DOLLAR)
 					ft_putchar_fd(DOLLAR, quote_fd);
 				else if (char_state->current[i] == char_state->quote)
-				{	ft_putchar_fd(NONE, quote_fd);}
+					ft_putchar_fd(NONE, quote_fd);
 				else
 					ft_putchar_fd(TEXT, quote_fd);
 			}
 		i++;
 	}
-	//char_state->quote = 0;
 }
 
 int	valid_quote(char *s, int quote, t_char_state *state)
@@ -64,43 +73,45 @@ void	set_char_state(char *s, t_char_state *char_state)
 		valid_quote(s, char_state->quote, char_state);
 }
 
-int	handle_putchar(t_char_state *char_state, int fd)
+int read_store_fd(int fd)
 {
-	off_t	size;
-	char	*buf;
+	int		i;
 	struct stat st;
 	int		quote_fd;
-	int		i = 0;
+	int		size;
+	char	*buf;
+
+	i = 0;
+	quote_fd = fd + 1;
+	fstat(quote_fd, &st);
+	size = st.st_size;
+	close(quote_fd);
+	quote_fd = open("quote_fd", O_RDONLY, 0644);
+	buf = malloc(sizeof(char) * size);
+	read(quote_fd, buf, size);
+	while (i < size)
+	{
+		ft_putchar_fd(buf[i], fd);
+		i++;
+	}
+	close(quote_fd);
+	free(buf);
+	unlink("quote_fd");
+	return (size);
+}
+
+
+int	handle_putchar(t_char_state *char_state, int fd)
+{
+	int	size;
 
 	size = 0;
 	if (char_state->quote == 0)
 	{
-		if ((is_whitespace(*(char_state->current))))
-			ft_putchar_fd(NONE, fd);
-		else if (ft_ismeta((char_state->current)))
-			ft_putchar_fd(ft_ismeta((char_state->current)), fd);
-		else
-			ft_putchar_fd(TEXT, fd);
-		size++;
+		size = putchar_quote_state_zero(char_state->current, fd);
 	}	
 	else
-	{
-		quote_fd = fd + 1;
-		fstat(quote_fd, &st);
-		size = st.st_size;
-		close(quote_fd);
-		quote_fd = open("quote_fd", O_RDONLY, 0644);
-		buf = malloc(sizeof(char) * size);
-		read(quote_fd, buf, size);
-		while (i < size)
-		{
-			ft_putchar_fd(buf[i], fd);
-			i++;
-		}
-		close(quote_fd);
-		free(buf);
-		unlink("quote_fd");
-	}
+		size = read_store_fd(fd);
 	return (size);
 }
 
@@ -118,9 +129,12 @@ int write_replace_spaces(char *s, int replace_fd)
 		(char_state.current) += handle_putchar(&char_state, replace_fd);
 	}
 	if (*(char_state.current) == '\0')
-	{		ft_putchar_fd('\n', replace_fd);}
+	{	
+		ft_putchar_fd('\n', replace_fd);
+	}
 	return (0);
 }
+
 
 char *generate_mask(char *s)
 {
@@ -138,12 +152,8 @@ char *generate_mask(char *s)
 	len = (int)st.st_size;
 	mask = malloc(sizeof(char) * len);
 	read(mask_fd, mask, len);
+	valid_syntax(mask);
 	close(mask_fd);
 	unlink("mask_fd");
-	printf("\nmask len: %d\n", len);
-	for (int i = 0; i < ft_strlen(s); i++) {
-        	printf("%c ", s[i]);
-    }
-	printf("\n");
 	return (mask);
 }

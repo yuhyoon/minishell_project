@@ -134,7 +134,39 @@ int write_replace_spaces(char *s, int replace_fd)
 	}
 	return (0);
 }
+int	meta_syntax(int	token, char *mask)
+{
+	int	n;
+	int	i;
 
+	i = 0;
+	n = 0;
+	while (i < 3)
+	{
+		
+	}
+	
+}
+
+int	valid_syntax(char *mask)
+{
+	int	i;
+	int	cnt;
+	int	meta;
+	int	err_flg;
+
+	i = 0;
+	cnt = 0;
+	err_flg = 0;
+	while (mask[i] != '\n' && err_flg == 0)
+	{
+		meta = ft_ismeta(&mask[i]);
+		// if (meta > 0)
+		// 	cnt++;
+		printf("%d", mask[i]);
+		i++;
+	}
+}
 
 char *generate_mask(char *s)
 {

@@ -56,9 +56,15 @@ int		read_input(t_minish *sh)
 	
 	input = readline("minishell> ");
 	if (input == NULL)
+	{
 		printf("%s\n","exit"); //todo: exit
+		return (0);
+	}
 	if (ft_strlen(input) == 0) 
+	{
 		free(input); //todo: continue
+		return (1);
+	}
 	add_history(input);
 	mask = generate_mask(input);
 	rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
@@ -66,6 +72,7 @@ int		read_input(t_minish *sh)
 	 
 }
 
+//cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
 int main() 
 {
 	t_minish	sh;
@@ -96,8 +103,9 @@ int main()
 	while (1)
 	{
 		if (read_input(&sh) != 0)
-			execute_ready(&sh);
-		
+			printf("execute\n");
+		else
+			break;
 	}
     rl_clear_history();
 	return 0;

@@ -37,7 +37,7 @@ void execute_rd(t_ready *rdy)
 	t_redrct	*rd;
 	int	in;
 
-	rd = (t_redrct *)rdy->io->content;
+	rd = (t_redrct *)rdy->rdrct;
 	if (rd->parts == 2)
 		in = here_doc(rd->obj);
 	else if (rd->parts == 1)

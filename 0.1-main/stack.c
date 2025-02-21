@@ -1,4 +1,4 @@
-#include "parse_main.h"
+# include "parse_main.h"
 
 void	init_stack(t_stack *stack, void *top, int size)
 {
@@ -36,4 +36,11 @@ int pop(t_stack *stack)
 	free(tmp);
 	stack->size--;
 	return (0);
+}
+
+void	*peek_rd(t_stack *stack)
+{
+	if (is_emthy(stack))
+		return (NULL);
+	return ((t_redrct *)(stack->top->content));
 }

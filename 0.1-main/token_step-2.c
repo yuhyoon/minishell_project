@@ -83,10 +83,11 @@ void	maniplt_next(t_list **fst, int t)
 	}
 }
 
+//study :difference of rdy rdyy
 void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
 {
-	rdy->in = peak(in);
-	rdy->out = peak(out);
+	(rdy)->in = peek_rd(in);
+	(rdy)->out = peek_rd(out);
 }
 
 int	divide_rdrct(t_list **rd_list, t_ready *rdy)
@@ -97,7 +98,7 @@ int	divide_rdrct(t_list **rd_list, t_ready *rdy)
 	init_stack(&in, NULL, 0);
 	init_stack(&out, NULL, 0);
 	divide_io(&in, &out, rd_list);
-	set_io(rdy, in, out);
+	set_io(rdy, &in, &out);
 	// maniplt_next(&in, IN_RD);
 	// maniplt_next(&out, OUT_RD);
 	//ft_lstclear(&(*rdy)->io, execute_rd());
@@ -170,7 +171,7 @@ void *parsing(char *src, char *mask, int len)
 		else
 			i++;
 	}
-	//divide_rdrct(&rdrct);
+	divide_rdrct(&rdrct, rdy);
 	create_text(rdy, &src[save], &mask[save]);
 	//clean_ready(&rdy);
 	

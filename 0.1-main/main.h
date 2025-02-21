@@ -14,7 +14,10 @@
 #include <dirent.h>
 #include "libft/libft.h"
 
-unsigned char	exitcode;
+//study: multiple definition
+//unsigned char	exitcode;
+
+extern unsigned char exitcode;
 
 typedef struct s_pipe
 {

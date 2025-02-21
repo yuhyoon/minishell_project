@@ -76,7 +76,11 @@ int		read_input(t_minish *sh)
 int main() 
 {
 	t_minish	sh;
+	int flg;
+	unsigned char exitcode;
 
+	flg = 0;
+	exitcode = 0;
 	init_minish(&sh);
 	/*
 	while (1) 

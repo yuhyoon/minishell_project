@@ -4,7 +4,7 @@
 
 void	init_stack(t_stack *stack, void *top, int size);
 int		is_emthy(t_stack *stack);
-void    push(t_stack *stack, char data);
+void    push(t_stack *stack, void *data);
 int pop(t_stack *stack);
 
 # endif

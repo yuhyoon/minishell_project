@@ -1,3 +1,4 @@
+#include "main.h"
 #include "parse_main.h"
 #include "token_step-1_utils.h"
 #include "stack.h"
@@ -179,6 +180,7 @@ char *generate_mask(char *s)
 	char	*mask;
 	int	len;
 	struct stat	st;
+	unsigned char	exitcode;
 
 	printf("s len: %ld\n", ft_strlen(s));
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);

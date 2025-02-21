@@ -189,7 +189,8 @@ char *generate_mask(char *s)
 	len = (int)st.st_size;
 	mask = malloc(sizeof(char) * len);
 	read(mask_fd, mask, len);
-	syntax_analysis(mask);
+	if (syntax_analysis(mask) > 0)
+		exitcode = 3;
 	close(mask_fd);
 	unlink("mask_fd");
 	return (mask);

@@ -14,7 +14,7 @@
 #include <dirent.h>
 #include "libft/libft.h"
 
-//unsigned char	exitcode;
+unsigned char	exitcode;
 
 typedef struct s_pipe
 {

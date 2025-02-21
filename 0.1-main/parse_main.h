@@ -34,7 +34,8 @@ typedef struct s_ready
 {
 	t_list	*text;
 	t_list	*rdrct;
-	DIR		*dir;
+	t_redrct	*in;
+	t_redrct	*out;
 }t_ready;
 
 typedef struct s_dollar

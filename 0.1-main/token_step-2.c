@@ -2,6 +2,7 @@
 # include "token_step-1_utils.h"
 #include "create_ready.c"
 #include "execute_meta.c"
+#include "stack.h"
 
 void	del_text(void *txt)
 {
@@ -38,26 +39,24 @@ int	f(char *src, char *mask, t_list **io)
 	return (i);
 }
 
-/*
 
-void	init_first(t_list **in, t_list **out, t_list **rd_list)
+
+void	divide_io(t_stack *in, t_stack *out, t_list **rd_list)
 {
 	t_list		**tmp;
 	t_redrct	*rd;
 
 	tmp = rd_list;
-	printf("\nrd_list\n");
 	while (*tmp)
 	{
 		rd = (t_redrct *)(*tmp)->content;
-		printf("%s\n", rd->obj);
-		if (rd->type == IN_RD && *in == NULL)
+		if (rd->type == IN_RD)
 		{
-			*in = *tmp;
+			push(in, rd);
 		}
-		else if (rd->type == OUT_RD && *out == NULL)
+		else if (rd->type == OUT_RD)
 		{
-			*out = *tmp;
+			push(out, rd);
 		}
 		*tmp = (*tmp)->next;
 	}
@@ -84,19 +83,26 @@ void	maniplt_next(t_list **fst, int t)
 	}
 }
 
-int	divide_rdrct(t_list **rd_list)
+void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
 {
-	t_list	*in;
-	t_list	*out;
+	rdy->in = peak(in);
+	rdy->out = peak(out);
+}
 
-	in = NULL;
-	out = NULL;
-	init_first(&in, &out, rd_list);
-	maniplt_next(&in, IN_RD);
-	maniplt_next(&out, OUT_RD);
+int	divide_rdrct(t_list **rd_list, t_ready *rdy)
+{
+	t_stack	in;
+	t_stack out;
+
+	init_stack(&in, NULL, 0);
+	init_stack(&out, NULL, 0);
+	divide_io(&in, &out, rd_list);
+	set_io(rdy, in, out);
+	// maniplt_next(&in, IN_RD);
+	// maniplt_next(&out, OUT_RD);
 	//ft_lstclear(&(*rdy)->io, execute_rd());
 }
-*/
+
 /* *
 char    **create_str_2(t_list **head)
 {
@@ -153,7 +159,7 @@ void *parsing(char *src, char *mask, int len)
 		}
 		else if (mask[i] == PIPE)
 		{
-			//divide_rdrct(&rdrct);
+			divide_rdrct(&rdrct, rdy);
 			create_text(rdy, &src[save], &mask[save]);
 			rdy = create_rdy();
 			new = ft_lstnew(rdy);

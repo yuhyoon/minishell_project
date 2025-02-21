@@ -134,21 +134,26 @@ int write_replace_spaces(char *s, int replace_fd)
 	}
 	return (0);
 }
-int	meta_syntax(int	token, char *mask)
+int	valid_meta(int token, char *mask)
 {
-	int	n;
+	int	max;
 	int	i;
+	int	rsult;
 
 	i = 0;
-	n = 0;
-	while (i < 3)
-	{
-		
-	}
-	
+	rsult = 0;
+	if (token == IN_RD || token == OUT_RD)
+		max = 3;
+	else if (token == PIPE)
+		max = 2;
+	while (i < max && mask[i] == token)
+		i++;
+	if (i == max)
+		rsult = 3;
+	return (rsult);
 }
 
-int	valid_syntax(char *mask)
+int	syntax_analysis(char *mask)
 {
 	int	i;
 	int	cnt;
@@ -161,11 +166,11 @@ int	valid_syntax(char *mask)
 	while (mask[i] != '\n' && err_flg == 0)
 	{
 		meta = ft_ismeta(&mask[i]);
-		// if (meta > 0)
-		// 	cnt++;
-		printf("%d", mask[i]);
+		if (meta > 0)
+			err_flg = valid_meta(mask[i], &mask[i]);
 		i++;
 	}
+	return (err_flg);
 }
 
 char *generate_mask(char *s)
@@ -184,7 +189,7 @@ char *generate_mask(char *s)
 	len = (int)st.st_size;
 	mask = malloc(sizeof(char) * len);
 	read(mask_fd, mask, len);
-	valid_syntax(mask);
+	syntax_analysis(mask);
 	close(mask_fd);
 	unlink("mask_fd");
 	return (mask);

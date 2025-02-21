@@ -67,10 +67,9 @@ int		read_input(t_minish *sh)
 	}
 	add_history(input);
 	mask = generate_mask(input);
-	exit_code = 
 	rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
 	sh->ready = rdy_head;
-	 
+
 }
 
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
@@ -103,7 +102,8 @@ int main()
 	*/
 	while (1)
 	{
-		if (read_input(&sh) != 0)
+		flg = read_input(&sh);
+		if (flg != 0)
 			printf("execute\n");
 		else
 			break;

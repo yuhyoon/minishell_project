@@ -33,6 +33,8 @@ typedef struct s_envp
 }				t_envp;
 
 
+
+
 // 시그널 관리 구조체
 typedef struct	s_signal
 {

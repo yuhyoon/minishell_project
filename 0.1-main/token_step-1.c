@@ -1,6 +1,6 @@
 #include "parse_main.h"
 #include "token_step-1_utils.h"
-#include "token_step-1_stack.c"
+#include "stack.h"
 # include "gnl_realreal_final.c"
 
 int	putchar_quote_state_zero(char *current, int fd)
@@ -51,7 +51,7 @@ int	valid_quote(char *s, int quote, t_char_state *state)
 
 	init_stack(&stack, NULL, ft_strlen(s));
 	ss = s;
-	push(&stack, *ss);
+	push(&stack, ss);
 	while (is_emthy(&stack) == false && ss[i] != '\0')
 	{
 		if (is_quote(ss[i]) == quote)

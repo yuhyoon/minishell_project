@@ -84,13 +84,13 @@ void	maniplt_next(t_list **fst, int t)
 }
 
 //study :difference of rdy rdyy
-void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
+void	set_io(t_ready **rdy, t_stack *in, t_stack *out)
 {
-	(rdy)->in = peek_rd(in);
-	(rdy)->out = peek_rd(out);
+	(*rdy)->in = peek_rd(in);
+	(*rdy)->out = peek_rd(out);
 }
 
-int	divide_rdrct(t_list **rd_list, t_ready *rdy)
+int	divide_rdrct(t_list **rd_list, t_ready **rdy)
 {
 	t_stack	in;
 	t_stack out;
@@ -160,7 +160,7 @@ void *parsing(char *src, char *mask, int len)
 		}
 		else if (mask[i] == PIPE)
 		{
-			divide_rdrct(&rdrct, rdy);
+			divide_rdrct(&rdrct, &rdy);
 			create_text(rdy, &src[save], &mask[save]);
 			rdy = create_rdy();
 			new = ft_lstnew(rdy);
@@ -171,7 +171,7 @@ void *parsing(char *src, char *mask, int len)
 		else
 			i++;
 	}
-	divide_rdrct(&rdrct, rdy);
+	divide_rdrct(&rdrct, &rdy);
 	create_text(rdy, &src[save], &mask[save]);
 	//clean_ready(&rdy);
 	

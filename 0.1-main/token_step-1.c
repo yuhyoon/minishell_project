@@ -166,7 +166,8 @@ int	syntax_analysis(char *mask)
 	err_flg = 0;
 	while (mask[i] != '\n' && err_flg == 0)
 	{
-		meta = ft_ismeta(&mask[i]);
+		if (mask[i] > 1)
+			meta = mask[i];
 		if (meta > 0)
 			err_flg = valid_meta(mask[i], &mask[i]);
 		i++;
@@ -192,6 +193,7 @@ char *generate_mask(t_minish *sh)
 	if (syntax_analysis(mask) > 0)
 	{
 		free(mask);
+		mask = NULL;
 		exitcode = 2;
 	}
 	close(mask_fd);

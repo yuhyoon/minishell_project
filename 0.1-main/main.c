@@ -86,7 +86,9 @@ int main()
 		else if (read_input(&sh) == -1)
 			break;
 		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
-		{//clean_minish(&sh);
+		{
+			printf("exitcode:%d\n", exitcode);
+			//clean_minish(&sh);
 		 }
 		//verify_exitcode();
 		//f_init_envps();

@@ -26,6 +26,17 @@ typedef struct s_pipe
 	int				*write_fd;
 }	t_pipe;
 
+//환경변수 관리용 구조체
+typedef struct s_envp
+{
+	char	**o_envp; //원래 envp;
+	int		count;
+	// char	**path;
+	char	*key;
+	char	*value;
+	struct s_envp	*next;
+}				t_envp;
+
 typedef struct s_minish
 {
 	char	*input;

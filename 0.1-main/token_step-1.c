@@ -174,15 +174,13 @@ int	syntax_analysis(char *mask)
 	return (err_flg);
 }
 
-char *generate_mask(char *s)
+char *generate_mask(t_minish *sh)
 {
 	int	mask_fd;
 	char	*mask;
 	int	len;
 	struct stat	st;
-	unsigned char	exitcode;
 
-	printf("s len: %ld\n", ft_strlen(s));
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	write_replace_spaces(s, mask_fd);
 	close(mask_fd);
@@ -192,8 +190,12 @@ char *generate_mask(char *s)
 	mask = malloc(sizeof(char) * len);
 	read(mask_fd, mask, len);
 	if (syntax_analysis(mask) > 0)
+	{
+		free(mask);
 		exitcode = 3;
+	}
 	close(mask_fd);
 	unlink("mask_fd");
+	sh->mask = mask;
 	return (mask);
 }

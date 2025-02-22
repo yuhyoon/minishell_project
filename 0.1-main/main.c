@@ -43,7 +43,7 @@ void	set_signal(void *handler)
 
 void	init_minish(t_minish *sh)
 {
-	set_signal(before_readline);
+	
 	ft_memset(sh, 0, sizeof(t_minish));
 
 }
@@ -51,64 +51,44 @@ void	init_minish(t_minish *sh)
 int		read_input(t_minish *sh)
 {
 	char 		*input;
-	char		*mask;
-	t_list		*rdy_head;
+	unsigned char exitcode;
 	
 	input = readline("minishell> ");
 	if (input == NULL)
 	{
+		//exitcode = 
 		printf("%s\n","exit"); //todo: exit
-		return (0);
+		return (-1);
 	}
-	if (ft_strlen(input) == 0) 
+	else if (ft_strlen(input) == 0) 
 	{
 		free(input); //todo: continue
-		return (1);
+		return (0);
 	}
 	add_history(input);
-	mask = generate_mask(input);
-	rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
-	sh->ready = rdy_head;
-	return (0);
+	sh->input = input;
+	return (1);
 }
 
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
 int main() 
 {
 	t_minish	sh;
-	int flg;
 	unsigned char exitcode;
 
-	flg = 0;
+	set_signal(before_readline);
 	exitcode = 0;
 	init_minish(&sh);
-	/*
-	while (1) 
+	while (true)
 	{
-		set_signal(before_readline);
-		input = readline("minishell> ");
-		if (input == NULL)
-		{
-			printf("%s\n","exit");
+		if (read_input(&sh) == 0)
+			continue ;
+		else if (read_input(&sh) == -1)
 			break;
-		}
-		add_history(input);
-		mask = generate_mask(input);
-		rdy_head = parsing(input, mask, ft_strlen_delim(mask, '\n'));
-		if (ft_strlen(input) == 0) 
-		{
-			free(input);
-			continue;
-		}
-		// 	free(mask);
-		// 	free(input);
-	}
-	*/
-	while (1)
-	{
-		flg = read_input(&sh);
-		if (flg == 0)
-			printf("execute\n");
+		if (!generate_mask(sh.input) || !parsing(sh.input, sh.mask, ft_strlen_delim(sh.mask)))
+			clean_minish(&sh);
+		//verify_exitcode();
+		
 	}
     rl_clear_history();
 	return 0;

@@ -28,10 +28,13 @@ typedef struct s_pipe
 
 typedef struct s_minish
 {
+	char	*input;
+	char	*mask;
+	t_list	*ready;
 	pid_t	pid;
 	t_pipe	old_pipe;
 	t_pipe	new_pipe;
-	t_list	*ready;
+	
 }t_minish;
 
 #endif

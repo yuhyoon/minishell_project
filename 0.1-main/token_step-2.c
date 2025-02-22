@@ -83,14 +83,14 @@ void	maniplt_next(t_list **fst, int t)
 	}
 }
 
-//study :difference of rdy rdyy
-void	set_io(t_ready **rdy, t_stack *in, t_stack *out)
+
+void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
 {
 	(*rdy)->in = (t_redrct *)pop2(in);
 	(*rdy)->out = (t_redrct *)pop2(out);
 }
 
-int	divide_rdrct(t_list **rd_list, t_ready **rdy)
+int	divide_rdrct(t_list **rd_list, t_ready *rdy)
 {
 	t_stack	in;
 	t_stack out;
@@ -98,7 +98,9 @@ int	divide_rdrct(t_list **rd_list, t_ready **rdy)
 	init_stack(&in, NULL, 0);
 	init_stack(&out, NULL, 0);
 	divide_io(&in, &out, rd_list);
-	set_io(rdy, &in, &out);
+	set_io(rdy, in, out);
+	set_io(rdy, in, out);
+	//todo: clear_stack
 	// maniplt_next(&in, IN_RD);
 	// maniplt_next(&out, OUT_RD);
 	//ft_lstclear(&(*rdy)->io, execute_rd());
@@ -160,7 +162,7 @@ void *parsing(char *src, char *mask, int len)
 		}
 		else if (mask[i] == PIPE)
 		{
-			divide_rdrct(&rdrct, &rdy);
+			divide_rdrct(&rdrct, rdy);
 			create_text(rdy, &src[save], &mask[save]);
 			rdy = create_rdy();
 			new = ft_lstnew(rdy);
@@ -171,9 +173,8 @@ void *parsing(char *src, char *mask, int len)
 		else
 			i++;
 	}
-	divide_rdrct(&rdrct, &rdy);
+	divide_rdrct(&rdrct, rdy);
 	create_text(rdy, &src[save], &mask[save]);
 	//clean_ready(&rdy);
-	
 	return (rdy_head);
 }

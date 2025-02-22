@@ -3,6 +3,7 @@
 #include "create_ready.c"
 #include "execute_meta.c"
 #include "stack.h"
+#include "token_step-2_utils.c"
 
 void	divide_io(t_stack *in, t_stack *out, t_list **rd_list)
 {
@@ -45,8 +46,8 @@ void	maniplt_next(t_list **fst, int t)
 
 void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
 {
-	(*rdy)->in = (t_redrct *)pop2(in);
-	(*rdy)->out = (t_redrct *)pop2(out);
+	(rdy)->in = (t_redrct *)pop2(in);
+	(rdy)->out = (t_redrct *)pop2(out);
 }
 
 int	divide_rdrct(t_list **rd_list, t_ready *rdy)
@@ -57,8 +58,8 @@ int	divide_rdrct(t_list **rd_list, t_ready *rdy)
 	init_stack(&in, NULL, 0);
 	init_stack(&out, NULL, 0);
 	divide_io(&in, &out, rd_list);
-	set_io(rdy, in, out);
-	set_io(rdy, in, out);
+	set_io(rdy, &in, &out);
+	set_io(rdy, &in, &out);
 	//todo: clear_stack
 	//ft_lstclear(&(*rdy)->io, execute_rd());
 }
@@ -99,18 +100,19 @@ t_list *init_parsing_structure(void)
     return (rdy_head);
 }
 
-int	handle_pipe(t_minish *sh, t_list **rdrct, int save)
+int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
 {
-	t_ready	*rdy;
-	t_list	*new;
+	t_ready	*next_rdy;
+	t_list	*next_lst;
 
 	if (valid_access(rdrct) != 0)
 		return (-1);
-	divide_rdrct(rdrct, sh->ready);
-	create_text(sh->ready, &sh->src[save], &sh->mask[save]);
-	rdy = create_rdy();
-	new = ft_lstnew(rdy);
-	ft_lstadd_back(&sh->ready, new);
+	divide_rdrct(rdrct, current_rdy);
+	create_text(current_rdy, &sh->src[save], &sh->mask[save]);
+	next_rdy = create_rdy();
+	next_lst = ft_lstnew(next_rdy);
+	//print error
+	ft_lstadd_back(&sh->ready, next_lst);
 	return (1);
 }
 
@@ -126,13 +128,14 @@ void *parsing(t_minish *sh, int len)
 	save = i;
 	rdrct = NULL;
 	sh->ready = init_parsing_structure();
+	rdy = ((t_ready *)rdy_head->content);
 	while (i < len && exitcode == 0)
 	{
-		if (mask[i] == IN_RD || mask[i] == OUT_RD)
+		if (sh->mask[i] == IN_RD || sh->mask[i] == OUT_RD)
 			i += create_rdrct(&sh->src[i], &sh->mask[i], &rdrct);
-		else if (mask[i] == PIPE)
+		else if (sh->mask[i] == PIPE)
 		{
-			i += handle_pipe(sh, &rdrct, save);
+			i += handle_pipe(sh, rdy,  &rdrct, save);
 			save = i;
 		}
 		else

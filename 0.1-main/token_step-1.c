@@ -182,7 +182,7 @@ char *generate_mask(t_minish *sh)
 	struct stat	st;
 
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
-	write_replace_spaces(s, mask_fd);
+	write_replace_spaces(sh->src, mask_fd);
 	close(mask_fd);
 	mask_fd = open("mask_fd", O_RDONLY);
 	fstat(mask_fd, &st);
@@ -192,7 +192,7 @@ char *generate_mask(t_minish *sh)
 	if (syntax_analysis(mask) > 0)
 	{
 		free(mask);
-		exitcode = 3;
+		exitcode = 2;
 	}
 	close(mask_fd);
 	unlink("mask_fd");

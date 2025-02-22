@@ -85,8 +85,9 @@ int main()
 			continue ;
 		else if (read_input(&sh) == -1)
 			break;
-		if (!generate_mask(sh.input) || !parsing(sh.input, sh.mask, ft_strlen_delim(sh.mask)))
-			clean_minish(&sh);
+		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
+		{//clean_minish(&sh);
+		 }
 		//verify_exitcode();
 		//f_init_envps();
 		//excute_commands(); //builtin&path_functions		

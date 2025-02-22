@@ -31,7 +31,7 @@ int	access_file(t_redrct *rdrct)
 	int	mode;
 
 	if (rdrct->type == IN_RD && rdrct->parts == 2)
-		mode = 0;//here_doc(rdrct);
+		mode = 0;//todo: here_doc(rdrct);
 	else if (rdrct->type == OUT_RD && rdrct->parts == 1)
 		mode = access(rdrct->obj, W_OK);
 	else if (rdrct->type == IN_RD && rdrct->parts == 1)

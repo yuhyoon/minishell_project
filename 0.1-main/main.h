@@ -39,7 +39,7 @@ typedef struct s_envp
 
 typedef struct s_minish
 {
-	char	*input;
+	char	*src;
 	char	*mask;
 	t_list	*ready;
 	pid_t	pid;

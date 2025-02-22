@@ -51,13 +51,9 @@ void	divide_io(t_stack *in, t_stack *out, t_list **rd_list)
 	{
 		rd = (t_redrct *)(*tmp)->content;
 		if (rd->type == IN_RD)
-		{
 			push(in, rd);
-		}
 		else if (rd->type == OUT_RD)
-		{
 			push(out, rd);
-		}
 		*tmp = (*tmp)->next;
 	}
 }
@@ -101,8 +97,6 @@ int	divide_rdrct(t_list **rd_list, t_ready *rdy)
 	set_io(rdy, in, out);
 	set_io(rdy, in, out);
 	//todo: clear_stack
-	// maniplt_next(&in, IN_RD);
-	// maniplt_next(&out, OUT_RD);
 	//ft_lstclear(&(*rdy)->io, execute_rd());
 }
 
@@ -127,52 +121,49 @@ char    **create_str_2(t_list **head)
 	ft_lstclear(head, del_text);
 	return (str);
 }
-
-void	*create_exeinfo(t_ready *rdy, char *src, char *mask)
-{
-	t_exe_info	*exe;
-
-	exe = malloc(sizeof(exe));
-	exe->cmd = create_str_2(&(rdy->text));
-	return (exe);
-}
 */
 
-void *parsing(char *src, char *mask, int len)
+t_list *init_parsing_structure(void)
+{
+    t_ready *rdy;
+    t_list *rdy_head;
+    t_list *new;
+
+	rdy = create_rdy();
+	rdy_head = NULL;
+	new = ft_lstnew(rdy);
+    ft_lstadd_back(&rdy_head, new);
+    return (rdy_head);
+}
+
+void *parsing(t_minish *sh, int len)
 {
 	int		i;
 	t_ready	*rdy;
 	t_list	*rdy_head;
-	t_list	*new;
 	int	save;
 	t_list  *rdrct;
 
-	rdy = create_rdy();
 	i = 0;
 	save = i;
-	rdy_head = NULL;
-	new = ft_lstnew(rdy);
-	ft_lstadd_back(&rdy_head, new);
 	rdrct = NULL;
-	while (i < len)
+	sh->ready = init_parsing_structure();
+	while (i < len && exitcode == 0)
 	{
 		if (mask[i] == IN_RD || mask[i] == OUT_RD)
 		{
-			i += create_rdrct(&src[i], &mask[i], &rdrct);
+			i += create_rdrct(&sh->src[i], &sh->mask[i], &rdrct);
 		}
 		else if (mask[i] == PIPE)
 		{
-			divide_rdrct(&rdrct, rdy);
-			create_text(rdy, &src[save], &mask[save]);
-			rdy = create_rdy();
-			new = ft_lstnew(rdy);
-			ft_lstadd_back(&rdy_head, new);
-			i++;
+			i += handle_pipe(sh, &rdrct, save);
 			save = i;
 		}
 		else
 			i++;
 	}
+	if (valid_access(rdrct) != 0 || exitcode != 0)
+		return (NULL);
 	divide_rdrct(&rdrct, rdy);
 	create_text(rdy, &src[save], &mask[save]);
 	//clean_ready(&rdy);

@@ -17,7 +17,7 @@
 
 #include <errno.h>
 
-unsigned char exitcode;
+unsigned char exitcode = 0;
 
 void	before_readline(int signal)
 {
@@ -58,7 +58,7 @@ int		read_input(t_minish *sh)
 	input = readline("minishell> ");
 	if (input == NULL)
 	{
-		//exitcode = 
+		//todo: exitcode = 
 		printf("%s\n","exit"); //todo: exit
 		return (-1);
 	}
@@ -68,7 +68,7 @@ int		read_input(t_minish *sh)
 		return (0);
 	}
 	add_history(input);
-	sh->input = input;
+	sh->src = input;
 	return (1);
 }
 
@@ -78,7 +78,6 @@ int main()
 	t_minish	sh;
 
 	set_signal(before_readline);
-	exitcode = 0;
 	init_minish(&sh);
 	while (true)
 	{

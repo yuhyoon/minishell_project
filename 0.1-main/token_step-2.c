@@ -4,6 +4,7 @@
 #include "execute_meta.c"
 #include "stack.h"
 #include "token_step-2_utils.c"
+#include "redirect.c"
 
 t_list *init_parsing_structure(void)
 {
@@ -35,7 +36,6 @@ void *parsing(t_minish *sh, int len)
 {
 	int		i;
 	t_ready	*rdy;
-	t_list	*rdy_head;
 	int	save;
 	t_list  *rdrct;
 
@@ -61,5 +61,5 @@ void *parsing(t_minish *sh, int len)
 		redirect(rdrct, current_rdy);
 		create_text(current_rdy, &sh->src[save], &sh->mask[save]);
 	}
-	return (rdy_head);
+	return (sh->ready);
 }

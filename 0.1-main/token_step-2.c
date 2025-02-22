@@ -4,43 +4,6 @@
 #include "execute_meta.c"
 #include "stack.h"
 
-void	del_text(void *txt)
-{
-	free((char *)txt);
-	txt = NULL;
-}
-
-void	del_redrct(t_redrct *redrct)
-{
-	free(redrct->obj);
-	redrct->obj = NULL;
-}
-
-void	del_dollar(t_dollar *dolr)
-{
-	free(dolr->str);
-	dolr->str = NULL;
-}
-
-void	clean_ready(t_ready **rdy)
-{
-	ft_lstclear(&(*rdy)->text, del_text);
-//	ft_lstclear((*rdy)->io, del_redrct((*rdy)->io->content));
-//	ft_lstclear((*rdy)->dolar, del_dollar((*rdy)->dolar->content));
-
-}
-
-//return length
-int	f(char *src, char *mask, t_list **io)
-{
-	int	i;
-
-	i = 0;
-	return (i);
-}
-
-
-
 void	divide_io(t_stack *in, t_stack *out, t_list **rd_list)
 {
 	t_list		**tmp;
@@ -136,6 +99,21 @@ t_list *init_parsing_structure(void)
     return (rdy_head);
 }
 
+int	handle_pipe(t_minish *sh, t_list **rdrct, int save)
+{
+	t_ready	*rdy;
+	t_list	*new;
+
+	if (valid_access(rdrct) != 0)
+		return (-1);
+	divide_rdrct(rdrct, sh->ready);
+	create_text(sh->ready, &sh->src[save], &sh->mask[save]);
+	rdy = create_rdy();
+	new = ft_lstnew(rdy);
+	ft_lstadd_back(&sh->ready, new);
+	return (1);
+}
+
 void *parsing(t_minish *sh, int len)
 {
 	int		i;
@@ -151,9 +129,7 @@ void *parsing(t_minish *sh, int len)
 	while (i < len && exitcode == 0)
 	{
 		if (mask[i] == IN_RD || mask[i] == OUT_RD)
-		{
 			i += create_rdrct(&sh->src[i], &sh->mask[i], &rdrct);
-		}
 		else if (mask[i] == PIPE)
 		{
 			i += handle_pipe(sh, &rdrct, save);
@@ -162,10 +138,14 @@ void *parsing(t_minish *sh, int len)
 		else
 			i++;
 	}
-	if (valid_access(rdrct) != 0 || exitcode != 0)
+	if (save == 0)
+	{/*
+		//todo:seperate
+		if (valid_access(rdrct) != 0)
 		return (NULL);
 	divide_rdrct(&rdrct, rdy);
 	create_text(rdy, &src[save], &mask[save]);
-	//clean_ready(&rdy);
+	*/
+	}
 	return (rdy_head);
 }

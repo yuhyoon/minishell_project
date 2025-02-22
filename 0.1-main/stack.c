@@ -38,6 +38,21 @@ int pop(t_stack *stack)
 	return (0);
 }
 
+void	*pop2(t_stack *stack)
+{
+	t_list	*tmp;
+	void	*content;
+
+	if (is_emthy(stack))
+		return (NULL);
+	tmp = stack->top;
+	content = tmp->content;
+	stack->top = tmp->next;
+	free(tmp);
+	stack->size--;
+	return (content);
+}
+
 void	*peek_rd(t_stack *stack)
 {
 	if (is_emthy(stack))

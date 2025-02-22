@@ -86,8 +86,8 @@ void	maniplt_next(t_list **fst, int t)
 //study :difference of rdy rdyy
 void	set_io(t_ready **rdy, t_stack *in, t_stack *out)
 {
-	(*rdy)->in = peek_rd(in);
-	(*rdy)->out = peek_rd(out);
+	(*rdy)->in = (t_redrct *)pop2(in);
+	(*rdy)->out = (t_redrct *)pop2(out);
 }
 
 int	divide_rdrct(t_list **rd_list, t_ready **rdy)

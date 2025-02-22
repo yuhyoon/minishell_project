@@ -17,6 +17,8 @@
 
 #include <errno.h>
 
+unsigned char exitcode;
+
 void	before_readline(int signal)
 {
 	if (signal == SIGINT)
@@ -45,7 +47,7 @@ void	init_minish(t_minish *sh)
 {
 	
 	ft_memset(sh, 0, sizeof(t_minish));
-
+	//main에서 받은 envps 저장
 }
 
 int		read_input(t_minish *sh)
@@ -74,7 +76,6 @@ int		read_input(t_minish *sh)
 int main() 
 {
 	t_minish	sh;
-	unsigned char exitcode;
 
 	set_signal(before_readline);
 	exitcode = 0;
@@ -88,7 +89,8 @@ int main()
 		if (!generate_mask(sh.input) || !parsing(sh.input, sh.mask, ft_strlen_delim(sh.mask)))
 			clean_minish(&sh);
 		//verify_exitcode();
-		
+		//f_init_envps();
+		//excute_commands(); //builtin&path_functions		
 	}
     rl_clear_history();
 	return 0;

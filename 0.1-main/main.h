@@ -34,7 +34,10 @@ typedef struct s_minish
 	pid_t	pid;
 	t_pipe	old_pipe;
 	t_pipe	new_pipe;
-	
+	char	**envp;
+	t_envp	*n_envs;
+	t_envp	*n_export;
+	char	*pwd;
 }t_minish;
 
 #endif

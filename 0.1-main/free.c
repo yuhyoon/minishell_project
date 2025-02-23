@@ -44,7 +44,7 @@ void	free_minish(t_minish *minish)
         minish->src = NULL;
     }
     if (minish->ready)
-        ft_lstclear(minish->ready, del_ready);
+        ft_lstclear(&minish->ready, del_ready);
     free_pipe(&minish->old_pipe);
     free_pipe(&minish->new_pipe);
     //free_str_array(minish->envp);

@@ -21,8 +21,8 @@ void	del_ready(void *ready)
 	t_ready	*rdy;
 
 	rdy = ready;
-	ft_lstclear(rdy->text, del_text);
-	ft_lstclear(rdy->rdrct, del_redrct);
+	ft_lstclear(&rdy->text, del_text);
+	ft_lstclear(&rdy->rdrct, del_redrct);
 	del_redrct(rdy->in);
 	del_redrct(rdy->out);
 }

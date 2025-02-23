@@ -34,7 +34,7 @@ int	redirect(t_list **rd_list, t_ready *rdy)
 		return (-1);
 	init_stack(&in, NULL, 0);
 	init_stack(&out, NULL, 0);
-	divide_io(&in, &out, rd_list);
+	sort_io(&in, &out, rd_list);
 	set_io(rdy, &in, &out);
 	set_io(rdy, &in, &out);
 	//todo: clear_stack

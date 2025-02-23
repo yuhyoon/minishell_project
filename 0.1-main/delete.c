@@ -11,6 +11,8 @@ void	del_redrct(void *rd)
 	t_redrct *redrct;
 
 	redrct = rd;
+	if (redrct == NULL)
+		return ;
 	free(redrct->obj);
 	redrct->obj = NULL;
 }

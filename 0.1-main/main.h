@@ -13,6 +13,7 @@
 #include <readline/history.h>
 #include <dirent.h>
 #include "libft/libft.h"
+#include "builtins/builtin.h"
 
 //study: multiple definition
 //unsigned char	exitcode;
@@ -25,17 +26,6 @@ typedef struct s_pipe
 	int				*read_fd;
 	int				*write_fd;
 }	t_pipe;
-
-//환경변수 관리용 구조체
-typedef struct s_envp
-{
-	char	**o_envp; //원래 envp;
-	int		count;
-	// char	**path;
-	char	*key;
-	char	*value;
-	struct s_envp	*next;
-}				t_envp;
 
 typedef struct s_minish
 {
@@ -53,5 +43,7 @@ typedef struct s_minish
 
 void	set_signal(void *handler);
 void	before_readline(int signal);
+
+void    f_init_envps(t_minish *sh);
 
 #endif

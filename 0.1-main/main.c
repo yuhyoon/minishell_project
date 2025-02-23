@@ -57,6 +57,7 @@ int main(int ac, char **av, char **envp)
 
 	set_signal(before_readline);
 	init_minish(&sh);
+	//init_minish(&sh, envp);
 	while (true)
 	{
 		if (read_input(&sh) == 0)
@@ -69,7 +70,7 @@ int main(int ac, char **av, char **envp)
 			//clean_minish(&sh);
 		 }
 		//verify_exitcode();
-		f_init_envps(&sh, envp);
+		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		
 	}
     rl_clear_history();

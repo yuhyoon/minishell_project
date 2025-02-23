@@ -134,7 +134,7 @@ void    create_text(t_ready *rdy, char *src, char *mask, t_minish *sh)
 
 	if (rdy->rdrct == NULL)
 	{
-		ft_lstclear(&sh->ready, del_ready);
+	//	ft_lstclear(&sh->ready, del_ready);
 		return ;
 	}
     i = 0;

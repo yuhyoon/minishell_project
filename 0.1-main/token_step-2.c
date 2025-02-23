@@ -26,6 +26,8 @@ int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
 
 	redirect(rdrct, current_rdy);
 	create_text(current_rdy, &sh->src[save], &sh->mask[save], sh);
+	if (sh->ready == NULL)
+		return (1);
 	next_rdy = create_rdy();
 	next_lst = ft_lstnew(next_rdy);
 	ft_lstadd_back(&sh->ready, next_lst);

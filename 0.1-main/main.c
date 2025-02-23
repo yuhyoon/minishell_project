@@ -19,30 +19,6 @@
 
 unsigned char exitcode = 0;
 
-void	before_readline(int signal)
-{
-	if (signal == SIGINT)
-	{
-		//버퍼 삭제... (이걸로 되려나..)
-		write(STDOUT_FILENO, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		//exitcode 
-	}
-	//없어도 될 것 같지만 차일을 위해 남겨둠
-	// else if (signal == SIGQUIT)
-	// {
-	// 	(void)signal;
-	// }
-}
-
-void	set_signal(void *handler)
-{
-	signal(SIGINT, handler);
-	signal(SIGQUIT, SIG_IGN);
-}
-
 void	init_minish(t_minish *sh)
 {
 	
@@ -73,8 +49,10 @@ int		read_input(t_minish *sh)
 }
 
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
-int main() 
+int main(int ac, char **av, char **envp) 
 {
+	(void)ac;
+	(void)av;
 	t_minish	sh;
 
 	set_signal(before_readline);
@@ -91,7 +69,7 @@ int main()
 			//clean_minish(&sh);
 		 }
 		//verify_exitcode();
-		//f_init_envps();
+		f_init_envps(&sh, envp);
 		//excute_commands(); //builtin&path_functions		
 	}
     rl_clear_history();

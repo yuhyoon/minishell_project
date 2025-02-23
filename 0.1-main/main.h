@@ -51,4 +51,7 @@ typedef struct s_minish
 	char	*pwd;
 }t_minish;
 
+void	set_signal(void *handler);
+void	before_readline(int signal);
+
 #endif

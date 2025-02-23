@@ -1,27 +1,7 @@
 #include "parse_main.h"
 # include "token_step-1_utils.h"
+#include "delete.h"
 
-void	del_text(void *txt)
-{
-	free((char *)txt);
-	txt = NULL;
-}
-
-void	del_redrct(void *rd)
-{
-	t_redrct *redrct;
-
-	redrct = rd;
-	free(redrct->obj);
-	redrct->obj = NULL;
-}
-
-/*
-void	clean_ready(t_ready **rdy)
-{
-	ft_lstclear(&(*rdy)->text, del_text);
-}
-*/
 int valid_access(t_list **head)
 {
     t_list  *tmp;

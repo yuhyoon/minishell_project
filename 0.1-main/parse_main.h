@@ -29,7 +29,6 @@ typedef struct s_char_state
 	char	*current;
 }t_char_state;
 
-
 typedef struct s_ready
 {
 	t_list	*text;
@@ -37,12 +36,6 @@ typedef struct s_ready
 	t_redrct	*in;
 	t_redrct	*out;
 }t_ready;
-
-typedef struct s_dollar
-{
-	char	pos;
-	char	*str;
-}t_dollar;
 
 typedef struct s_stack
 {

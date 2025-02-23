@@ -4,6 +4,7 @@
 #include "token_step-1.c"
 #include "token_step-2.c"
 #include "free.c"
+#include <valgrind/memcheck.h>
 
 /*****
  * 
@@ -90,6 +91,7 @@ int main()
 		{
 			printf("exitcode:%d\n", exitcode);
 			free_minish(&sh);
+			VALGRIND_DO_LEAK_CHECK;
 		 }
 		//verify_exitcode();
 		//f_init_envps();

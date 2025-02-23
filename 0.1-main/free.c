@@ -48,4 +48,5 @@ void	free_minish(t_minish *minish)
     free_pipe(&minish->old_pipe);
     free_pipe(&minish->new_pipe);
     //free_str_array(minish->envp);
+    exitcode = 0;
 }

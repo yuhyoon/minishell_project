@@ -1,4 +1,5 @@
 #include "parse_main.h"
+#include "delete.h"
 
 void    *create_rdy()
 {
@@ -125,27 +126,27 @@ int	create_text_4(char *mask, char *src, t_list **head)
 	return (i);
 }
 
-void    create_text(t_ready *rdy, char *src, char *mask)
+void    create_text(t_ready *rdy, char *src, char *mask, t_minish *sh)
 {
     int i;
     t_list  *head;
     t_list  *lst;
 
+	if (rdy->rdrct == NULL)
+	{
+		ft_lstclear(&sh->ready, del_ready);
+		return ;
+	}
     i = 0;
     head = NULL;
     while (mask[i] != '\n' && mask[i] != PIPE )
     {
     	if (mask[i] == 1)
-        {
             i += create_text_1(&mask[i], "1", &src[i], &head);
-	}
-	else if (mask[i] == 4)
-	{
-		i += create_text_4(&mask[i], &src[i], &head);
-	}
-	else
-		i++;
-	
+		else if (mask[i] == 4)
+			i += create_text_4(&mask[i], &src[i], &head);
+		else
+			i++;
     }
 	rdy->text = head;   
 }

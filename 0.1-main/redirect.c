@@ -31,8 +31,8 @@ int	redirect(t_list **rd_list, t_ready *rdy)
 	t_stack	in;
 	t_stack out;
 
-	if (valid_access(rd_list) != 0)
-		return (-1);
+	// if (valid_access(rd_list) != 0)
+	// 	return (-1);
 	init_stack(&in, NULL, 0);
 	init_stack(&out, NULL, 0);
 	sort_io(&in, &out, rd_list);

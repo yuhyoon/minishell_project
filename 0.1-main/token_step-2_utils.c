@@ -15,7 +15,5 @@ int valid_access(t_list **head)
 			exitcode = 1;
 		tmp = tmp->next;
 	}
-	if (exitcode != 0)
-		ft_lstclear(head, del_redrct);
 	return (exitcode);
 }

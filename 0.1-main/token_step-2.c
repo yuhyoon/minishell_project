@@ -24,7 +24,7 @@ int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
 	t_ready	*next_rdy;
 	t_list	*next_lst;
 
-	redirect(rdrct, current_rdy);
+	//redirect(rdrct, current_rdy);
 	create_text(current_rdy, &sh->src[save], &sh->mask[save], sh);
 	if (sh->ready == NULL)
 		return (1);

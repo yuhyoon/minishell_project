@@ -62,7 +62,7 @@ int create_rdrct(char *src, char *mask, t_list **head)
 	str = ft_memcpy(str, &src[i], len);
 	str[len] = '\0';
 	new->obj = str;
-	access_file(new);
+	//access_file(new);
 	lst = ft_lstnew(new);
 	ft_lstadd_back(head, lst);
 	return (i + len);

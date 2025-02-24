@@ -50,59 +50,37 @@ int		read_input(t_minish *sh)
 	return (1);
 }
 
+
+pid_t	create_process(t_ready **rdy)
+{
+	pid_t	pid;
+	int		pp[2];
+	int		n;
+
+	pid = fork();
+	if ((*rdy)->rdrct == NULL)
+		pp = NULL;
+	else if (valid_rdrct((rdy)) == 0)
+		pipe(pp[0]);
+	if (pid == 0)
+	{
+		execute_cmd();
+	}
+}
+
 int	execute(t_minish *sh)
 {
 	int	n;
-	t_list	*head;
-	int pid;
-    int first = 1;
-    int status;
-	int fds[2][2];
+	t_list	*lst;
+	t_ready	*rdy;
 
-	head = sh->ready;
-	while (head) 
-    {
-        if (head->next) {
-            if (pipe(fds[1]) == -1) {
-                printf("pipe error");
-                exit(1);
-            }
-        }
-        pid = fork();
-        if (pid == -1) {
-            printf("fork error");
-            exit(2);
-        }
-        if (pid == 0) {
-            if (!first) {
-                dup2(fds[0][0], STDIN_FILENO);
-                close(fds[0][0]);
-                close(fds[0][1]);
-            }
-            if (head->next) {
-                dup2(fds[1][1], STDOUT_FILENO);
-                close(fds[1][0]);
-                close(fds[1][1]);
-            }
-
-            execvp(head->cmd[0], head->cmd);
-            // execve(path, head->cmd, environ);
-            printf("execvp error");
-            exit(3);
-        }
-        if (!first) {
-            close(fds[0][0]);
-            close(fds[0][1]);
-        }
-        if (head->next) {
-            fds[0][0] = fds[1][0];
-            fds[0][1] = fds[1][1];
-        }
-        first = 0;
-        head = head->next;
-    }
-    while (wait(&status) > 0);
-
+	n = ft_lstsize(sh->ready);
+	lst = sh->ready;
+	while (lst)
+	{
+		rdy = (t_ready *)(lst->content);
+		create_process(rdy);
+	}
 }
 
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1

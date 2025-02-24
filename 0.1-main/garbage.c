@@ -62,3 +62,17 @@ char    **create_str_2(t_list **head)
 	ft_lstclear(head, del_text);
 	return (str);
 }
+
+int	valid_io(t_list **rdy_head)
+{
+	t_list	*tmp;
+	t_ready	*rdy;
+
+	tmp = *rdy_head;
+	rdy = ((t_ready *)(tmp->content));
+	if (access(rdy->in->obj, R_OK) != 0)
+		err_permission(1, rdy->in);
+	if (access(rdy->out->obj, W_OK) != 0)
+		err_permission(1, rdy->out);
+	return (errno);
+}

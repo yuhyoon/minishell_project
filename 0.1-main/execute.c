@@ -1,13 +1,30 @@
 #include "main.h"
 #include "parse_main.h"
 
-int execute_ready(t_minish *sh)
+int valid_rdrct(t_list *head)
 {
-    t_list  *rdy_list;
-    t_ready *rdy;
+    t_list	*tmp;
+	t_redrct	*rdrct;
+	t_ready	*rdy;
+	int		n;
 
-    rdy_list = sh->ready;
-    rdy = (t_ready *)(sh->ready->content);
-    printf("execute\n");
-    
+	tmp = head;
+	errno = 0;
+	while (tmp && errno == 0)
+	{
+		rdy = ((t_ready *)(tmp->content));
+		rdrct = (t_redrct *)(rdy->rdrct->content);
+		access(rdrct->obj, F_OK);
+		if (errno != 0)
+			err_rdrct(1, rdrct);
+		if (errno == 0 && rdrct->type == IN_RD && access(rdy->obj, R_OK) != 0)
+			err_permission(1, rdy->obj);
+		else if (errno == 0 && rdrct->type == OUT_RD && access(rdy->obj, W_OK) != 0)
+			err_permission(1, rdy->obj);
+		tmp = tmp->next;
+	}
+	ft_lstclear(head, del_rdrct);
+	return (errno);
 }
+
+

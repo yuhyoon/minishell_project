@@ -50,6 +50,61 @@ int		read_input(t_minish *sh)
 	return (1);
 }
 
+int	execute(t_minish *sh)
+{
+	int	n;
+	t_list	*head;
+	int pid;
+    int first = 1;
+    int status;
+	int fds[2][2];
+
+	head = sh->ready;
+	while (head) 
+    {
+        if (head->next) {
+            if (pipe(fds[1]) == -1) {
+                printf("pipe error");
+                exit(1);
+            }
+        }
+        pid = fork();
+        if (pid == -1) {
+            printf("fork error");
+            exit(2);
+        }
+        if (pid == 0) {
+            if (!first) {
+                dup2(fds[0][0], STDIN_FILENO);
+                close(fds[0][0]);
+                close(fds[0][1]);
+            }
+            if (head->next) {
+                dup2(fds[1][1], STDOUT_FILENO);
+                close(fds[1][0]);
+                close(fds[1][1]);
+            }
+
+            execvp(head->cmd[0], head->cmd);
+            // execve(path, head->cmd, environ);
+            printf("execvp error");
+            exit(3);
+        }
+        if (!first) {
+            close(fds[0][0]);
+            close(fds[0][1]);
+        }
+        if (head->next) {
+            fds[0][0] = fds[1][0];
+            fds[0][1] = fds[1][1];
+        }
+        first = 0;
+        head = head->next;
+    }
+    while (wait(&status) > 0);
+
+}
+
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
 int main(int ac, char **av, char **envp) 
 {
@@ -71,6 +126,7 @@ int main(int ac, char **av, char **envp)
 			printf("exitcode:%d\n", exitcode);
 			free_minish(&sh);
 		 }
+		execute();
 		//verify_exitcode();
 		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		

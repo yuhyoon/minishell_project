@@ -42,26 +42,7 @@ void	init_first(t_list **in, t_list **out, t_list **rd_list)
 	}
 }
 
-char    **create_str_2(t_list **head)
-{
-    int size;
-    char    **str;
-    t_list  *tmp;
-	int	i;
-    
-	size = ft_lstsize(*head);
-    str = malloc(sizeof(char *) * (size));
-	i = 0;
-	tmp = *head;
-    while (i < size)
-    {
-        str[i] = ft_strdup((char *)tmp->content);
-		i++;
-		tmp = tmp->next;
-    }
-	ft_lstclear(head, del_text);
-	return (str);
-}
+
 
 int	valid_io(t_list **rdy_head)
 {

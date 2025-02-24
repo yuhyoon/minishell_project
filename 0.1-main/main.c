@@ -61,7 +61,7 @@ pid_t	create_process(t_ready *rdy)
 	pid = fork();
 	if ((rdy)->rdrct == NULL)
 		pp = NULL;
-	else if (valid_rdrct((rdy)) == 0)
+	else if (valid_rdrct(&(rdy->rdrct)) == 0)
 		printf("init pipe\n");
 	if (pid == 0)
 	{

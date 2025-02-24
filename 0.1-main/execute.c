@@ -27,4 +27,19 @@ int valid_rdrct(t_list *head)
 	return (errno);
 }
 
+int execute_cmd(t_ready	*rdy)
+{
+    char	**cmd;
+	char	*name;
 
+	cmd = create_str_2(&rdy->text);
+	name = cmd[0];
+	printf("%s\n", name);   
+	// close(pp[0]);
+	// if (dup2(pp[1], STDOUT_FILENO) == -1)
+	// 	error_exit_errno("dup2 error");
+	// close(pp[1]);
+	// if (execve(f_p, cmd, NULL) == -1)
+	// 	exit(EXIT_FAILURE);
+    
+}

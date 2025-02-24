@@ -51,14 +51,14 @@ int		read_input(t_minish *sh)
 }
 
 
-pid_t	create_process(t_ready **rdy)
+pid_t	create_process(t_ready *rdy)
 {
 	pid_t	pid;
 	int		pp[2];
 	int		n;
 
 	pid = fork();
-	if ((*rdy)->rdrct == NULL)
+	if ((rdy)->rdrct == NULL)
 		pp = NULL;
 	else if (valid_rdrct((rdy)) == 0)
 		pipe(pp[0]);
@@ -80,6 +80,7 @@ int	execute(t_minish *sh)
 	{
 		rdy = (t_ready *)(lst->content);
 		create_process(rdy);
+		lst = lst->next;
 	}
 }
 
@@ -104,7 +105,7 @@ int main(int ac, char **av, char **envp)
 			printf("exitcode:%d\n", exitcode);
 			free_minish(&sh);
 		 }
-		execute();
+		execute(&sh);
 		//verify_exitcode();
 		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		

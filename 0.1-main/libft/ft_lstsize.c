@@ -15,13 +15,15 @@
 int	ft_lstsize(t_list *lst)
 {
 	size_t	cnt;
+	t_list	*tmp;
 
+	tmp = lst;
 	cnt = 0;
-	if (!lst)
+	if (!tmp)
 		return (0);
-	while (lst)
+	while (tmp)
 	{
-		lst = lst->next;
+		tmp = tmp->next;
 		cnt++;
 	}
 	return (cnt);

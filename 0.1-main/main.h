@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/wait.h>
 #include <dirent.h>
 #include "libft/libft.h"
 #include "builtins/builtin.h"

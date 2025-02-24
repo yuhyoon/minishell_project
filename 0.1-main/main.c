@@ -59,12 +59,12 @@ pid_t	create_process(t_ready *rdy)
 	int		n;
 
 	pid = fork();
-	if ((rdy)->rdrct == NULL)
-		pp = NULL;
-	else if (valid_rdrct(&(rdy->rdrct)) == 0)
-		printf("init pipe\n");
 	if (pid == 0)
 	{
+		if ((rdy)->rdrct == NULL)
+			pp = NULL;
+		else if (valid_rdrct(&(rdy->rdrct)) == 0)
+			printf("init pipe\n");
 		execute_cmd(rdy);
 	}
 }
@@ -83,6 +83,8 @@ int	execute(t_minish *sh)
 		create_process(rdy);
 		lst = lst->next;
 	}
+	while (wait(NULL) > 0)
+		continue;
 }
 
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1

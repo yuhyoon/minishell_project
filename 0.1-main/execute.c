@@ -1,6 +1,7 @@
 #include "main.h"
 #include "parse_main.h"
 #include "delete.h"
+#include "error.h"
 
 char    **create_str_2(t_list **head)
 {
@@ -38,11 +39,11 @@ int valid_rdrct(t_list **rdrct_head)
 		rdrct = (t_redrct *)(rdy->rdrct->content);
 		access(rdrct->obj, F_OK);
 		if (errno != 0)
-			err_rdrct(1, rdrct);
+			err_such(1, rdrct);
 		if (errno == 0 && rdrct->type == IN_RD && access(rdrct->obj, R_OK) != 0)
-			err_permission(1, rdrct->obj);
+			err_permission(1, rdrct);
 		else if (errno == 0 && rdrct->type == OUT_RD && access(rdrct->obj, W_OK) != 0)
-			err_permission(1, rdrct->obj);
+			err_permission(1, rdrct);
 		tmp = tmp->next;
 	}
 	ft_lstclear(rdrct_head, del_redrct);

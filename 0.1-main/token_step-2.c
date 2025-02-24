@@ -60,7 +60,7 @@ void *parsing(t_minish *sh, int len)
 	}
 	if (save == 0)
 	{
-		redirect(&rdrct, rdy);
+		//redirect(&rdrct, rdy);
 		create_text(rdy, &sh->src[save], &sh->mask[save], sh);
 	}
 	return (sh->ready);

@@ -41,5 +41,5 @@ int	redirect(t_list **rd_list, t_ready *rdy)
 	del_stack(&in);
 	del_stack(&out);
 	//todo: clear_stack
-	//ft_lstclear(&(*rdy)->io, execute_rd());
+	
 }

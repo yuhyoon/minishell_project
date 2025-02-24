@@ -1,5 +1,6 @@
 #include "main.h"
 #include "parse_main.h"
+#include "delete.h"
 
 int valid_rdrct(t_list *head)
 {
@@ -10,20 +11,20 @@ int valid_rdrct(t_list *head)
 
 	tmp = head;
 	errno = 0;
-	while (tmp && errno == 0)
+	if (tmp && errno == 0)
 	{
 		rdy = ((t_ready *)(tmp->content));
 		rdrct = (t_redrct *)(rdy->rdrct->content);
 		access(rdrct->obj, F_OK);
 		if (errno != 0)
 			err_rdrct(1, rdrct);
-		if (errno == 0 && rdrct->type == IN_RD && access(rdy->obj, R_OK) != 0)
+		if (errno == 0 && rdrct->type == IN_RD && access(rdrct->obj, R_OK) != 0)
 			err_permission(1, rdy->obj);
-		else if (errno == 0 && rdrct->type == OUT_RD && access(rdy->obj, W_OK) != 0)
+		else if (errno == 0 && rdrct->type == OUT_RD && access(rdrct->obj, W_OK) != 0)
 			err_permission(1, rdy->obj);
-		tmp = tmp->next;
+	//	tmp = tmp->next;
 	}
-	ft_lstclear(head, del_rdrct);
+	ft_lstclear(head, del_redrct);
 	return (errno);
 }
 

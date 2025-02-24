@@ -5,6 +5,7 @@
 #include "token_step-2.c"
 #include "free.c"
 #include <valgrind/memcheck.h>
+#include "execute.c"
 
 /*****
  * 
@@ -54,17 +55,17 @@ int		read_input(t_minish *sh)
 pid_t	create_process(t_ready *rdy)
 {
 	pid_t	pid;
-	int		pp[2];
+	int		*pp;
 	int		n;
 
 	pid = fork();
 	if ((rdy)->rdrct == NULL)
 		pp = NULL;
 	else if (valid_rdrct((rdy)) == 0)
-		pipe(pp[0]);
+		printf("init pipe\n");
 	if (pid == 0)
 	{
-		execute_cmd();
+		execute_cmd(rdy);
 	}
 }
 

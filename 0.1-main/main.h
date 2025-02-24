@@ -14,6 +14,7 @@
 #include <dirent.h>
 #include "libft/libft.h"
 #include "builtins/builtin.h"
+#include <errno.h>
 
 //study: multiple definition
 //unsigned char	exitcode;

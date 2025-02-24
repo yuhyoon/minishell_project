@@ -3,6 +3,8 @@
 # include "token_step-1_utils.h"
 #include "token_step-1.c"
 #include "token_step-2.c"
+#include "free.c"
+#include <valgrind/memcheck.h>
 
 /*****
  * 
@@ -48,8 +50,13 @@ int		read_input(t_minish *sh)
 	return (1);
 }
 
+<<<<<<< HEAD
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
 int main(int ac, char **av, char **envp) 
+=======
+//cc -g main.c token_step-1_utils.c stack.c delete.c libft/libft.a -lreadline -o 1
+int main() 
+>>>>>>> origin/valid_cf_prse
 {
 	(void)ac;
 	(void)av;
@@ -67,7 +74,7 @@ int main(int ac, char **av, char **envp)
 		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
 		{
 			printf("exitcode:%d\n", exitcode);
-			//clean_minish(&sh);
+			free_minish(&sh);
 		 }
 		//verify_exitcode();
 		// f_init_envps(&sh);

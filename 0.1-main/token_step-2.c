@@ -25,7 +25,9 @@ int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
 	t_list	*next_lst;
 
 	redirect(rdrct, current_rdy);
-	create_text(current_rdy, &sh->src[save], &sh->mask[save]);
+	create_text(current_rdy, &sh->src[save], &sh->mask[save], sh);
+	if (sh->ready == NULL)
+		return (1);
 	next_rdy = create_rdy();
 	next_lst = ft_lstnew(next_rdy);
 	ft_lstadd_back(&sh->ready, next_lst);
@@ -58,8 +60,8 @@ void *parsing(t_minish *sh, int len)
 	}
 	if (save == 0)
 	{
-		redirect(rdrct, current_rdy);
-		create_text(current_rdy, &sh->src[save], &sh->mask[save]);
+		redirect(&rdrct, rdy);
+		create_text(rdy, &sh->src[save], &sh->mask[save], sh);
 	}
 	return (sh->ready);
 }

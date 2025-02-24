@@ -1,6 +1,7 @@
 #include "parse_main.h"
 # include "token_step-1_utils.h"
 #include "stack.h"
+#include "delete.h"
 
 void	sort_io(t_stack *in, t_stack *out, t_list **rd_list)
 {
@@ -34,9 +35,11 @@ int	redirect(t_list **rd_list, t_ready *rdy)
 		return (-1);
 	init_stack(&in, NULL, 0);
 	init_stack(&out, NULL, 0);
-	divide_io(&in, &out, rd_list);
+	sort_io(&in, &out, rd_list);
 	set_io(rdy, &in, &out);
 	set_io(rdy, &in, &out);
+	del_stack(&in);
+	del_stack(&out);
 	//todo: clear_stack
 	//ft_lstclear(&(*rdy)->io, execute_rd());
 }

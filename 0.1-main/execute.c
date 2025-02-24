@@ -33,11 +33,13 @@ int valid_rdrct(t_list **rdrct_head)
 
 	tmp = *rdrct_head;
 	errno = 0;
+	printf("valid_rdrct\n");
 	while (tmp && errno == 0)
 	{
 		rdy = ((t_ready *)(tmp->content));
 		rdrct = (t_redrct *)(rdy->rdrct->content);
 		access(rdrct->obj, F_OK);
+		printf("%d\n", errno);
 		if (errno != 0)
 			err_such(1, rdrct);
 		if (errno == 0 && rdrct->type == IN_RD && access(rdrct->obj, R_OK) != 0)
@@ -47,6 +49,7 @@ int valid_rdrct(t_list **rdrct_head)
 		tmp = tmp->next;
 	}
 	ft_lstclear(rdrct_head, del_redrct);
+
 	return (errno);
 }
 

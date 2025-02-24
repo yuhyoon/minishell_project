@@ -61,6 +61,8 @@ pid_t	create_process(t_ready *rdy)
 	pid = fork();
 	if (pid == 0)
 	{
+
+		printf("asdfasdf\n");
 		if ((rdy)->rdrct == NULL)
 			pp = NULL;
 		else if (valid_rdrct(&(rdy->rdrct)) == 0)

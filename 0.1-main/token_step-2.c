@@ -12,16 +12,7 @@ t_list *init_parsing_structure(t_list **rdy_head)
 
 	rdy = create_rdy();
     ft_lstadd_back(rdy_head, ft_lstnew(rdy));
-    return (rdy_head);
-}
-
-t_list	*init_rdrct(void)
-{
-	t_redrct	*rdrct;
-
-	rdrct = malloc(sizeof(t_redrct));
-	ft_memset(rdrct, 0, sieof(rdrct));
-	return (rdrct)
+    return (*rdy_head);
 }
 
 int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)

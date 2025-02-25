@@ -35,18 +35,20 @@ void *parsing(t_minish *sh, int len)
 	int		i;
 	t_ready	*rdy;
 	int	save;
+	t_list	*lst;
 
 	i = 0;
 	save = i;
-	init_parsing_structure(&sh->ready);
-	rdy = ((t_ready *)sh->ready->content);
+	lst = init_parsing_structure(&sh->ready);
 	while (i < len && exitcode == 0)
 	{
+		rdy = ((t_ready *)lst->content);
 		if (sh->mask[i] == IN_RD || sh->mask[i] == OUT_RD)
 			i += create_rdrct(&sh->src[i], &sh->mask[i], &rdy->rdrct);
 		else if (sh->mask[i] == PIPE)
 		{
 			i += handle_pipe(sh, rdy, &rdy->rdrct, save);
+			lst = lst->next;
 			save = i;
 		}
 		else

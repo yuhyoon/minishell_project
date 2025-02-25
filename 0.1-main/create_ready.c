@@ -40,13 +40,13 @@ int	access_file(t_redrct *rdrct)
 	rdrct->access = mode;
 }
 
-t_list	*init_rdrct(void)
+t_redrct	*init_rdrct(void)
 {
 	t_redrct	*rdrct;
 
 	rdrct = malloc(sizeof(t_redrct));
-	ft_memset(rdrct, 0, sieof(rdrct));
-	return (rdrct)
+	ft_memset(rdrct, 0, sizeof(rdrct));
+	return (rdrct);
 }
 
 int create_rdrct(char *src, char *mask, t_list **head)

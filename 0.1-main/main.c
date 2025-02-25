@@ -62,9 +62,8 @@ pid_t	create_process(t_ready *rdy)
 	pid = fork();
 	if (pid == 0)
 	{
-
-		printf("asdfasdf\n");
-		if ((rdy)->rdrct == NULL)
+		printf("create_process\n");
+		if ((rdy)->rdrct_num == 0)
 			pp = NULL;
 		else if (valid_rdrct(&(rdy->rdrct)) == 0)
 			redirect(&(rdy->rdrct), rdy);

@@ -4,19 +4,29 @@
 #include "execute_meta.c"
 #include "stack.h"
 #include "token_step-2_utils.c"
-#include "redirect.c"
 
-t_list *init_parsing_structure(void)
+
+t_list *init_parsing_structure(t_list **rdy_head)
 {
     t_ready *rdy;
-    t_list *rdy_head;
-    t_list *new;
+	t_redrct	*rdrct;
 
 	rdy = create_rdy();
-	rdy_head = NULL;
-	new = ft_lstnew(rdy);
-    ft_lstadd_back(&rdy_head, new);
+	rdrct = init_rdrct();
+	rdy->rdrct = rdrct;
+    ft_lstadd_back(rdy_head, ft_lstnew(rdy));
+	ft_lstadd_back(rdrct_head, ft_lstnew(rdrct));
     return (rdy_head);
+}
+
+t_list	*init_rdrct(void)
+{
+	t_redrct	*rdrct;
+	t_list		*new;
+	t_list		*rdrct_head;
+
+	rdrct = malloc(sizeof(t_redrct));
+	ft_memset(rdrct, 0, sieof(rdrct));
 }
 
 int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
@@ -29,6 +39,7 @@ int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
 	if (sh->ready == NULL)
 		return (1);
 	next_rdy = create_rdy();
+	next_rdy->rdrct = init_rdrct();
 	next_lst = ft_lstnew(next_rdy);
 	ft_lstadd_back(&sh->ready, next_lst);
 	return (1);
@@ -39,20 +50,18 @@ void *parsing(t_minish *sh, int len)
 	int		i;
 	t_ready	*rdy;
 	int	save;
-	t_list  *rdrct;
 
 	i = 0;
 	save = i;
-	rdrct = NULL;
-	sh->ready = init_parsing_structure();
+	init_parsing_structure(&sh->ready);
 	rdy = ((t_ready *)sh->ready->content);
 	while (i < len && exitcode == 0)
 	{
 		if (sh->mask[i] == IN_RD || sh->mask[i] == OUT_RD)
-			i += create_rdrct(&sh->src[i], &sh->mask[i], &rdrct);
+			i += create_rdrct(&sh->src[i], &sh->mask[i], &rdy->rdrct);
 		else if (sh->mask[i] == PIPE)
 		{
-			i += handle_pipe(sh, rdy,  &rdrct, save);
+			i += handle_pipe(sh, rdy, &rdy->rdrct, save);
 			save = i;
 		}
 		else

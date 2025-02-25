@@ -49,7 +49,7 @@ int create_rdrct(char *src, char *mask, t_list **head)
 	t_list	*lst;
 
     i = 0;
-	new = malloc(sizeof(t_redrct));
+	new = *head;
 	new->type = mask[i];
     while (mask[i] == new->type)
         i++;
@@ -62,7 +62,6 @@ int create_rdrct(char *src, char *mask, t_list **head)
 	str = ft_memcpy(str, &src[i], len);
 	str[len] = '\0';
 	new->obj = str;
-	//access_file(new);
 	lst = ft_lstnew(new);
 	ft_lstadd_back(head, lst);
 	return (i + len);

@@ -15,11 +15,11 @@ typedef enum s_token
 
 typedef struct s_redrct
 {
-	char	type;
-	int		parts;
 	char	*obj;
+	int		parts;
 	int		access;
 	int		hrd_fd;
+	char	type;
 }t_redrct;
 
 typedef struct s_char_state

@@ -6,6 +6,7 @@
 #include "free.c"
 #include <valgrind/memcheck.h>
 #include "execute.c"
+#include "redirect.c"
 
 /*****
  * 

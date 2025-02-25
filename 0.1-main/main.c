@@ -65,7 +65,7 @@ pid_t	create_process(t_ready *rdy)
 		printf("create_process\n");
 		if ((rdy)->rdrct_num == 0)
 			pp = NULL;
-		else if (valid_rdrct(&(rdy->rdrct)) == 0)
+		else if (valid_rdrct(rdy) == 0)
 			redirect(&(rdy->rdrct), rdy);
 		execute_cmd(rdy);
 	}
@@ -78,7 +78,9 @@ int	execute(t_minish *sh)
 	t_ready	*rdy;
 
 	n = ft_lstsize(sh->ready);
+	printf("ready nums:%d\n", n);
 	lst = sh->ready;
+
 	while (lst)
 	{
 		rdy = (t_ready *)(lst->content);

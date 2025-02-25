@@ -24,20 +24,19 @@ char    **create_str_2(t_list **head)
 	return (str);
 }
 
-int valid_rdrct(t_list **rdrct_head)
+int valid_rdrct(t_ready *rdy)
 {
-    t_list	*tmp;
+    t_list	*lst;
 	t_redrct	*rdrct;
-	t_ready	*rdy;
 	int		n;
 
-	tmp = *rdrct_head;
+	lst = rdy->rdrct;
 	errno = 0;
+	n = rdy->rdrct_num;
 	printf("valid_rdrct\n");
-	while (tmp && errno == 0)
+	while (n && errno == 0)
 	{
-		rdy = ((t_ready *)(tmp->content));
-		rdrct = (t_redrct *)(rdy->rdrct->content);
+		rdrct = (t_redrct *)(lst->content);
 		access(rdrct->obj, F_OK);
 		printf("%d\n", errno);
 		if (errno != 0)
@@ -46,9 +45,9 @@ int valid_rdrct(t_list **rdrct_head)
 			err_permission(1, rdrct);
 		else if (errno == 0 && rdrct->type == OUT_RD && access(rdrct->obj, W_OK) != 0)
 			err_permission(1, rdrct);
-		tmp = tmp->next;
+		lst = lst->next;
+		n--;
 	}
-	ft_lstclear(rdrct_head, del_redrct);
 
 	return (errno);
 }

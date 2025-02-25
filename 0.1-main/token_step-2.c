@@ -52,11 +52,8 @@ void *parsing(t_minish *sh, int len)
 		else
 			i++;
 	}
-	if (save == 0)
-	{
 		if (rdy->rdrct != NULL)
 			rdy->rdrct_num = ft_lstsize(rdy->rdrct);
 		create_text(rdy, &sh->src[save], &sh->mask[save], sh);
-	}
 	return (sh->ready);
 }

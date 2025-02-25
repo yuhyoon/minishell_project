@@ -37,8 +37,9 @@ int valid_rdrct(t_ready *rdy)
 	while (n && errno == 0)
 	{
 		rdrct = (t_redrct *)(lst->content);
+		printf("first rdrct obj:%s", rdrct->obj);
 		access(rdrct->obj, F_OK);
-		printf("%d\n", errno);
+		printf("errno: %d\n", errno);
 		if (errno != 0)
 			err_such(1, rdrct);
 		if (errno == 0 && rdrct->type == IN_RD && access(rdrct->obj, R_OK) != 0)

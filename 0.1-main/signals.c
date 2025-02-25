@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:55:43 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/02/23 20:56:09 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/02/24 15:53:40 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	before_readline(int signal)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		//exitcode 
+		exitcode = 130;
 	}
 	//없어도 될 것 같지만 차일을 위해 남겨둠
 	// else if (signal == SIGQUIT)

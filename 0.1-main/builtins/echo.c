@@ -6,15 +6,15 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:47:10 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/02/25 16:24:23 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/02/25 16:25:27 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 #include "parse_main.h"
 
-#define TURE 1
-#define FALSE 0
+#define TURE_ 1
+#define FALSE_ 0
 
 void	f_print_newline(t_list *param_list, int no_newline) //0 newline 1 no_newline
 {
@@ -65,9 +65,9 @@ int f_echo(t_minish *sh)
 	if (size > 2)
 	{
 		if (f_check_n_option(((char *)commands->next->content)))
-			f_print_echo(((char *)commands->next), TURE); //without newline (-n option)
+			f_print_echo(((char *)commands->next), TURE_); //without newline (-n option)
 		else
-			f_print_echo(((char *)commands->next), FALSE); //newline
+			f_print_echo(((char *)commands->next), FALSE_); //newline
 	}
 	return (0);
 }

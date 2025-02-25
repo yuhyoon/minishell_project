@@ -9,24 +9,19 @@
 t_list *init_parsing_structure(t_list **rdy_head)
 {
     t_ready *rdy;
-	t_redrct	*rdrct;
 
 	rdy = create_rdy();
-	rdrct = init_rdrct();
-	rdy->rdrct = rdrct;
     ft_lstadd_back(rdy_head, ft_lstnew(rdy));
-	ft_lstadd_back(rdrct_head, ft_lstnew(rdrct));
     return (rdy_head);
 }
 
 t_list	*init_rdrct(void)
 {
 	t_redrct	*rdrct;
-	t_list		*new;
-	t_list		*rdrct_head;
 
 	rdrct = malloc(sizeof(t_redrct));
 	ft_memset(rdrct, 0, sieof(rdrct));
+	return (rdrct)
 }
 
 int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
@@ -35,11 +30,10 @@ int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
 	t_list	*next_lst;
 
 	//redirect(rdrct, current_rdy);
+	if (*rdrct != NULL)
+		current_rdy->rdrct_num = ft_lstsize(*rdrct);
 	create_text(current_rdy, &sh->src[save], &sh->mask[save], sh);
-	if (sh->ready == NULL)
-		return (1);
 	next_rdy = create_rdy();
-	next_rdy->rdrct = init_rdrct();
 	next_lst = ft_lstnew(next_rdy);
 	ft_lstadd_back(&sh->ready, next_lst);
 	return (1);
@@ -69,7 +63,8 @@ void *parsing(t_minish *sh, int len)
 	}
 	if (save == 0)
 	{
-		//redirect(&rdrct, rdy);
+		if (rdy->rdrct != NULL)
+			current_rdy->rdrct_num = ft_lstsize(*rdrct);
 		create_text(rdy, &sh->src[save], &sh->mask[save], sh);
 	}
 	return (sh->ready);

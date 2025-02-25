@@ -33,6 +33,7 @@ typedef struct s_ready
 {
 	t_list	*text;
 	t_list	*rdrct;
+	int		rdrct_num;
 	t_redrct	*in;
 	t_redrct	*out;
 }t_ready;

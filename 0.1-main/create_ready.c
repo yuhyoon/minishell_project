@@ -48,8 +48,9 @@ int create_rdrct(char *src, char *mask, t_list **head)
 	int		len;
 	t_list	*lst;
 
+	lst = ft_lstnew(init_rdrct());
     i = 0;
-	new = *head;
+	new = ((t_redrct *)((lst)->content));
 	new->type = mask[i];
     while (mask[i] == new->type)
         i++;
@@ -62,7 +63,6 @@ int create_rdrct(char *src, char *mask, t_list **head)
 	str = ft_memcpy(str, &src[i], len);
 	str[len] = '\0';
 	new->obj = str;
-	lst = ft_lstnew(new);
 	ft_lstadd_back(head, lst);
 	return (i + len);
 }

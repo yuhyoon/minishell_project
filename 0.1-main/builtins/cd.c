@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 02:12:09 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/02/26 13:11:58 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/02/26 15:31:26 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,31 @@
 
 char *f_getenv(char **custom_envp,  char *name);
 
-
-int	f_update_pwds(t_minish *sh, char *updated)
+int f_update_pwds(t_minish *sh)
 {
-	char *t_oldpwd;
-	
-	t_oldpwd = ft_strdup(sh->pwd);
-	sh->pwd = getcwd(NULL, 0);
-	if (!sh->pwd)
-	{
-		ft_putstr_fd("bash: cd: Error updating PWD\n", 2);
-		exitcode = 1;
-		return (1);
-	}
-	if (f_update_env(sh, "PWD", sh->pwd) == -1 || f_update_env(sh, "OLDPWD", t_oldpwd) == -1)
-	{
-		ft_putstr_fd("bash: cd: Error updating environment variables\n", 2);
-		free(t_oldpwd);
-		exitcode = 1;
-		return (1);
-	}
-	free(t_oldpwd);
-	exitcode = 0;
-	return (0);
+    char *t_oldpwd;
+    char *t_newpwd;
+
+	exitcode = 1;
+    t_oldpwd = ft_strdup(sh->pwd);
+    if (!t_oldpwd)
+        return (1);
+    t_newpwd = getcwd(NULL, 0);
+    if (!t_newpwd)
+    {
+        free(t_oldpwd);
+        return (1);
+    }
+    sh->pwd = t_newpwd;
+    if (f_update_env(sh, "PWD", t_newpwd) == -1 || f_update_env(sh, "OLDPWD", t_oldpwd) == -1)
+    {
+        free(t_oldpwd);
+        free(t_newpwd);
+        return (1);
+    }
+    free(t_oldpwd);
+    exitcode = 0;
+    return (0);
 }
 
 // ft_putstr_fd_error_msg 수정
@@ -148,7 +150,8 @@ int f_check_params( char *param1, int length)
 // f_cd 수정
 int f_cd(t_minish *sh)
 {
-    int size, res;
+    int	size; 
+	int	res;
     t_list *commands;
 
     commands = (((t_ready *)(sh->ready->content))->text);

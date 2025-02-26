@@ -53,7 +53,24 @@ int		read_input(t_minish *sh)
 }
 
 
-pid_t	create_process(t_ready *rdy)
+
+
+int	**create_pipes(int child_num)
+{
+	int	(*pp)[2];
+	int	i;
+
+	pp = malloc(sizeof(int[2]) * (child_num - 1));
+	i = 0;
+	while (i < child_num - 1)
+	{
+		pipe(pp[i]); //todo: error if (pipe(pp[i]) < 0)
+		i++;
+	}
+	return (pp);
+}
+
+pid_t	create_process(t_ready *rdy, int child_num, int **pipes)
 {
 	pid_t	pid;
 	int		*pp;
@@ -69,6 +86,10 @@ pid_t	create_process(t_ready *rdy)
 			redirect(&(rdy->rdrct), rdy);
 		execute_cmd(rdy);
 	}
+	else
+	{
+		
+	}
 }
 
 int	execute(t_minish *sh)
@@ -76,15 +97,17 @@ int	execute(t_minish *sh)
 	int	n;
 	t_list	*lst;
 	t_ready	*rdy;
+	pid_t	*child_pids;
+	int		**pipes;
 
 	n = ft_lstsize(sh->ready);
-	printf("ready nums:%d\n", n);
+	child_pids = malloc(sizeof(pid_t) * n);
 	lst = sh->ready;
-
+	pipes = create_pipes(n);
 	while (lst)
 	{
 		rdy = (t_ready *)(lst->content);
-		create_process(rdy);
+		create_process(rdy, i, pipes);
 		lst = lst->next;
 	}
 	while (wait(NULL) > 0)

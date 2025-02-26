@@ -142,14 +142,14 @@ void	free_n_envps(t_envp **envp)
 	*envp = NULL;
 }
 
-void	add_envp_node(t_envp **head, char *key, char *value)
+int	add_envp_node(t_envp **head, char *key, char *value)
 {
 	t_envp *new_node;
 	t_envp *current;
 
 	new_node = (t_envp *)malloc(sizeof(t_envp));
 	if (!new_node)
-		return;
+		return (-1);
 	new_node->key = ft_strdup(key);
 	new_node->value = ft_strdup(value);
 	new_node->o_envp = NULL;
@@ -159,14 +159,20 @@ void	add_envp_node(t_envp **head, char *key, char *value)
 	if (*head == NULL)
 	{
 		*head = new_node;
-		return;
+		return (-1);
 	}
 	current = *head;
 	while (current->next != NULL)
 		current = current->next;
 	current->next = new_node;
+	return (0);
 }
 
+
+// int	f_update_env(t_minish *sh, char *key, char *value)
+// {
+	
+// }
 
 int	update_envp_node(t_envp **head, char *key, char *value)
 {
@@ -179,6 +185,8 @@ int	update_envp_node(t_envp **head, char *key, char *value)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
+			if (!current->value)
+				return (-1);
 			return (0);
 		}
 		current = current->next;
@@ -188,13 +196,41 @@ int	update_envp_node(t_envp **head, char *key, char *value)
 }
 
 
-void	update_or_add_envp_node(t_envp **head, char *key, char *value)
+// void	update_or_add_envp_node(t_envp **head, char *key, char *value)
+// {
+// 	if (update_envp_node(head, key, value) == 1)
+// 		add_envp_node(head, key, value);
+// }
+
+//main에서 2개만 받는다고 했을 때, 이게 맞지...
+void	update_or_add_envp_node(t_envp **head, char *set)
 {
+	char	*key;
+	char	*value;
+	char	**sets;
+	int	res;
+	sets = ft_spilt(set, '=');
+	key = ft_strdup(sets[0]);
+	if (!sets[1])
+		value = ft_strdup("\0");
+	else
+	{
+		value = ft_strdup(sets[1]);
+		if (!value)
+			return ;
+	}
 	if (update_envp_node(head, key, value) == 1)
 		add_envp_node(head, key, value);
+	
+	free(key);
+	free(value);
+	free(sets[0]);
+	free(sets[1]);
 }
 
- 
+
+
+
 int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -209,7 +245,8 @@ int main(int argc, char **argv, char **envp)
     f_sort_and_store_envp(envp, &sorted_envps);
     f_init_env(envp, n_envps); //노드가 생성된지 확인
     show_stack(*n_envps, "------------env------------\n");
-	update_or_add_envp_node(n_envps, "NEW_VALUE", "Hello Worldz_");
+	update_or_add_envp_node(n_envps, "NEW_VALUE='HELLO worlds'");
+	// update_or_add_envp_node(n_envps, "NEW_VALUE", "Hello Worldz_");
 	show_stack(*n_envps, "------------ADD------------\n\n");
 	delete_envp_node(n_envps, "NEW_VALUE");
 	show_stack(*n_envps, "------------DELETE------------\n\n");

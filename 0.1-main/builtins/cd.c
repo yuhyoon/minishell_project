@@ -15,29 +15,45 @@
 
 char *f_getenv(char **custom_envp,  char *name);
 
+int update_envps(t_minish *sh, char *newpwd, char *oldpwd)
+{
+    int res;
+
+    res = 0;
+    if (update_envp_node(sh->n_envs, "PWD", newpwd) != 0)
+        add_envp_node(sh->n_envs, "PWD", newpwd);
+    if (update_envp_node(sh->n_envs, "OLDPWD", oldpwd) != 0)
+        add_envp_node(sh->n_envs, "OLDPWD", oldpwd);
+    if (update_envp_node(sh->n_export, "PWD", newpwd) != 0)
+        add_envp_node(sh->n_export, "PWD", newpwd);
+    if (update_envp_node(sh->n_export, "OLDPWD", oldpwd) != 0)
+        add_envp_node(sh->n_export, "OLDPWD", oldpwd);
+    return (0);
+}
+
 int f_update_pwds(t_minish *sh)
 {
-    char *t_oldpwd;
-    char *t_newpwd;
+    char *oldpwd;
+    char *newpwd;
 
 	exitcode = 1;
-    t_oldpwd = ft_strdup(sh->pwd);
-    if (!t_oldpwd)
+    oldpwd = ft_strdup(sh->pwd);
+    if (!oldpwd)
         return (1);
-    t_newpwd = getcwd(NULL, 0);
-    if (!t_newpwd)
+    newpwd = getcwd(NULL, 0);
+    if (!newpwd)
     {
-        free(t_oldpwd);
+        free(oldpwd);
         return (1);
     }
-    sh->pwd = t_newpwd;
-    if (f_update_env(sh, "PWD", t_newpwd) == -1 || f_update_env(sh, "OLDPWD", t_oldpwd) == -1)
+    sh->pwd = newpwd;
+    if (update_envps(sh, newpwd, oldpwd))
     {
-        free(t_oldpwd);
-        free(t_newpwd);
+        free(oldpwd);
+        free(newpwd);
         return (1);
     }
-    free(t_oldpwd);
+    free(oldpwd);
     exitcode = 0;
     return (0);
 }
@@ -117,25 +133,22 @@ int f_cd_goto(char *location)
     {
         f_putstr_fd_error_msg("cd", "Permission denied", location, 2);
         exitcode = 1;
-        return 1;
+        return (1);
     }
     if (location[0] != '\\')
         res = chdir(location);
     else
-        res = -1;
-
-    if (res == -1)
     {
         f_putstr_fd_error_msg("cd", "No such file or directory", location, 2);
         exitcode = 1;
-        return 1;
+        return (1);
     }
     exitcode = 0;
-    return 0;
+    return (0);
 }
 
 // f_check_params 수정
-int f_check_params( char *param1, int length)
+int f_check_params(char *param1, int length)
 {
     if (ft_strncmp(param1, "-", length) == 0)
         return 1;
@@ -173,7 +186,7 @@ int f_cd(t_minish *sh)
             printf("Unexpected condition\n");
     }
     if (res == 0)
-        f_update_pwds(sh, (char *)commands->next->content);
+        f_update_pwds(sh);
     return res;
 }
 

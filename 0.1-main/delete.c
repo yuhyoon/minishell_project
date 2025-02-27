@@ -33,6 +33,8 @@ void	del_stack(void *st)
 	t_stack	*stack;
 
 	stack = st;
+	if (stack == NULL)
+		return ;
 	while (!is_emthy(stack))
 		pop2(stack);
 	stack = NULL;

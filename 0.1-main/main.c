@@ -57,39 +57,54 @@ int		read_input(t_minish *sh)
 
 int	**create_pipes(int child_num)
 {
-	int	(*pp)[2];
+	int	**pp;
 	int	i;
 
-	pp = malloc(sizeof(int[2]) * (child_num - 1));
+	pp = malloc(sizeof(int *) * (child_num - 1));
 	i = 0;
 	while (i < child_num - 1)
 	{
-		pipe(pp[i]); //todo: error if (pipe(pp[i]) < 0)
+		pp[i] = malloc(sizeof(int) * 2);
+		if (pipe(pp[i]) < 0)
+		{
+			while (i >= 0)
+				free(pp[i--]);
+			free(pp);
+			return (NULL);
+		}
 		i++;
 	}
 	return (pp);
 }
 
+void	set_pipe(int i, int **pipes, t_ready *rdy, int child_num)
+{
+	rdy->in_fd = STDIN_FILENO;
+	if (i > 0)
+		rdy->in_fd = pipes[i - 1][0];
+	rdy->out_fd = STDOUT_FILENO;
+	if (i < child_num - 1)
+		rdy->out_fd = pipes[i][1];
+}
+
 pid_t	create_process(t_ready *rdy, int child_num, int **pipes)
 {
 	pid_t	pid;
-	int		*pp;
-	int		n;
+	int		in_fd;
+	int		status;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		printf("create_process\n");
-		if ((rdy)->rdrct_num == 0)
-			pp = NULL;
-		else if (valid_rdrct(rdy) == 0)
-			redirect(&(rdy->rdrct), rdy);
+		if (redirect(&(rdy->rdrct), rdy) != 0);
+			exit(EXIT_FAILURE);			
 		execute_cmd(rdy);
 	}
 	else
 	{
+		//parents func()
 		
-	}
+	}	
 }
 
 int	execute(t_minish *sh)
@@ -99,19 +114,29 @@ int	execute(t_minish *sh)
 	t_ready	*rdy;
 	pid_t	*child_pids;
 	int		**pipes;
+	int		i;
+	int		status;
 
 	n = ft_lstsize(sh->ready);
 	child_pids = malloc(sizeof(pid_t) * n);
 	lst = sh->ready;
 	pipes = create_pipes(n);
+	i = 0;
 	while (lst)
 	{
 		rdy = (t_ready *)(lst->content);
+		set_pipe(i, pipes, rdy, n);
 		create_process(rdy, i, pipes);
+		i++;
 		lst = lst->next;
 	}
-	while (wait(NULL) > 0)
-		continue;
+
+	//parent_process;
+	i = 0;
+	while (waitpid(child_pids[i], &status, 0))
+	{
+		i++;
+	}
 }
 
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1

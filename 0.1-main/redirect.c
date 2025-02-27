@@ -3,20 +3,23 @@
 #include "stack.h"
 #include "delete.h"
 
-void	sort_io(t_stack *in, t_stack *out, t_list **rd_list)
+void	sort_io(t_stack *in, t_stack *out, t_ready *rdy)
 {
-	t_list		**tmp;
+	t_list		*tmp;
 	t_redrct	*rd;
+	int			n;
 
-	tmp = rd_list;
-	while (*tmp)
+	n = rdy->rdrct_num;
+	tmp = rdy->rdrct;
+	while (n)
 	{
-		rd = (t_redrct *)(*tmp)->content;
+		rd = (t_redrct *)(tmp)->content;
 		if (rd->type == IN_RD)
 			push(in, rd);
 		else if (rd->type == OUT_RD)
 			push(out, rd);
-		*tmp = (*tmp)->next;
+		n--;
+		tmp = (tmp)->next;
 	}
 }
 
@@ -31,15 +34,14 @@ int	redirect(t_list **rd_list, t_ready *rdy)
 	t_stack	in;
 	t_stack out;
 
-	// if (valid_access(rd_list) != 0)
-	// 	return (-1);
+	if (valid_rdrct(rdy) != 0)
+		return (-1);
 	init_stack(&in, NULL, 0);
 	init_stack(&out, NULL, 0);
-	sort_io(&in, &out, rd_list);
+	sort_io(&in, &out, rdy);
 	set_io(rdy, &in, &out);
 	set_io(rdy, &in, &out);
 	del_stack(&in);
 	del_stack(&out);
-	//todo: clear_stack
-	
+	return (0);	
 }

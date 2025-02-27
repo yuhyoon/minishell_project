@@ -36,6 +36,8 @@ typedef struct s_ready
 	int		rdrct_num;
 	t_redrct	*in;
 	t_redrct	*out;
+	int		in_fd;
+	int		out_fd;
 }t_ready;
 
 typedef struct s_stack

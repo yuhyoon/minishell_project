@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 02:12:09 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/02/26 15:31:26 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/02/27 17:33:26 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,33 @@
 
 char *f_getenv(char **custom_envp,  char *name);
 
+int update_sh_pwd(t_minish *sh, char *newpwd)
+{ 
+    int i;
+    int flag;
+
+    i = -1;
+    flag = 0;
+    while (!(sh->envp[i]) && (++i))
+    {
+        if (ft_strncmp(sh->envp[i], "PWD", ft_strlen(sh->envp[i])) == 0)
+        {
+            flag = 1;
+            free(sh->envp[i]);
+            sh->envp[i] = ft_strjoin("PWD=", newpwd);
+            break;
+        }
+    }
+    if (!flag && !(sh->envp))
+        sh->envp[i] = ft_strjoin("PWD=", newpwd);
+    return (0);
+}
+
+
 int update_envps(t_minish *sh, char *newpwd, char *oldpwd)
 {
     int res;
+    int i;
 
     res = 0;
     if (update_envp_node(sh->n_envs, "PWD", newpwd) != 0)
@@ -28,16 +52,18 @@ int update_envps(t_minish *sh, char *newpwd, char *oldpwd)
         add_envp_node(sh->n_export, "PWD", newpwd);
     if (update_envp_node(sh->n_export, "OLDPWD", oldpwd) != 0)
         add_envp_node(sh->n_export, "OLDPWD", oldpwd);
+    sh->pwd = newpwd;
+    update_sh_pwd(sh, newpwd);
     return (0);
 }
 
-int f_update_pwds(t_minish *sh)
+int f_update_pwds(t_minish *sh, char *current_pwd)
 {
     char *oldpwd;
     char *newpwd;
 
 	exitcode = 1;
-    oldpwd = ft_strdup(sh->pwd);
+    oldpwd = ft_strdup(current_pwd);
     if (!oldpwd)
         return (1);
     newpwd = getcwd(NULL, 0);
@@ -165,8 +191,12 @@ int f_cd(t_minish *sh)
 {
     int	size; 
 	int	res;
-    t_list *commands;
+    char    *current_pwd;
+    t_list  *commands;
 
+    current_pwd = getcwd(NULL, 0);
+    if (!current_pwd)
+        return (1);
     commands = (((t_ready *)(sh->ready->content))->text);
     size = ft_lstsize(commands);
     if (size == 1) // cd home
@@ -186,7 +216,8 @@ int f_cd(t_minish *sh)
             printf("Unexpected condition\n");
     }
     if (res == 0)
-        f_update_pwds(sh);
+        f_update_pwds(sh, current_pwd);
+    free(current_pwd); //free 여기서 해도 괜찮?
     return res;
 }
 

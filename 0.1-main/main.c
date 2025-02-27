@@ -79,15 +79,29 @@ int	**create_pipes(int child_num)
 
 void	set_pipe(int i, int **pipes, t_ready *rdy, int child_num)
 {
+	int	j;
+
+	j = i;
 	rdy->in_fd = STDIN_FILENO;
 	if (i > 0)
 		rdy->in_fd = pipes[i - 1][0];
 	rdy->out_fd = STDOUT_FILENO;
 	if (i < child_num - 1)
 		rdy->out_fd = pipes[i][1];
+	if (!rdy->in)
+	{
+		dup2(rdy->in->fd, rdy->in_fd); //n copy to rdy->in_fd;
+	}
+	if (!rdy->out)
+	{
+		dup2(rdy->out->fd, rdy->out_fd); //n copy to rdy->in_fd;
+	}
+//problem: 지금써야하는 파이프 외에 만들어놓은 모든 파이프들을 닫아야함.......
+		close(pipes[j][0]);
+	close(pipes[j][1]);
 }
 
-pid_t	create_process(t_ready *rdy, int child_num, int **pipes)
+pid_t	create_process(t_ready *rdy, int child_num, int **pipes, int i)
 {
 	pid_t	pid;
 	int		in_fd;
@@ -97,13 +111,13 @@ pid_t	create_process(t_ready *rdy, int child_num, int **pipes)
 	if (pid == 0)
 	{
 		if (redirect(&(rdy->rdrct), rdy) != 0);
-			exit(EXIT_FAILURE);			
+			exit(EXIT_FAILURE);
+		set_pipe(i, pipes, rdy, child_num);
 		execute_cmd(rdy);
 	}
 	else
 	{
-		//parents func()
-		
+		//parents func();
 	}	
 }
 
@@ -113,20 +127,18 @@ int	execute(t_minish *sh)
 	t_list	*lst;
 	t_ready	*rdy;
 	pid_t	*child_pids;
-	int		**pipes;
 	int		i;
 	int		status;
 
 	n = ft_lstsize(sh->ready);
 	child_pids = malloc(sizeof(pid_t) * n);
 	lst = sh->ready;
-	pipes = create_pipes(n);
+	sh->pps = create_pipes(n);
 	i = 0;
 	while (lst)
 	{
 		rdy = (t_ready *)(lst->content);
-		set_pipe(i, pipes, rdy, n);
-		create_process(rdy, i, pipes);
+		create_process(rdy, child_pids, sh->pps, i);
 		i++;
 		lst = lst->next;
 	}

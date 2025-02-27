@@ -18,7 +18,7 @@ typedef struct s_redrct
 	char	*obj;
 	int		parts;
 	int		access;
-	int		hrd_fd;
+	int		fd;
 	char	type;
 }t_redrct;
 

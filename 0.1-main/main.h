@@ -22,12 +22,12 @@
 
 extern unsigned char exitcode;
 
-typedef struct s_pipe
-{
-	int				pipe_fd[2];
-	int				*read_fd;
-	int				*write_fd;
-}	t_pipe;
+// typedef struct s_pipe
+// {
+// 	int				pipe_fd[2];
+// 	int				*read_fd;
+// 	int				*write_fd;
+// }	t_pipe;
 
 typedef struct s_minish
 {
@@ -35,12 +35,14 @@ typedef struct s_minish
 	char	*mask;
 	t_list	*ready;
 	pid_t	pid;
-	t_pipe	pipe;
+	int		**pps;
 	char	**envp;
 	t_envp	*n_envs;
 	t_envp	*n_export;
 	char	*pwd;
 }t_minish;
+
+
 
 void	set_signal(void *handler);
 void	before_readline(int signal);

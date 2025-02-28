@@ -77,31 +77,36 @@ int	**create_pipes(int child_num)
 	return (pp);
 }
 
-void	set_pipe(int i, int **pipes, t_ready *rdy, int child_num)
+void	set_pipe(int i, int *pipes, t_ready *rdy, int child_num, int *prev)
 {
 	int	j;
 
 	j = i;
 	rdy->in_fd = STDIN_FILENO;
-	if (i > 0)
-		rdy->in_fd = pipes[i - 1][0];
+	if (*prev != -1)
+		rdy->in_fd = *prev;
 	rdy->out_fd = STDOUT_FILENO;
 	if (i < child_num - 1)
-		rdy->out_fd = pipes[i][1];
+		rdy->out_fd = pipes[1];
 	if (!rdy->in)
 	{
 		dup2(rdy->in->fd, rdy->in_fd); //n copy to rdy->in_fd;
+		close(rdy->in->fd);
 	}
 	if (!rdy->out)
 	{
 		dup2(rdy->out->fd, rdy->out_fd); //n copy to rdy->in_fd;
+		close(rdy->out->fd);
 	}
-//problem: 지금써야하는 파이프 외에 만들어놓은 모든 파이프들을 닫아야함.......
-		close(pipes[j][0]);
-	close(pipes[j][1]);
+	if (child_num - (i + 1) > 0)
+	{
+		dup2(pipes[1], rdy->out_fd);
+		close(pipes[1]);
+		close(pipes[0]);
+	}
 }
-
-pid_t	create_process(t_ready *rdy, int child_num, int **pipes, int i)
+/*
+pid_t	create_process_old(t_ready *rdy, int child_num, int **pipes, int i)
 {
 	pid_t	pid;
 	int		in_fd;
@@ -120,6 +125,31 @@ pid_t	create_process(t_ready *rdy, int child_num, int **pipes, int i)
 		//parents func();
 	}	
 }
+*/
+
+pid_t	create_process(t_ready *rdy, pid_t child_num, int i)
+{
+	pid_t	pid;
+	int		prev = -1;
+	int		status;
+	int		pipes[2];
+
+	if (pipe(pipes) == -1)
+		printf("pp error\n");
+	pid = fork();
+	if (pid == 0)
+	{
+		if (redirect(&(rdy->rdrct), rdy) != 0);
+			exit(EXIT_FAILURE);
+		set_pipe(i, pipes, rdy, child_num, &prev);
+		execute_cmd(rdy);
+	}
+	else
+	{
+		close(pipes[1]);
+		prev = pipes[0];
+	}	
+}
 
 int	execute(t_minish *sh)
 {
@@ -133,20 +163,22 @@ int	execute(t_minish *sh)
 	n = ft_lstsize(sh->ready);
 	child_pids = malloc(sizeof(pid_t) * n);
 	lst = sh->ready;
-	sh->pps = create_pipes(n);
+	//sh->pps = create_pipes(n);
 	i = 0;
 	while (lst)
 	{
 		rdy = (t_ready *)(lst->content);
-		create_process(rdy, child_pids, sh->pps, i);
+		//create_process_old(rdy, child_pids, sh->pps, i);
+		create_process(rdy, n, i);
 		i++;
 		lst = lst->next;
 	}
 
 	//parent_process;
 	i = 0;
-	while (waitpid(child_pids[i], &status, 0))
+	while (i < n)
 	{
+		waitpid(child_pids[i], &status, 0);
 		i++;
 	}
 }

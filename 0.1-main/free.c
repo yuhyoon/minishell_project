@@ -20,21 +20,21 @@ static void	free_str_array(char **arr)
 
 
 
-static void	free_pipe(t_pipe *pipe)
-{
-    if (!pipe)
-        return ;
-    if (pipe->read_fd)
-    {
-        free(pipe->read_fd);
-        pipe->read_fd = NULL;
-    }
-    if (pipe->write_fd)
-    {
-        free(pipe->write_fd);
-        pipe->write_fd = NULL;
-    }
-}
+// static void	free_pipe(t_pipe *pipe)
+// {
+//     if (!pipe)
+//         return ;
+//     if (pipe->read_fd)
+//     {
+//         free(pipe->read_fd);
+//         pipe->read_fd = NULL;
+//     }
+//     if (pipe->write_fd)
+//     {
+//         free(pipe->write_fd);
+//         pipe->write_fd = NULL;
+//     }
+// }
 
 void	free_minish(t_minish *minish)
 {

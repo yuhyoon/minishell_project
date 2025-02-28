@@ -84,23 +84,27 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, int child_num, int *prev)
 	j = i;
 	rdy->input = STDIN_FILENO;
 	if (*prev != -1)
-		rdy->input = *prev;
-	rdy->output = STDOUT_FILENO;
-	if (i < child_num - 1)
-		rdy->output = pipes[1];
+	{
+		dup2(pipes[0], rdy->input);
+		close(pipes[0]);
+		//rdy->input = *prev;
+	}
 	if (rdy->rdrct_in)
 	{
 		printf("%d\n", rdy->rdrct_in->fd);
 		dup2(rdy->rdrct_in->fd, rdy->input); //n copy to rdy->input;
 		close(rdy->rdrct_in->fd);
 	}
+	rdy->output = STDOUT_FILENO;
+	// if (i + 1 < child_num)
+	// 	rdy->output = pipes[1];
 	if (rdy->rdrct_out)
 	{
 		printf("%d\n", rdy->rdrct_out->fd);
 		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
 		close(rdy->rdrct_out->fd);
 	}
-	if (child_num - (i + 1) > 0)
+	if (i + 1 < child_num)
 	{
 		dup2(pipes[1], rdy->output);
 		close(pipes[1]);
@@ -137,8 +141,8 @@ pid_t	create_process(t_ready *rdy, pid_t child_num, int i, int *prev)
 	int		status;
 	int		pp[2];
 
-	if (pipe(pp) == -1)
-		printf("pp error\n");
+	if (i + 1 < child_num)
+		pipe(pp);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -149,10 +153,13 @@ pid_t	create_process(t_ready *rdy, pid_t child_num, int i, int *prev)
 	}
 	else
 	{
-		close(pp[1]);
-		*prev = pp[0];
-		if (i == child_num - 1)
-			close(*prev);
+		if (*prev != -1) { // z이전 파이프 닫기
+        close(*prev);
+    }
+    if (i + 1 < child_num) { // 새로운 파이프의 쓰기(fd[1]) 닫기 (부모는 필요 없음)
+        close(pp[1]);
+    }
+    *prev = pp[0];
 	}	
 }
 

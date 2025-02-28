@@ -25,20 +25,20 @@ void	sort_io(t_stack *in, t_stack *out, t_ready *rdy)
 
 void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
 {
-	(rdy)->in = (t_redrct *)pop2(in);
-	if (rdy->in)
+	(rdy)->rdrct_in = (t_redrct *)pop2(in);
+	if (rdy->rdrct_in)
 	{
-		rdy->in->fd = open(rdy->in->obj, O_RDONLY);
-		printf("rdy->in->fd: %d\n", rdy->in->fd);
+		rdy->rdrct_in->fd = open(rdy->rdrct_in->obj, O_RDONLY);
+		printf("rdy->in->fd: %d\n", rdy->rdrct_in->fd);
 	}
-	(rdy)->out = (t_redrct *)pop2(out);
-	if (rdy->out)
+	(rdy)->rdrct_out = (t_redrct *)pop2(out);
+	if (rdy->rdrct_out)
 	{
-		if (rdy->out->parts == 1)
-			rdy->out->fd = open(rdy->out->obj, O_TRUNC | O_WRONLY | O_CREAT, 0644);
-		else if (rdy->out->parts == 2)
-			rdy->out->fd = open(rdy->out->obj, O_APPEND | O_WRONLY | O_CREAT, 0644);
-		printf("rdy->out->fd:%d\n", rdy->out->fd);
+		if (rdy->rdrct_out->parts == 1)
+			rdy->rdrct_out->fd = open(rdy->rdrct_out->obj, O_TRUNC | O_WRONLY | O_CREAT, 0644);
+		else if (rdy->rdrct_out->parts == 2)
+			rdy->rdrct_out->fd = open(rdy->rdrct_out->obj, O_APPEND | O_WRONLY | O_CREAT, 0644);
+		printf("rdy->out->fd:%d\n", rdy->rdrct_out->fd);
 	}
 	
 }

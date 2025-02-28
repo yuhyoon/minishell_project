@@ -34,10 +34,10 @@ typedef struct s_ready
 	t_list	*text;
 	t_list	*rdrct;
 	int		rdrct_num;
-	t_redrct	*in;
-	t_redrct	*out;
-	int		in_fd;
-	int		out_fd;
+	t_redrct	*rdrct_in;
+	t_redrct	*rdrct_out;
+	int		input;
+	int		output;
 }t_ready;
 
 typedef struct s_stack

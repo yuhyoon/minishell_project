@@ -82,27 +82,27 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, int child_num, int *prev)
 	int	j;
 
 	j = i;
-	rdy->in_fd = STDIN_FILENO;
+	rdy->input = STDIN_FILENO;
 	if (*prev != -1)
-		rdy->in_fd = *prev;
-	rdy->out_fd = STDOUT_FILENO;
+		rdy->input = *prev;
+	rdy->output = STDOUT_FILENO;
 	if (i < child_num - 1)
-		rdy->out_fd = pipes[1];
-	if (!rdy->in)
+		rdy->output = pipes[1];
+	if (rdy->rdrct_in)
 	{
-		printf("%d\n", rdy->in->fd);
-		dup2(rdy->in->fd, rdy->in_fd); //n copy to rdy->in_fd;
-		close(rdy->in->fd);
+		printf("%d\n", rdy->rdrct_in->fd);
+		dup2(rdy->rdrct_in->fd, rdy->input); //n copy to rdy->input;
+		close(rdy->rdrct_in->fd);
 	}
-	if (!rdy->out)
+	if (rdy->rdrct_out)
 	{
-		printf("%d\n", rdy->out->fd);
-		dup2(rdy->out->fd, rdy->out_fd); //n copy to rdy->in_fd;
-		close(rdy->out->fd);
+		printf("%d\n", rdy->rdrct_out->fd);
+		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
+		close(rdy->rdrct_out->fd);
 	}
 	if (child_num - (i + 1) > 0)
 	{
-		dup2(pipes[1], rdy->out_fd);
+		dup2(pipes[1], rdy->output);
 		close(pipes[1]);
 		close(pipes[0]);
 	}
@@ -151,6 +151,8 @@ pid_t	create_process(t_ready *rdy, pid_t child_num, int i)
 	{
 		close(pp[1]);
 		prev = pp[0];
+		if (i == child_num - 1)
+			close(prev);
 	}	
 }
 

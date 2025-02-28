@@ -7,10 +7,7 @@ void    *create_rdy()
 	static	int	num; //study: 폴더 최대 몇개까지 만들 수 있는지 
 
     rdy = malloc(sizeof(t_ready));
-    rdy->text = NULL;
-    rdy->rdrct = NULL;
-    rdy->in = NULL;
-    rdy->out = NULL;
+	ft_memset(rdy, 0, sizeof(t_ready));
     return (rdy);
 }
 

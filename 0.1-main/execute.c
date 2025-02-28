@@ -30,7 +30,7 @@ char    **create_str_2(t_list **head)
 	int	i;
     
 	size = ft_lstsize(*head);
-    str = malloc(sizeof(char *) * (size));
+    str = malloc(sizeof(char *) * (size + 1));
 	i = 0;
 	tmp = *head;
     while (i < size)
@@ -39,6 +39,7 @@ char    **create_str_2(t_list **head)
 		i++;
 		tmp = tmp->next;
     }
+	str[i] = NULL;
 	ft_lstclear(head, del_text);
 	return (str);
 }

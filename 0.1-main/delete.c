@@ -24,8 +24,8 @@ void	del_ready(void *ready)
 	rdy = ready;
 	ft_lstclear(&rdy->text, del_text);
 	ft_lstclear(&rdy->rdrct, del_redrct);
-	del_redrct(rdy->in);
-	del_redrct(rdy->out);
+	del_redrct(rdy->rdrct_in);
+	del_redrct(rdy->rdrct_out);
 }
 
 void	del_stack(void *st)

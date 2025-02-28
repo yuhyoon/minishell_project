@@ -35,7 +35,6 @@ typedef struct s_minish
 	char	*mask;
 	t_list	*ready;
 	pid_t	pid;
-	int		**pps;
 	char	**envp;
 	t_envp	*n_envs;
 	t_envp	*n_export;

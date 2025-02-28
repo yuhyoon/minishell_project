@@ -85,8 +85,8 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, int child_num, int *prev)
 	rdy->input = STDIN_FILENO;
 	if (*prev != -1)
 	{
-		dup2(pipes[0], rdy->input);
-		close(pipes[0]);
+		dup2(*prev, rdy->input);
+		close(*prev);
 		//rdy->input = *prev;
 	}
 	if (rdy->rdrct_in)

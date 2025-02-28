@@ -106,7 +106,7 @@ int execute_cmd(t_ready	*rdy, int *pipe)
 
 	cmd = create_str_2(&rdy->text);
 	name = &cmd[0];
-	printf("%s\n", *name);   
+	//printf("%s\n", *name);   
 	exe_path = create_exepath(cmd, cmd[0]);
     if (execve(exe_path, name, NULL) == -1)
 		exit(EXIT_FAILURE);

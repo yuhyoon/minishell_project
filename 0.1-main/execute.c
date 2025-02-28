@@ -3,6 +3,25 @@
 #include "delete.h"
 #include "error.h"
 
+void	free_splited(char **abs)
+{
+	int	i;
+
+	i = 0;
+	if (!abs)
+		return ;
+	while (abs[i] != NULL)
+	{
+		free(abs[i]);
+		abs[i] = NULL;
+		i++;
+	}
+	free(abs[i]);
+	abs[i] = NULL;
+	free(abs);
+	abs = NULL;
+}
+
 char    **create_str_2(t_list **head)
 {
     int size;
@@ -53,19 +72,41 @@ int valid_rdrct(t_ready *rdy)
 	return (errno);
 }
 
-int execute_cmd(t_ready	*rdy)
+char	*create_exepath(char **cmd, char *name)
+{
+	char	**env_paths;
+	int		i;
+	char	*cmd_path;
+	char	*exe_path;
+
+	env_paths = ft_split(getenv("PATH"), ':');
+	cmd_path = ft_strjoin("/", name);
+	i = 0;
+	while (env_paths[i] != NULL)
+	{
+		exe_path = ft_strjoin(env_paths[i], cmd_path);
+		if (access(exe_path, X_OK) == 0)
+			break ;
+		free(exe_path);
+		exe_path = NULL;
+		i++;
+	}
+	free_splited(env_paths);
+	free(cmd_path);
+	cmd_path = NULL;
+	return (exe_path);
+}
+
+int execute_cmd(t_ready	*rdy, int *pipe)
 {
     char	**cmd;
-	char	*name;
+	char	**name;
+	char	*exe_path;
 
 	cmd = create_str_2(&rdy->text);
-	name = cmd[0];
-	printf("%s\n", name);   
-	// close(pp[0]);
-	// if (dup2(pp[1], STDOUT_FILENO) == -1)
-	// 	error_exit_errno("dup2 error");
-	// close(pp[1]);
-	// if (execve(f_p, cmd, NULL) == -1)
-	// 	exit(EXIT_FAILURE);
-    
+	name = &cmd[0];
+	printf("%s\n", *name);   
+	exe_path = create_exepath(cmd, cmd[0]);
+    if (execve(exe_path, name, NULL) == -1)
+		exit(EXIT_FAILURE);
 }

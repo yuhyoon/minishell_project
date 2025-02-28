@@ -104,6 +104,7 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, int child_num, int *prev)
 		close(pipes[1]);
 		close(pipes[0]);
 	}
+
 }
 /*
 pid_t	create_process_old(t_ready *rdy, int child_num, int **pipes, int i)
@@ -132,22 +133,22 @@ pid_t	create_process(t_ready *rdy, pid_t child_num, int i)
 	pid_t	pid;
 	int		prev = -1;
 	int		status;
-	int		pipes[2];
+	int		pp[2];
 
-	if (pipe(pipes) == -1)
+	if (pipe(pp) == -1)
 		printf("pp error\n");
 	pid = fork();
 	if (pid == 0)
 	{
 		if (redirect(&(rdy->rdrct), rdy) != 0);
 			exit(EXIT_FAILURE);
-		set_pipe(i, pipes, rdy, child_num, &prev);
-		execute_cmd(rdy);
+		set_pipe(i, pp, rdy, child_num, &prev);
+		execute_cmd(rdy, pp);
 	}
 	else
 	{
-		close(pipes[1]);
-		prev = pipes[0];
+		close(pp[1]);
+		prev = pp[0];
 	}	
 }
 

@@ -137,12 +137,12 @@ void    create_text(t_ready *rdy, char *src, char *mask, t_minish *sh)
     t_list  *head;
     t_list  *lst;
 
-	if (rdy->rdrct == NULL)
-	{
-		printf("what the\n");
-	//	ft_lstclear(&sh->ready, del_ready);
-		return ;
-	}
+	// if (rdy->rdrct == NULL)
+	// {
+	// 	printf("what the\n");
+	// //	ft_lstclear(&sh->ready, del_ready);
+	// 	return ;
+	// }
     i = 0;
     head = NULL;
     while (mask[i] != '\n' && mask[i] != PIPE )

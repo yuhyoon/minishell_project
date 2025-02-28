@@ -130,10 +130,10 @@ pid_t	create_process_old(t_ready *rdy, int child_num, int **pipes, int i)
 }
 */
 
-pid_t	create_process(t_ready *rdy, pid_t child_num, int i)
+pid_t	create_process(t_ready *rdy, pid_t child_num, int i, int *prev)
 {
 	pid_t	pid;
-	int		prev = -1;
+
 	int		status;
 	int		pp[2];
 
@@ -144,15 +144,15 @@ pid_t	create_process(t_ready *rdy, pid_t child_num, int i)
 	{
 		if (redirect(&(rdy->rdrct), rdy) != 0)
 			exit(EXIT_FAILURE);
-		set_pipe(i, pp, rdy, child_num, &prev);
+		set_pipe(i, pp, rdy, child_num, prev);
 		execute_cmd(rdy, pp);
 	}
 	else
 	{
 		close(pp[1]);
-		prev = pp[0];
+		*prev = pp[0];
 		if (i == child_num - 1)
-			close(prev);
+			close(*prev);
 	}	
 }
 
@@ -164,6 +164,7 @@ int	execute(t_minish *sh)
 	pid_t	*child_pids;
 	int		i;
 	int		status;
+	int		prev = -1;
 
 	n = ft_lstsize(sh->ready);
 	child_pids = malloc(sizeof(pid_t) * n);
@@ -174,7 +175,7 @@ int	execute(t_minish *sh)
 	{
 		rdy = (t_ready *)(lst->content);
 		//create_process_old(rdy, child_pids, sh->pps, i);
-		create_process(rdy, n, i);
+		create_process(rdy, n, i, &prev);
 		i++;
 		lst = lst->next;
 	}

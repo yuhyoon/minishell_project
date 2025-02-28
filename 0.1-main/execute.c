@@ -52,19 +52,19 @@ int valid_rdrct(t_ready *rdy)
 	lst = rdy->rdrct;
 	errno = 0;
 	n = rdy->rdrct_num;
-	printf("valid_rdrct\n");
+	//printf("valid_rdrct\n");
 	while (n && errno == 0)
 	{
-		rdrct = (t_redrct *)(lst->content);
-		printf("first rdrct obj:%s", rdrct->obj);
-		access(rdrct->obj, F_OK);
-		printf("errno: %d\n", errno);
+		rdrct = (t_redrct *)(lst->content);printf("first rdrct obj:%s\n", rdrct->obj);
+		access(rdrct->obj, F_OK);//printf("errno: %d\n", errno);
+		if (rdrct->type == OUT_RD && rdrct->parts == 1)
+			errno = 0;
 		if (errno != 0)
 			err_such(1, rdrct);
 		if (errno == 0 && rdrct->type == IN_RD && access(rdrct->obj, R_OK) != 0)
 			err_permission(1, rdrct);
-		else if (errno == 0 && rdrct->type == OUT_RD && access(rdrct->obj, W_OK) != 0)
-			err_permission(1, rdrct);
+		// else if (errno == 0 && rdrct->type == OUT_RD && access(rdrct->obj, W_OK) != 0)
+		// 	err_permission(1, rdrct);
 		lst = lst->next;
 		n--;
 	}

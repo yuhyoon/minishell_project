@@ -90,11 +90,13 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, int child_num, int *prev)
 		rdy->out_fd = pipes[1];
 	if (!rdy->in)
 	{
+		printf("%d\n", rdy->in->fd);
 		dup2(rdy->in->fd, rdy->in_fd); //n copy to rdy->in_fd;
 		close(rdy->in->fd);
 	}
 	if (!rdy->out)
 	{
+		printf("%d\n", rdy->out->fd);
 		dup2(rdy->out->fd, rdy->out_fd); //n copy to rdy->in_fd;
 		close(rdy->out->fd);
 	}
@@ -140,7 +142,7 @@ pid_t	create_process(t_ready *rdy, pid_t child_num, int i)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (redirect(&(rdy->rdrct), rdy) != 0);
+		if (redirect(&(rdy->rdrct), rdy) != 0)
 			exit(EXIT_FAILURE);
 		set_pipe(i, pp, rdy, child_num, &prev);
 		execute_cmd(rdy, pp);

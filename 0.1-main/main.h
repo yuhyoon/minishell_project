@@ -34,6 +34,9 @@ typedef struct s_minish
 	char	*src;
 	char	*mask;
 	t_list	*ready;
+	pid_t	*child_pids;
+	int		cmd_num;
+	int		prev_for_pipe;
 	pid_t	pid;
 	char	**envp;
 	t_envp	*n_envs;

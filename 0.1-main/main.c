@@ -28,6 +28,7 @@ void	init_minish(t_minish *sh)
 	
 	ft_memset(sh, 0, sizeof(t_minish));
 	//main에서 받은 envps 저장
+	sh->prev_for_pipe = -1;
 }
 
 int		read_input(t_minish *sh)
@@ -52,55 +53,22 @@ int		read_input(t_minish *sh)
 	return (1);
 }
 
-
-
-
-int	**create_pipes(int child_num)
+void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
 {
-	int	**pp;
-	int	i;
-
-	pp = malloc(sizeof(int *) * (child_num - 1));
-	i = 0;
-	while (i < child_num - 1)
-	{
-		pp[i] = malloc(sizeof(int) * 2);
-		if (pipe(pp[i]) < 0)
-		{
-			while (i >= 0)
-				free(pp[i--]);
-			free(pp);
-			return (NULL);
-		}
-		i++;
-	}
-	return (pp);
-}
-
-void	set_pipe(int i, int *pipes, t_ready *rdy, int child_num, int *prev)
-{
-	int	j;
-
-	j = i;
 	rdy->input = STDIN_FILENO;
-	if (*prev != -1)
+	if (sh->prev_for_pipe != -1)
 	{
-		dup2(*prev, rdy->input);
-		close(*prev);
-		//rdy->input = *prev;
+		dup2(sh->prev_for_pipe, rdy->input);
+		close(sh->prev_for_pipe);
 	}
 	if (rdy->rdrct_in)
 	{
-		printf("%d\n", rdy->rdrct_in->fd);
 		dup2(rdy->rdrct_in->fd, rdy->input); //n copy to rdy->input;
 		close(rdy->rdrct_in->fd);
 	}
 	rdy->output = STDOUT_FILENO;
-	// if (i + 1 < child_num)
-	// 	rdy->output = pipes[1];
 	if (rdy->rdrct_out)
 	{
-		printf("%d\n", rdy->rdrct_out->fd);
 		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
 		close(rdy->rdrct_out->fd);
 	}
@@ -110,89 +78,60 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, int child_num, int *prev)
 		close(pipes[1]);
 		close(pipes[0]);
 	}
-
 }
-/*
-pid_t	create_process_old(t_ready *rdy, int child_num, int **pipes, int i)
-{
-	pid_t	pid;
-	int		in_fd;
-	int		status;
 
-	pid = fork();
-	if (pid == 0)
-	{
-		if (redirect(&(rdy->rdrct), rdy) != 0);
-			exit(EXIT_FAILURE);
-		set_pipe(i, pipes, rdy, child_num);
-		execute_cmd(rdy);
-	}
-	else
-	{
-		//parents func();
-	}	
-}
-*/
-
-pid_t	create_process(t_ready *rdy, pid_t child_num, int i, int *prev, pid_t *child_pids)
+pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
 {
 	pid_t	pid;
 
 	int		status;
 	int		pp[2];
 
-	if (i + 1 < child_num)
-		pipe(pp);
+	if (i + 1 < sh->cmd_num)
+		pipe(pp); //todo: err handling
 	pid = fork();
 	if (pid == 0)
 	{
 		if (redirect(&(rdy->rdrct), rdy) != 0)
 			exit(EXIT_FAILURE);
-		set_pipe(i, pp, rdy, child_num, prev);
+		set_pipe(i, pp, rdy, sh);
 		execute_cmd(rdy, pp);
 	}
 	else
 	{
 		child_pids[i] = pid;
-		if (*prev != -1) // z이전 파이프 닫기
-			close(*prev);
-    		if (i + 1 < child_num)
+		if (sh->prev_for_pipe != -1)
+			close(sh->prev_for_pipe);
+    	if (i + 1 < sh->cmd_num)
 		{
-        		close(pp[1]);
-    			*prev = pp[0];
+        	close(pp[1]);
+    		sh->prev_for_pipe = pp[0];
 		}
 	}	
 }
 
 int	execute(t_minish *sh)
 {
-	int	n;
 	t_list	*lst;
 	t_ready	*rdy;
-	pid_t	*child_pids;
 	int		i;
 	int		status;
-	int		prev = -1;
 
-	n = ft_lstsize(sh->ready);
-	child_pids = malloc(sizeof(pid_t) * n);
+	sh->cmd_num = ft_lstsize(sh->ready);
+	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_num);
 	lst = sh->ready;
-	//sh->pps = create_pipes(n);
 	i = 0;
 	while (lst)
 	{
 		rdy = (t_ready *)(lst->content);
-		//create_process_old(rdy, child_pids, sh->pps, i);
-		create_process(rdy, n, i, &prev, child_pids);
+		create_process(rdy, sh->cmd_num, i, sh->child_pids);
 		i++;
 		lst = lst->next;
 	}
-
-	//parent_process;
 	i = 0;
-	while (i < n)
+	while (i < sh->cmd_num)
 	{
-		waitpid(child_pids[i], &status, 0);
+		waitpid(sh->child_pids[i], &status, 0);
 		i++;
 	}
 	ft_lstclear(&sh->ready, del_ready);

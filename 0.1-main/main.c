@@ -134,7 +134,7 @@ pid_t	create_process_old(t_ready *rdy, int child_num, int **pipes, int i)
 }
 */
 
-pid_t	create_process(t_ready *rdy, pid_t child_num, int i, int *prev)
+pid_t	create_process(t_ready *rdy, pid_t child_num, int i, int *prev, pid_t *child_pids)
 {
 	pid_t	pid;
 
@@ -153,12 +153,12 @@ pid_t	create_process(t_ready *rdy, pid_t child_num, int i, int *prev)
 	}
 	else
 	{
-		if (*prev != -1) { // z이전 파이프 닫기
-        close(*prev);
-    }
-    if (i + 1 < child_num) { // 새로운 파이프의 쓰기(fd[1]) 닫기 (부모는 필요 없음)
-        close(pp[1]);
-    }
+		child_pids[i] = pid;
+		if (*prev != -1) // z이전 파이프 닫기
+			close(*prev);
+    	if (i + 1 < child_num) // 새로운 파이프의 쓰기(fd[1]) 닫기 (부모는 필요 없음)
+        	close(pp[1]);
+    
     *prev = pp[0];
 	}	
 }
@@ -182,7 +182,7 @@ int	execute(t_minish *sh)
 	{
 		rdy = (t_ready *)(lst->content);
 		//create_process_old(rdy, child_pids, sh->pps, i);
-		create_process(rdy, n, i, &prev);
+		create_process(rdy, n, i, &prev, child_pids);
 		i++;
 		lst = lst->next;
 	}

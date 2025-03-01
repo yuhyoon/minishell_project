@@ -20,12 +20,55 @@
 #include <errno.h>
 
 unsigned char exitcode = 0;
+#include <stdio.h>
 
-void	init_minish(t_minish *sh)
+int f_double_array_size(char **array) //utils에 넣으면 좋겠음!
 {
-	
+    int size;
+
+	size = 0;
+    while (array[size] != NULL)
+        size++;
+    return (size);
+}
+
+void	free_double_char(char **array, int end) //utils에 넣으면 좋겠음!
+{
+	int i;
+
+	i = 0;
+	if (end == -1)
+		end = f_double_array_size(array);
+	while ((i < end) && array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
+void	init_minish(t_minish *sh, char **envp)
+{
+	int	envps_size;
+	int envp_len;
+	int i;
+
 	ft_memset(sh, 0, sizeof(t_minish));
-	//main에서 받은 envps 저장
+	envps_size = f_double_array_size(envp);
+	sh->envp = (char **)malloc(sizeof(char *) * (envps_size + 1));
+	if (!sh->envp)
+		return ;
+	i = -1;
+	while (envp[++i] != NULL)
+	{
+		envp_len = ft_strlen(envp[i]);
+		sh->envp[i] = (char *)malloc(sizeof(char) * (envp_len + 1));
+		if (!sh->envp[i])
+		{
+			free_double_char(sh->envp, i);
+			return ;
+		}
+	}
 }
 
 int		read_input(t_minish *sh)
@@ -50,6 +93,12 @@ int		read_input(t_minish *sh)
 	return (1);
 }
 
+//sh 멤버 변수들 free
+void	free_minish(t_minish *sh)
+{
+	free_double_char(sh->envp, -1);
+}
+
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
 int main(int ac, char **av, char **envp) 
 {
@@ -58,8 +107,7 @@ int main(int ac, char **av, char **envp)
 	t_minish	sh;
 
 	set_signal(before_readline);
-	init_minish(&sh);
-	//init_minish(&sh, envp);
+	init_minish(&sh, envp);
 	while (true)
 	{
 		if (read_input(&sh) == 0)
@@ -74,6 +122,7 @@ int main(int ac, char **av, char **envp)
 		//verify_exitcode();
 		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		
+		// free_minish(&sh);
 	}
     rl_clear_history();
 	return 0;

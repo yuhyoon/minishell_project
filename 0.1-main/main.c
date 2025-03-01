@@ -195,6 +195,7 @@ int	execute(t_minish *sh)
 		waitpid(child_pids[i], &status, 0);
 		i++;
 	}
+	ft_lstclear(&sh->ready, del_ready);
 }
 
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1

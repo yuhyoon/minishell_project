@@ -32,21 +32,6 @@ int f_double_array_size(char **array) //utils에 넣으면 좋겠음!
     return (size);
 }
 
-void	free_double_char(char **array, int end) //utils에 넣으면 좋겠음!
-{
-	int i;
-
-	i = 0;
-	if (end == -1)
-		end = f_double_array_size(array);
-	while ((i < end) && array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
-
 void	init_minish(t_minish *sh, char **envp)
 {
 	int	envps_size;
@@ -65,7 +50,7 @@ void	init_minish(t_minish *sh, char **envp)
 		sh->envp[i] = (char *)malloc(sizeof(char) * (envp_len + 1));
 		if (!sh->envp[i])
 		{
-			free_double_char(sh->envp, i);
+			free_str_array(sh->envp);
 			return ;
 		}
 	}
@@ -93,12 +78,6 @@ int		read_input(t_minish *sh)
 	return (1);
 }
 
-//sh 멤버 변수들 free
-void	free_minish(t_minish *sh)
-{
-	free_double_char(sh->envp, -1);
-}
-
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
 int main(int ac, char **av, char **envp) 
 {
@@ -122,7 +101,7 @@ int main(int ac, char **av, char **envp)
 		//verify_exitcode();
 		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		
-		// free_minish(&sh);
+		// free_minish(&sh); ??
 	}
     rl_clear_history();
 	return 0;

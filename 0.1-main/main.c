@@ -72,7 +72,7 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
 		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
 		close(rdy->rdrct_out->fd);
 	}
-	if (i + 1 < child_num)
+	if (i + 1 < sh->cmd_num)
 	{
 		dup2(pipes[1], rdy->output);
 		close(pipes[1]);
@@ -99,7 +99,7 @@ pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
 	}
 	else
 	{
-		child_pids[i] = pid;
+		sh->child_pids[i] = pid;
 		if (sh->prev_for_pipe != -1)
 			close(sh->prev_for_pipe);
     	if (i + 1 < sh->cmd_num)
@@ -124,7 +124,7 @@ int	execute(t_minish *sh)
 	while (lst)
 	{
 		rdy = (t_ready *)(lst->content);
-		create_process(rdy, sh->cmd_num, i, sh->child_pids);
+		create_process(rdy, i, sh);
 		i++;
 		lst = lst->next;
 	}

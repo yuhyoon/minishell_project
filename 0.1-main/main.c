@@ -156,10 +156,11 @@ pid_t	create_process(t_ready *rdy, pid_t child_num, int i, int *prev, pid_t *chi
 		child_pids[i] = pid;
 		if (*prev != -1) // z이전 파이프 닫기
 			close(*prev);
-    	if (i + 1 < child_num) // 새로운 파이프의 쓰기(fd[1]) 닫기 (부모는 필요 없음)
-        	close(pp[1]);
-    
-    *prev = pp[0];
+    		if (i + 1 < child_num)
+		{
+        		close(pp[1]);
+    			*prev = pp[0];
+		}
 	}	
 }
 

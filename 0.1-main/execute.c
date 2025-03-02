@@ -110,4 +110,6 @@ int execute_cmd(t_ready	*rdy, int *pipe)
 	exe_path = create_exepath(cmd, cmd[0]);
     if (execve(exe_path, name, NULL) == -1)
 		exit(EXIT_FAILURE);
+    free(exe_path);
+    free_splited(cmd);
 }

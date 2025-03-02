@@ -15,6 +15,8 @@ void	del_redrct(void *rd)
 		return ;
 	free(redrct->obj);
 	redrct->obj = NULL;
+	free(redrct);
+	redrct = NULL;
 }
 
 void	del_ready(void *ready)
@@ -26,6 +28,9 @@ void	del_ready(void *ready)
 	ft_lstclear(&rdy->rdrct, del_redrct);
 	del_redrct(rdy->rdrct_in);
 	del_redrct(rdy->rdrct_out);
+	free(rdy);
+	rdy = NULL;
+
 }
 
 void	del_stack(void *st)

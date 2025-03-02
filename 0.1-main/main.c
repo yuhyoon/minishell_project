@@ -135,6 +135,7 @@ int	execute(t_minish *sh)
 		i++;
 	}
 	free_minish(sh);
+	free(sh->mask);
 }
 
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1

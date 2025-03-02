@@ -45,6 +45,8 @@ void	free_minish(t_minish *minish)
     }
     if (minish->ready)
         ft_lstclear(&minish->ready, del_ready);
+    free(minish->child_pids);
+    minish->child_pids = NULL;
     //free_str_array(minish->envp);
-    exitcode = 0;
+    //exitcode = 0;
 }

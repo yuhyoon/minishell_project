@@ -149,3 +149,8 @@ lib/libft/ft_toupper.o
 0.1-main/libft/ft_tolower.o
 0.1-main/libft/ft_toupper.o
 0.1-main/libft/ft_atoi.o
+0.1-main/builtins/path_test.c
+0.1-main/main.h.gch
+0.1-main/builtins/a.out
+0.1-main/builtins/error.txt
+0.1-main/test.c

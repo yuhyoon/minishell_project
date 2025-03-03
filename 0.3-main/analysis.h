@@ -12,6 +12,7 @@ int			valid_meta(int token, char *mask);
 int			valid_quote(char *s, int quote, t_char_state *state);
 void		store_quote_seq(t_char_state *char_state, int len, char *ss);
 int			putchar_quote_state_zero(char *current, int fd);
+int			read_store_fd(int fd);
 
 //redirect
 t_redrct	*init_rdrct(void);

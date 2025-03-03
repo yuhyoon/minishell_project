@@ -15,6 +15,33 @@ int	putchar_quote_state_zero(char *current, int fd)
 	size++;
 	return (size);
 }
+
+int read_store_fd(int fd)
+{
+	int		i;
+	struct stat st;
+	int		quote_fd;
+	int		size;
+	char	*buf;
+
+	i = 0;
+	quote_fd = fd + 1;
+	fstat(quote_fd, &st);
+	size = st.st_size;
+	close(quote_fd);
+	quote_fd = open("quote_fd", O_RDONLY, 0644);
+	buf = malloc(sizeof(char) * size);
+	read(quote_fd, buf, size);
+	while (i < size)
+	{
+		ft_putchar_fd(buf[i], fd);
+		i++;
+	}
+	close(quote_fd);
+	free(buf);
+	unlink("quote_fd");
+	return (size);
+}
 void	store_quote_seq(t_char_state *char_state, int len, char *ss)
 {
 	int		quote_fd;

@@ -1,6 +1,7 @@
 #include "main.h"
 #include "parse.h"
 #include "analysis.h"
+#include "execution.h"
 #include "free.c"
 #include "error.c"
 #include "parse_step-1_mask.c"

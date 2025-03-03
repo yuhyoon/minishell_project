@@ -41,6 +41,30 @@ void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
 	
 }
 
+int valid_rdrct(t_ready *rdy)
+{
+    t_list	*lst;
+	t_redrct	*rdrct;
+	int		n;
+
+	lst = rdy->rdrct;
+	errno = 0;
+	n = rdy->rdrct_num;
+	while (n && errno == 0)
+	{
+		rdrct = (t_redrct *)(lst->content);printf("first rdrct obj:%s\n", rdrct->obj);
+		access(rdrct->obj, F_OK);//printf("errno: %d\n", errno);
+		if (rdrct->type == OUT_RD && rdrct->parts == 1)
+			errno = 0;
+		if (errno != 0)
+			err_such(1, rdrct);
+		if (errno == 0 && rdrct->type == IN_RD && access(rdrct->obj, R_OK) != 0)
+			err_permission(1, rdrct);
+		lst = lst->next;
+		n--;
+	}
+}
+
 int	redirect(t_list **rd_list, t_ready *rdy)
 {
 	t_stack	in;

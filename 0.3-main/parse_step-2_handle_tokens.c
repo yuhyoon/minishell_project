@@ -1,21 +1,22 @@
 #include "parse.h"
+#include "analysis.h"
 
-void    *create_rdy()
+void	*create_rdy()
 {
-    t_ready *rdy;
+	t_ready *rdy;
 
-    rdy = malloc(sizeof(t_ready));
+	rdy = malloc(sizeof(t_ready));
 	ft_memset(rdy, 0, sizeof(t_ready));
-    return (rdy);
+	return (rdy);
 }
 
 t_list *init_parsing_structure(t_list **rdy_head)
 {
-    t_ready *rdy;
+	t_ready *rdy;
 
 	rdy = create_rdy();
-    ft_lstadd_back(rdy_head, ft_lstnew(rdy));
-    return (*rdy_head);
+	ft_lstadd_back(rdy_head, ft_lstnew(rdy));
+	return (*rdy_head);
 }
 
 int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
@@ -25,7 +26,7 @@ int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
 
 	if (*rdrct != NULL)
 		current_rdy->rdrct_num = ft_lstsize(*rdrct);
-	create_text(current_rdy, &sh->src[save], &sh->mask[save], sh);
+	create_text_list(current_rdy, &sh->src[save], &sh->mask[save], sh);
 	next_rdy = create_rdy();
 	next_lst = ft_lstnew(next_rdy);
 	ft_lstadd_back(&sh->ready, next_lst);
@@ -58,6 +59,6 @@ void *parsing(t_minish *sh, int len)
 	}
 	if (rdy->rdrct != NULL)
 		rdy->rdrct_num = ft_lstsize(rdy->rdrct);
-	create_text(rdy, &sh->src[save], &sh->mask[save], sh);
+	create_text_list(rdy, &sh->src[save], &sh->mask[save], sh);
 	return (sh->ready);
 }

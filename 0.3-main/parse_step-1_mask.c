@@ -1,5 +1,6 @@
 #include "main.h"
 #include "parse.h"
+#include "parse_step.h"
 #include "stack.h"
 #include "analysis.h"
 #include "parse_utils.h"

@@ -1,5 +1,5 @@
 #include "main.h"
-#include "parse_main.h"
+#include "parse.h"
 
 //todo: 에러메시지 fd2에 작성하기
 void    err_such(int exit, t_redrct *rdrct)

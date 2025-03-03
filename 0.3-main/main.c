@@ -2,8 +2,8 @@
 #include "parse.h"
 #include "analysis.h"
 #include "free.c"
-#include "signal.c"
-
+#include "signals.c"
+#include "error.c"
 /*****
  * 
  * 실행순서

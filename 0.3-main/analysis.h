@@ -2,6 +2,7 @@
 # define ANALYSIS_H
 
 # include "parse.h"
+# include "parse_utils.h"
 
 //syntax
 int			syntax_analysis(char *mask);

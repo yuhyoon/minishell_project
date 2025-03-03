@@ -1,0 +1,63 @@
+#include "parse.h"
+
+void    *create_rdy()
+{
+    t_ready *rdy;
+
+    rdy = malloc(sizeof(t_ready));
+	ft_memset(rdy, 0, sizeof(t_ready));
+    return (rdy);
+}
+
+t_list *init_parsing_structure(t_list **rdy_head)
+{
+    t_ready *rdy;
+
+	rdy = create_rdy();
+    ft_lstadd_back(rdy_head, ft_lstnew(rdy));
+    return (*rdy_head);
+}
+
+int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
+{
+	t_ready	*next_rdy;
+	t_list	*next_lst;
+
+	if (*rdrct != NULL)
+		current_rdy->rdrct_num = ft_lstsize(*rdrct);
+	create_text(current_rdy, &sh->src[save], &sh->mask[save], sh);
+	next_rdy = create_rdy();
+	next_lst = ft_lstnew(next_rdy);
+	ft_lstadd_back(&sh->ready, next_lst);
+	return (1);
+}
+
+void *parsing(t_minish *sh, int len)
+{
+	int		i;
+	t_ready	*rdy;
+	int		save;
+	t_list	*lst;
+
+	i = 0;
+	save = i;
+	lst = init_parsing_structure(&sh->ready);
+	while (i < len && exitcode == 0)
+	{
+		rdy = ((t_ready *)lst->content);
+		if (sh->mask[i] == IN_RD || sh->mask[i] == OUT_RD)
+			i += create_rdrct(&sh->src[i], &sh->mask[i], &rdy->rdrct);
+		else if (sh->mask[i] == PIPE)
+		{
+			i += handle_pipe(sh, rdy, &rdy->rdrct, save);
+			lst = lst->next;
+			save = i;
+		}
+		else
+			i++;
+	}
+	if (rdy->rdrct != NULL)
+		rdy->rdrct_num = ft_lstsize(rdy->rdrct);
+	create_text(rdy, &sh->src[save], &sh->mask[save], sh);
+	return (sh->ready);
+}

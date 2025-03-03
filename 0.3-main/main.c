@@ -2,8 +2,10 @@
 #include "parse.h"
 #include "analysis.h"
 #include "free.c"
-#include "signals.c"
 #include "error.c"
+#include "parse_step-1_mask.c"
+#include "parse_step-1_utils.c"
+#include "parse_step-2_handle_tokens.c"
 /*****
  * 
  * 실행순서

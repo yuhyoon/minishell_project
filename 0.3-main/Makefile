@@ -2,8 +2,7 @@ NAME = minish
 
 CC = cc
 CFLAGS = -g #-Wall -Wextra -Werror 
-SRCS = 
-main.c \
+SRCS = main.c \
 signals.c \
 stack.c \
 delete.c \

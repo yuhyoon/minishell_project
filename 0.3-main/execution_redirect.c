@@ -1,5 +1,6 @@
 #include "main.h"
 #include "stack.h"
+#include "error.h"
 
 void	sort_io(t_stack *in, t_stack *out, t_ready *rdy)
 {

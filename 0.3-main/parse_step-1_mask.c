@@ -1,5 +1,7 @@
 #include "parse.h"
 #include "stack.h"
+#include "analysis.h"
+
 
 void	set_char_state(char *s, t_char_state *char_state)
 {

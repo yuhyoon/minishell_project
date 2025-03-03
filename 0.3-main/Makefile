@@ -1,8 +1,10 @@
 NAME = minish
 
 CC = cc
-CFLAGS = -g -Wall -Wextra -Werror 
-SRCS = signals.c \
+CFLAGS = -g #-Wall -Wextra -Werror 
+SRCS = 
+main.c \
+signals.c \
 stack.c \
 delete.c \
 error.c \

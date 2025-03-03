@@ -1,3 +1,4 @@
+#include "main.h"
 #include "parse.h"
 #include "stack.h"
 #include "analysis.h"

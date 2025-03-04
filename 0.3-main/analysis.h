@@ -25,4 +25,12 @@ int 		get_plain_text(char *s1, char *s2, char *src, t_list **head);
 char		*valid_env(char *tmp);
 int			count_text(char *mask);
 
+
+//heredoc
+void    close_fd(int fd);
+void    handle_heredoc_child(int write_fd, char *delimeter);
+void    create_heredoc_pipe(int *read_fd, int *write_fd);
+void    handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd);
+void    f_heredoc(t_redrct *rdrct);
+
 #endif

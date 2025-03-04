@@ -27,8 +27,8 @@ void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
 	(rdy)->rdrct_in = (t_redrct *)pop2(in);
 	if (rdy->rdrct_in)
 	{
-		rdy->rdrct_in->fd = open(rdy->rdrct_in->obj, O_RDONLY);
-		printf("rdy->in->fd: %d\n", rdy->rdrct_in->fd);
+		if (rdy->rdrct_in->parts == 1)
+			rdy->rdrct_in->fd = open(rdy->rdrct_in->obj, O_RDONLY); //printf("rdy->in->fd: %d\n", rdy->rdrct_in->fd);
 	}
 	(rdy)->rdrct_out = (t_redrct *)pop2(out);
 	if (rdy->rdrct_out)

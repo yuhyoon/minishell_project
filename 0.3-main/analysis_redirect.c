@@ -16,7 +16,7 @@ void    handle_heredoc_child(int write_fd, char *delimeter)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strncmp(line, delimeter, ft_strlen(line)) == 0)
+		if (ft_strncmp(line, delimeter, ft_strlen(delimeter)) == 0)
 		{
 			free(line);
 			break;

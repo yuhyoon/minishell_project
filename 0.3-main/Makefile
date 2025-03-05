@@ -43,11 +43,13 @@ clean:
 fclean: clean
 		rm -f $(NAME)
 
+VALGRIND_LOG = valgrind_log.txt
+
 run: $(NAME)
 	valgrind --leak-check=full \
 		--show-leak-kinds=all \
 		--suppressions=suppression_readline.supp \
-		--track-fds=yes ./$(NAME)
+		--track-fds=yes ./$(NAME) 2> $(VALGRIND_LOG)
 
 re: fclean all
 

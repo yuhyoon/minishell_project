@@ -97,7 +97,7 @@ int create_rdrct(char *src, char *mask, t_list **head)
 	len = count_text(&mask[i]);
 	ft_memset(&mask[i], new->type, len);
 	str = malloc(sizeof(char) * (len + 1));
-	str = ft_memcpy(str, &src[i], len);
+	ft_memcpy(str, &src[i], len);
 	str[len] = '\0';
 	new->obj = str; //리다이렉트 다 만든 상태
 	//히어독일때 fd 갱신 처리

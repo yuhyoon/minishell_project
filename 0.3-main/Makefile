@@ -43,4 +43,12 @@ clean:
 fclean: clean
 		rm -f $(NAME)
 
+run: $(NAME)
+	valgrind --leak-check=full \
+		--show-leak-kinds=all \
+		--suppressions=suppression_readline.supp \
+		--track-fds=yes ./$(NAME)
+
+re: fclean all
+
 .PHONY: all clean fclean re libft

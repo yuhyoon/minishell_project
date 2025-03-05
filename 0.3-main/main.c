@@ -91,7 +91,10 @@ pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
 	if (pid == 0)
 	{
 		if (redirect(&(rdy->rdrct), rdy) != 0)
+		{
+			del_ready(rdy);
 			exit(EXIT_FAILURE);
+		}
 		set_pipe(i, pp, rdy, sh);
 		execute_cmd(rdy, pp);
 	}

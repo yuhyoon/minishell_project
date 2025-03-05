@@ -1,4 +1,5 @@
 #include "execution.h"
+#include "error.h"
 
 void	free_splited(char **abs)
 {
@@ -77,7 +78,7 @@ int execute_cmd(t_ready	*rdy, int *pipe)
 	//printf("%s\n", *name);   
 	exe_path = create_exepath(cmd, cmd[0]);
     if (execve(exe_path, name, NULL) == -1)
-		err_exec(127, name);
+		err_exec(127, cmd[0]);
     free(exe_path);
     free_splited(cmd);
 }

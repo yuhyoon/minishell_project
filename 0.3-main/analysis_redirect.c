@@ -26,7 +26,8 @@ void    handle_heredoc_child(int write_fd, char *delimeter)
 		free(line);
 	}
 	close_fd(write_fd);
-	exit(0);
+	exitcode = 0;
+	return ;
 }
 
 void    create_heredoc_pipe(int *read_fd, int *write_fd)

@@ -17,6 +17,8 @@ parse_step-1_utils.c \
 parse_step-1_mask.c \
 parse_step-2_handle_tokens.c \
 
+#heredoc_1.c
+
 READLINEFLG = -lreadline
 
 LIBFTA = ./libft/libft.a

@@ -25,7 +25,9 @@ void	sort_io(t_stack *in, t_stack *out, t_ready *rdy)
 void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
 {
 	(rdy)->rdrct_in = (t_redrct *)pop2(in);
-	if (rdy->rdrct_in)
+	if (rdy->rdrct_in && rdy->rdrct_in->parts == 2 && rdy->rdrct_in->type == IN_RD)
+        printf("rdy->in->fd heredoc FD: %d\n", rdy->rdrct_in->fd);
+	else if (rdy->rdrct_in)
 	{
 		if (rdy->rdrct_in->parts == 1)
 			rdy->rdrct_in->fd = open(rdy->rdrct_in->obj, O_RDONLY); //printf("rdy->in->fd: %d\n", rdy->rdrct_in->fd);

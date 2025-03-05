@@ -57,11 +57,13 @@ int valid_rdrct(t_ready *rdy)
 	{
 		rdrct = (t_redrct *)(lst->content);printf("first rdrct obj:%s\n", rdrct->obj);
 		access(rdrct->obj, F_OK);//printf("errno: %d\n", errno);
-		if (rdrct->type == OUT_RD && rdrct->parts == 1)
+		if (rdrct->type == OUT_RD && rdrct->parts == 1 || rdrct->type == IN_RD && rdrct->parts == 2)
 			errno = 0;
 		if (errno != 0)
 			err_such(1, rdrct);
-		if (errno == 0 && rdrct->type == IN_RD && access(rdrct->obj, R_OK) != 0)
+		if (errno == 0 && rdrct->type == IN_RD && 
+			rdrct->parts == 1 && 
+			access(rdrct->obj, R_OK) != 0)
 			err_permission(1, rdrct);
 		lst = lst->next;
 		n--;

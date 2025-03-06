@@ -19,7 +19,7 @@ void    err_permission(int exit, t_redrct *rdrct)
     obj = rdrct->obj;
     printf("minish: %s: Permission denied\n", rdrct->obj);
 }
-void    err_exec(int exit, t_ready *rdy, char *cmd_name)
+void    err_exec(int exit, char *cmd_name)
 {
 	exitcode = exit;
 	write(2, "minish: ", 8);

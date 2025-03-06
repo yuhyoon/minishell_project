@@ -78,7 +78,7 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
 	}
 }
 
-int	is_bulitin(char *cmd_name)
+int	is_builtin(char *cmd_name)
 {
 	return (0);
 }
@@ -99,7 +99,7 @@ void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
 	set_pipe(i, pp, rdy, sh);
 	rdy->cmd = create_str_2(&rdy->text);
 	if (is_builtin(rdy->cmd[0]))
-		exec_builtin(sh, rdy);
+		printf("here builtin\n");
 	else
 	{
 		char *access_path = get_acesspath(rdy, pp);
@@ -113,7 +113,7 @@ void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
 		}
 		else
 		{
-			if (execve(exe_path, name, NULL) == -1)
+			if (execve(access_path, &rdy->cmd[0], NULL) == -1)
 				exit(EXIT_FAILURE);
 		}
 	}

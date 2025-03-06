@@ -29,7 +29,7 @@ typedef struct s_minish
 	pid_t	*child_pids;
 	int		cmd_num;
 	int		prev_for_pipe;
-	pid_t	pid;
+	//pid_t	pid;
 	char	**envp;
 	t_envp	*n_envs;
 	t_envp	*n_export;

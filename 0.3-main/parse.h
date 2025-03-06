@@ -34,6 +34,7 @@ typedef struct s_ready
 	t_list	*text;
 	t_list	*rdrct;
 	int		rdrct_num;
+	char		**cmd;
 	t_redrct	*rdrct_in;
 	t_redrct	*rdrct_out;
 	int		input;

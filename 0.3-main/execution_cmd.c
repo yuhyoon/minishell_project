@@ -42,7 +42,7 @@ char	**create_str_2(t_list **head)
 	return (str);
 }
 
-char	*create_exepath(char **cmd, char *name)
+char	*find_exepath(char *name)
 {
 	char	**env_paths;
 	int		i;
@@ -67,18 +67,13 @@ char	*create_exepath(char **cmd, char *name)
 	return (exe_path);
 }
 
-int execute_cmd(t_ready	*rdy, int *pipe)
+char	*get_acesspath(t_ready *rdy, int *pipe)
 {
-    char	**cmd;
-	char	**name;
+	char	*name;
 	char	*exe_path;
 
-	cmd = create_str_2(&rdy->text);
-	name = &cmd[0];
+	name = (rdy->cmd[0]);
 	//printf("%s\n", *name);   
-	exe_path = create_exepath(cmd, cmd[0]);
-    if (execve(exe_path, name, NULL) == -1)
-		err_exec(127, cmd[0]);
-    free(exe_path);
-    free_splited(cmd);
+	exe_path = find_exepath(rdy->cmd, name);
+	return (exe_path);
 }

@@ -12,8 +12,8 @@ void	set_io(t_ready *rdy, t_stack *in, t_stack *out);
 void	sort_io(t_stack *in, t_stack *out, t_ready *rdy);
 
 //cmd
-int		execute_cmd(t_ready	*rdy, int *pipe);
-char	*create_exepath(char **cmd, char *name);
+char	*get_acesspath(t_ready *rdy, int *pipe);
+char	*find_exepath(char *name);
 char	**create_str_2(t_list **head);
 void	free_splited(char **abs);
 #endif

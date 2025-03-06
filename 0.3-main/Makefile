@@ -49,6 +49,7 @@ run: $(NAME)
 	valgrind --leak-check=full \
 		--show-leak-kinds=all \
 		--suppressions=suppression_readline.supp \
+		--show-reachable=yes \
 		--track-fds=yes ./$(NAME) 2> $(VALGRIND_LOG)
 
 re: fclean all

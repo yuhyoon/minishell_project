@@ -78,6 +78,11 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
 	}
 }
 
+int	is_bulitin(char *cmd_name)
+{
+	return (0);
+}
+
 pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
 {
 	pid_t	pid;
@@ -90,13 +95,33 @@ pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
 	pid = fork();
 	if (pid == 0)
 	{
+		char	*access_path;
+
 		if (redirect(&(rdy->rdrct), rdy) != 0)
 		{
 			del_ready(rdy);
 			exit(EXIT_FAILURE);
 		}
 		set_pipe(i, pp, rdy, sh);
-		execute_cmd(rdy, pp);
+		rdy->cmd = create_str_2(&rdy->text);
+		if (is_builtin(rdy->cmd[0]))
+			exec_builtin(sh, rdy);
+		else
+		{
+			access_path = get_acesspath(rdy, pp);
+			if (access_path == NULL)
+			{
+				err_exec(127, rdy, rdy->cmd[0]);
+				del_ready(rdy);
+				free(access_path);
+				access_path = NULL;
+			}
+			else
+			{
+				if (execve(exe_path, name, NULL) == -1)
+					exit(EXIT_FAILURE);
+			}
+		}
 	}
 	else
 	{

@@ -83,6 +83,42 @@ int	is_bulitin(char *cmd_name)
 	return (0);
 }
 
+void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
+{
+	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
+		del_ready(rdy);
+	if (rdy == NULL)
+	{
+		if (pp != NULL)
+		{
+			close(pp[0]);
+			close(pp[1]);
+		}
+		exit(EXIT_FAILURE);
+	}
+	set_pipe(i, pp, rdy, sh);
+	rdy->cmd = create_str_2(&rdy->text);
+	if (is_builtin(rdy->cmd[0]))
+		exec_builtin(sh, rdy);
+	else
+	{
+		char *access_path = get_acesspath(rdy, pp);
+		if (access_path == NULL)
+		{
+			err_exec(127, rdy, rdy->cmd[0]);
+			del_ready(rdy);
+			free(access_path);
+			access_path = NULL;
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			if (execve(exe_path, name, NULL) == -1)
+				exit(EXIT_FAILURE);
+		}
+	}
+}
+
 pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
 {
 	pid_t	pid;
@@ -95,33 +131,7 @@ pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
 	pid = fork();
 	if (pid == 0)
 	{
-		char	*access_path;
-
-		if (redirect(&(rdy->rdrct), rdy) != 0)
-		{
-			del_ready(rdy);
-			exit(EXIT_FAILURE);
-		}
-		set_pipe(i, pp, rdy, sh);
-		rdy->cmd = create_str_2(&rdy->text);
-		if (is_builtin(rdy->cmd[0]))
-			exec_builtin(sh, rdy);
-		else
-		{
-			access_path = get_acesspath(rdy, pp);
-			if (access_path == NULL)
-			{
-				err_exec(127, rdy, rdy->cmd[0]);
-				del_ready(rdy);
-				free(access_path);
-				access_path = NULL;
-			}
-			else
-			{
-				if (execve(exe_path, name, NULL) == -1)
-					exit(EXIT_FAILURE);
-			}
-		}
+		child_process(rdy, pp, i, sh);
 	}
 	else
 	{

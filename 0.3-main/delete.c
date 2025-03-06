@@ -24,13 +24,14 @@ void	del_ready(void *ready)
 	t_ready	*rdy;
 
 	rdy = ready;
+	if (rdy == NULL)
+		return ;
 	ft_lstclear(&rdy->text, del_text);
 	ft_lstclear(&rdy->rdrct, del_redrct);
 	del_redrct(rdy->rdrct_in);
 	del_redrct(rdy->rdrct_out);
 	free(rdy);
 	rdy = NULL;
-
 }
 
 void	del_stack(void *st)

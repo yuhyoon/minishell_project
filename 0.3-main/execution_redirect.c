@@ -39,7 +39,7 @@ void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
 			rdy->rdrct_out->fd = open(rdy->rdrct_out->obj, O_TRUNC | O_WRONLY | O_CREAT, 0644);
 		else if (rdy->rdrct_out->parts == 2)
 			rdy->rdrct_out->fd = open(rdy->rdrct_out->obj, O_APPEND | O_WRONLY | O_CREAT, 0644);
-		printf("rdy->out->fd:%d\n", rdy->rdrct_out->fd);
+		//printf("rdy->out->fd:%d\n", rdy->rdrct_out->fd);
 	}
 	
 }
@@ -76,7 +76,7 @@ int	redirect(t_list **rd_list, t_ready *rdy)
 	t_stack	in;
 	t_stack out;
 
-	if (valid_rdrct(rdy) != 0)
+	if (rdy == NULL)
 		return (-1);
 	init_stack(&in, NULL, 0);
 	init_stack(&out, NULL, 0);

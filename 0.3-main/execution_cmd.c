@@ -74,6 +74,6 @@ char	*get_acesspath(t_ready *rdy, int *pipe)
 
 	name = (rdy->cmd[0]);
 	//printf("%s\n", *name);   
-	exe_path = find_exepath(rdy->cmd, name);
+	exe_path = find_exepath(name);
 	return (exe_path);
 }

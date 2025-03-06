@@ -105,7 +105,7 @@ void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
 		char *access_path = get_acesspath(rdy, pp);
 		if (access_path == NULL)
 		{
-			err_exec(127, rdy, rdy->cmd[0]);
+			err_exec(127, rdy->cmd[0]);
 			del_ready(rdy);
 			free(access_path);
 			access_path = NULL;

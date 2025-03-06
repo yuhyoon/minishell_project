@@ -17,17 +17,25 @@ static void	free_str_array(char **arr)
     free(arr);
 }
 
+void    dengling(void *content, int size_type)
+{
+	if (size_type == 1)
+		free((char *)content);
+	if (size_type == 4)
+		free((int *)content)
+	content = NULL;
+}
+
 void	free_minish(t_minish *minish)
 {
+    if (minish->mask)
+		dengling(minish->mask, 1);
     if (minish->src)
-    {
-        free(minish->src);
-        minish->src = NULL;
-    }
+		dengling(minish->src, 1);
     if (minish->ready)
         ft_lstclear(&minish->ready, del_ready);
-    free(minish->child_pids);
-    minish->child_pids = NULL;
+	if (minish->child_pids)
+		dengling(minish->child_pids, 4);
     //free_str_array(minish->envp);
     //exitcode = 0;
 }

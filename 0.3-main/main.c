@@ -5,6 +5,8 @@
 #include "execution.h"
 #include "error.h"
 #include "free.c"
+#include "child_process.h"
+#include "child_process.c"
 
 /*****
  * 
@@ -51,7 +53,7 @@ int		read_input(t_minish *sh)
 	return (1);
 }
 
-void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
+void	set_pipe_old(int i, int *pipes, t_ready *rdy, t_minish *sh)
 {
 	rdy->input = STDIN_FILENO;
 	if (sh->prev_for_pipe != -1)
@@ -78,14 +80,7 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
 	}
 }
 
-int	is_builtin(char *cmd_name)
-{
-	return (0);
-}
-
-
-
-void	child_process(t_ready *rdy, int *pp, t_minish *sh)
+void	child_process_old(t_ready *rdy, int *pp, t_minish *sh)
 {
 	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
 		del_ready(rdy);
@@ -98,7 +93,7 @@ void	child_process(t_ready *rdy, int *pp, t_minish *sh)
 		}
 		exit(EXIT_FAILURE);
 	}
-	set_pipe(pp, rdy, sh);
+	set_pipe_old(pp, rdy, sh);
 	rdy->cmd = create_str_2(&rdy->text);
 	if (is_builtin(rdy->cmd[0]))
 		printf("here builtin\n");
@@ -140,7 +135,7 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 		sh->child_pids[rdy->num - 1] = pid;
 		if (sh->prev_for_pipe != -1)
 			close(sh->prev_for_pipe);
-    	if (rdy->num < sh->cmd_count)
+    	if (sh->cmd_count > 1 && rdy->num < sh->cmd_count)
 		{
         	close(pp[1]);
     		sh->prev_for_pipe = pp[0];

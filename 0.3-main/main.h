@@ -27,7 +27,7 @@ typedef struct s_minish
 	char	*mask;
 	t_list	*ready;
 	pid_t	*child_pids;
-	int		cmd_num;
+	int		cmd_count;
 	int		prev_for_pipe;
 	//pid_t	pid;
 	char	**envp;

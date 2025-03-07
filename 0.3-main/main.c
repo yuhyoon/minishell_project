@@ -70,7 +70,7 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
 		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
 		close(rdy->rdrct_out->fd);
 	}
-	if (i + 1 < sh->cmd_num)
+	if (rdy->num < sh->cmd_count)
 	{
 		dup2(pipes[1], rdy->output);
 		close(pipes[1]);
@@ -83,7 +83,9 @@ int	is_builtin(char *cmd_name)
 	return (0);
 }
 
-void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
+
+
+void	child_process(t_ready *rdy, int *pp, t_minish *sh)
 {
 	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
 		del_ready(rdy);
@@ -96,7 +98,7 @@ void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
 		}
 		exit(EXIT_FAILURE);
 	}
-	set_pipe(i, pp, rdy, sh);
+	set_pipe(pp, rdy, sh);
 	rdy->cmd = create_str_2(&rdy->text);
 	if (is_builtin(rdy->cmd[0]))
 		printf("here builtin\n");
@@ -119,26 +121,26 @@ void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
 	}
 }
 
-pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
+pid_t	create_process(t_ready *rdy, t_minish *sh)
 {
 	pid_t	pid;
 
 	int		status;
 	int		pp[2];
 
-	if (i + 1 < sh->cmd_num)
+	if (rdy->num < sh->cmd_count)
 		pipe(pp); //todo: err handling
 	pid = fork();
 	if (pid == 0)
 	{
-		child_process(rdy, pp, i, sh);
+		child_process(rdy, pp, sh);
 	}
 	else
 	{
-		sh->child_pids[i] = pid;
+		sh->child_pids[rdy->num - 1] = pid;
 		if (sh->prev_for_pipe != -1)
 			close(sh->prev_for_pipe);
-    	if (i + 1 < sh->cmd_num)
+    	if (rdy->num < sh->cmd_count)
 		{
         	close(pp[1]);
     		sh->prev_for_pipe = pp[0];
@@ -153,19 +155,17 @@ int	execute(t_minish *sh)
 	int		i;
 	int		status;
 
-	sh->cmd_num = ft_lstsize(sh->ready);
-	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_num);
+	sh->cmd_count = ft_lstsize(sh->ready);
+	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_count);
 	lst = sh->ready;
-	i = 0;
 	while (lst)
 	{
 		rdy = (t_ready *)(lst->content);
-		create_process(rdy, i, sh);
-		i++;
+		create_process(rdy, sh);
 		lst = lst->next;
 	}
 	i = 0;
-	while (i < sh->cmd_num)
+	while (i < sh->cmd_count)
 	{
 		waitpid(sh->child_pids[i], &status, 0);
 		i++;

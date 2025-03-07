@@ -6,9 +6,11 @@
 void	*create_rdy()
 {
 	t_ready *rdy;
-
+	static int	cnt;
 	rdy = malloc(sizeof(t_ready));
 	ft_memset(rdy, 0, sizeof(t_ready));
+	cnt++;
+	rdy->num = cnt;
 	return (rdy);
 }
 

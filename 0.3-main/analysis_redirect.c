@@ -16,9 +16,16 @@ void    handle_heredoc_child(int write_fd, char *delimeter)
 	while (1)
 	{
 		line = readline("> ");
+		if (!line)
+		{
+			//> bash: warning: here-document at line ?? delimited by end-of-file (wanted `eof')
+			write(write_fd, "\n", 1);
+			break;
+		}
 		if (ft_strncmp(line, delimeter, ft_strlen(delimeter)) == 0)
 		{
-			free(line);
+			if (line)
+				free(line);
 			break;
 		}
 		write(write_fd, line, ft_strlen(line));
@@ -40,17 +47,20 @@ void    create_heredoc_pipe(int *read_fd, int *write_fd)
 	*write_fd = fd[1];
 }
 
-void    handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd)
+void handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd, pid_t child_pid)
 {
-	int	status;
+    int status;
 
-	close_fd(write_fd);
-	rdrct->fd = read_fd;
-	printf("??? : %d\n", rdrct->fd);
-	if (wait(&status) == -1)
+    close_fd(write_fd);
+    rdrct->fd = read_fd;
+    if (waitpid(child_pid, &status, 0) == -1) 
+        exit(EXIT_FAILURE);
+    if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+    {
+		// close_fd(read_fd);
+        // rdrct->fd = -1;
 		exit(EXIT_FAILURE);
-	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		exit(EXIT_FAILURE);
+    }
 }
 
 void	f_heredoc(t_redrct *rdrct)
@@ -59,14 +69,25 @@ void	f_heredoc(t_redrct *rdrct)
 	int		read_fd;
 	int		write_fd;
 
+	if (!rdrct->obj || ft_strlen(rdrct->obj) < 1)
+	{
+		write(2, "bash: syntax error near unexpected token `newline'\n", 51);
+		return ;
+	}
 	create_heredoc_pipe(&read_fd, &write_fd);
 	pid = fork();
 	if (pid == -1)
 		exit(EXIT_FAILURE);
 	if (pid == 0)
+	{
+		// printf("child\n");
 		handle_heredoc_child(write_fd, rdrct->obj);
+	}
 	else
-		handle_heredoc_parent(rdrct, read_fd, write_fd);
+	{
+		// printf("parent %d\n", pid);		
+		handle_heredoc_parent(rdrct, read_fd, write_fd, pid);
+	}
 }
 
 t_redrct	*init_rdrct(void)

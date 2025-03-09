@@ -15,7 +15,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include "libft/libft.h"
-#include "builtins/builtin.h"
+#include "builtin.h"
 #include "delete.h"
 #include "errno.h"
 
@@ -31,12 +31,10 @@ typedef struct s_minish
 	int		prev_for_pipe;
 	//pid_t	pid;
 	char	**envp;
-	t_envp	*n_envs;
-	t_envp	*n_export;
+	struct s_envp	*n_envs;
+	struct s_envp	*n_export;
 	char	*pwd;
 }t_minish;
-
-
 
 void	set_signal(void *handler);
 void	before_readline(int signal);

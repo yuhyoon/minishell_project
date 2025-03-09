@@ -21,13 +21,36 @@
 
 unsigned char exitcode = 0;
 
-void	init_minish(t_minish *sh)
+// void    f_init_envps(t_minish *sh)
+// {
+//     t_envp **n_envps;
+//     t_envp *sorted_envps;
+
+//     n_envps = (t_envp **)malloc(sizeof(t_envp *));
+//     sorted_envps= NULL;
+//     f_init_env(sh->envp, sh->n_envs);
+//     f_sort_and_store_envp(sh->envp, sh->n_export); //이름 변경
+// }
+
+void	init_minish(t_minish *sh, char **envp)
 {
-	
+	int	envp_length;
+	int	i;
+
+	envp_length = f_count_char(envp);
 	ft_memset(sh, 0, sizeof(t_minish));
 	//main에서 받은 envps 저장
 	sh->prev_for_pipe = -1;
+	sh->envp = (char **)malloc(sizeof(char *) * (envp_length + 1));
+	if (!(sh->envp))
+		return ;
+	i = -1;
+	while (++i < envp_length)
+		sh->envp[i] = ft_strdup(envp[i]);
+	f_init_env(sh->envp, &(sh->n_envs));
+	f_sort_and_store_envp(sh->envp, &(sh->n_export));
 }
+
 
 int		read_input(t_minish *sh)
 {
@@ -38,7 +61,7 @@ int		read_input(t_minish *sh)
 	if (input == NULL)
 	{
 		write(STDOUT_FILENO, "exit\n", 5);
-		return (-1);
+		return (0);
 	}
 	else if (ft_strlen(input) == 0) 
 	{
@@ -85,7 +108,11 @@ int	is_builtin(char *cmd_name)
 void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
 {
 	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
+	{
+		printf("??");
 		del_ready(rdy);
+
+	}
 	if (rdy == NULL)
 	{
 		if (pp != NULL)
@@ -177,12 +204,14 @@ int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
+	int	res;
 	t_minish	sh;
 
 	set_signal(before_readline);
-	init_minish(&sh);
-	//init_minish(&sh, envp);
-	while (read_input(&sh) != -1)
+	init_minish(&sh, envp);
+
+	res = 1;
+	while ((res = read_input(&sh)))
 	{
 		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
 		{
@@ -196,7 +225,7 @@ int main(int ac, char **av, char **envp)
 	}
 	//free_minish()
     rl_clear_history();
-	return 0;
+	return (0);
 }
 
 

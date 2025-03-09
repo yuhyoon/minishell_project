@@ -37,8 +37,7 @@ int		read_input(t_minish *sh)
 	input = readline("minishell> ");
 	if (input == NULL)
 	{
-		//todo: exitcode = 
-		printf("%s\n","exit"); //todo: exit
+		write(STDOUT_FILENO, "exit\n", 5);
 		return (-1);
 	}
 	else if (ft_strlen(input) == 0) 
@@ -195,6 +194,7 @@ int main(int ac, char **av, char **envp)
 		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		
 	}
+	//free_minish()
     rl_clear_history();
 	return 0;
 }

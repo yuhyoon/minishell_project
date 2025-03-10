@@ -60,6 +60,7 @@ void	*parse(t_list *cur_rdylst)
 
 	rdy = (t_ready *)(cur_rdylst->content);
 	mask = generate_mask(rdy);
+	next_rdylst = cur_rdylst;
 	if (syntax_analysis(mask) > 0)
 	{
 		free(mask);
@@ -71,6 +72,7 @@ void	*parse(t_list *cur_rdylst)
 		rdy->mask = mask;
 	if (g_shmode % 10 == 0)
 		next_rdylst = parsing(cur_rdylst, ft_strlen_delim(rdy->mask, '\n'));
+	return (next_rdylst);
 }
 
 void    prompt(t_list **cur_rdylst, t_minish *sh)

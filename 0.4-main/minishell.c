@@ -73,16 +73,16 @@ void	*parse(t_list *cur_rdylst)
 		next_rdylst = parsing(cur_rdylst, ft_strlen_delim(rdy->mask, '\n'));
 }
 
-void    prompt(t_list *cur_rdylst, t_minish *sh)
+void    prompt(t_list **cur_rdylst, t_minish *sh)
 {
     t_ready	*rdy;
 
-	if (cur_rdylst == NULL)
+	if (*cur_rdylst == NULL)
 	{
-		cur_rdylst = ft_lstnew(create_rdy());
-    	sh->ready = cur_rdylst;
+		*cur_rdylst = ft_lstnew(create_rdy());
+    	sh->ready = *cur_rdylst;
 	}	
-	rdy = cur_rdylst->content;
+	rdy = (*cur_rdylst)->content;
     read_input(rdy);
 }
 
@@ -112,7 +112,7 @@ int main(int ac, char **av, char **envp)
     cur_rdylst = NULL; 
 	while (g_shmode >= 0)
 	{
-		prompt(cur_rdylst, &sh);
+		prompt(&cur_rdylst, &sh);
 		if (g_shmode == PROMPT_OK)
 			cur_rdylst = parse(cur_rdylst);
 		handle_shmode(&sh);

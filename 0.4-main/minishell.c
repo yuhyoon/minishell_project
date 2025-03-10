@@ -58,7 +58,7 @@ void	*parse(t_list *cur_rdylst)
 	t_list	*next_rdylst;
 	char	*mask;
 
-	rdy = cur_rdylst->content;
+	rdy = (t_ready *)(cur_rdylst->content);
 	mask = generate_mask(rdy);
 	if (syntax_analysis(mask) > 0)
 	{

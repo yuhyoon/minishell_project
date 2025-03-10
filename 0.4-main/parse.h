@@ -31,7 +31,7 @@ typedef struct s_char_state
 
 typedef struct s_ready
 {
-	char	*input;
+	char	*line;
 	char	*mask;
 	t_list	*text;
 	t_list	*rdrct;

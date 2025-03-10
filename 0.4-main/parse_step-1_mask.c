@@ -54,7 +54,7 @@ char *generate_mask(t_ready *rdy)
 	struct stat	st;
 
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
-	write_replace_spaces(rdy->input, mask_fd);
+	write_replace_spaces(rdy->line, mask_fd);
 	close(mask_fd);
 	mask_fd = open("mask_fd", O_RDONLY);
 	fstat(mask_fd, &st);

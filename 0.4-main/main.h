@@ -20,7 +20,12 @@
 #include "errno.h"
 
 extern unsigned char exitcode;
-extern unsinged int	shmode;
+extern int	g_shmode;
+
+typedef enum	e_shmode
+{
+	PROMPT_OK = 10,
+}t_shmode;
 
 typedef struct s_minish
 {

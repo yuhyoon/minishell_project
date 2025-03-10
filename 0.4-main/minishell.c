@@ -20,7 +20,7 @@
 #include <errno.h>
 
 unsigned char exitcode = 0;
-unsigned int shmode = 0;
+int g_shmode = 0;
 
 void	init_minish(t_minish *sh)
 {
@@ -47,143 +47,10 @@ int		read_input(t_ready *rdy)
 	if (shmode == PROMPT_OK)
 	{
 		add_history(input);
-		rdy->input = input;
+		rdy->line = input;
 	}
 	return (1);
 }
-
-void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
-{
-	rdy->input = STDIN_FILENO;
-	if (sh->prev_for_pipe != -1)
-	{
-		dup2(sh->prev_for_pipe, rdy->input);
-		close(sh->prev_for_pipe);
-	}
-	if (rdy->rdrct_in)
-	{
-		dup2(rdy->rdrct_in->fd, rdy->input); //n copy to rdy->input;
-		close(rdy->rdrct_in->fd);
-	}
-	rdy->output = STDOUT_FILENO;
-	if (rdy->rdrct_out)
-	{
-		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
-		close(rdy->rdrct_out->fd);
-	}
-	if (i + 1 < sh->cmd_num)
-	{
-		dup2(pipes[1], rdy->output);
-		close(pipes[1]);
-		close(pipes[0]);
-	}
-}
-
-int	is_builtin(char *cmd_name)
-{
-	return (0);
-}
-
-void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
-{
-	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
-		del_ready(rdy);
-	if (rdy == NULL)
-	{
-		if (pp != NULL)
-		{
-			close(pp[0]);
-			close(pp[1]);
-		}
-		exit(EXIT_FAILURE);
-	}
-	set_pipe(i, pp, rdy, sh);
-	rdy->cmd = create_str_2(&rdy->text);
-	if (is_builtin(rdy->cmd[0]))
-		printf("here builtin\n");
-	else
-	{
-		char *access_path = get_acesspath(rdy, pp);
-		if (access_path == NULL)
-		{
-			err_exec(127, rdy->cmd[0]);
-			del_ready(rdy);
-			free(access_path);
-			access_path = NULL;
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			if (execve(access_path, &rdy->cmd[0], NULL) == -1)
-				exit(EXIT_FAILURE);
-		}
-	}
-}
-
-pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
-{
-	pid_t	pid;
-
-	int		status;
-	int		pp[2];
-
-	if (i + 1 < sh->cmd_num)
-		pipe(pp); //todo: err handling
-	pid = fork();
-	if (pid == 0)
-	{
-		child_process(rdy, pp, i, sh);
-	}
-	else
-	{
-		sh->child_pids[i] = pid;
-		if (sh->prev_for_pipe != -1)
-			close(sh->prev_for_pipe);
-    	if (i + 1 < sh->cmd_num)
-		{
-        	close(pp[1]);
-    		sh->prev_for_pipe = pp[0];
-		}
-	}	
-}
-
-int	execute(t_minish *sh)
-{
-	t_list	*lst;
-	t_ready	*rdy;
-	int		i;
-	int		status;
-
-	sh->cmd_num = ft_lstsize(sh->ready);
-	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_num);
-	lst = sh->ready;
-	i = 0;
-	while (lst)
-	{
-		rdy = (t_ready *)(lst->content);
-		create_process(rdy, i, sh);
-		i++;
-		lst = lst->next;
-	}
-	i = 0;
-	while (i < sh->cmd_num)
-	{
-		waitpid(sh->child_pids[i], &status, 0);
-		i++;
-	}
-	free_minish(sh);
-}
-
-void	*prompt_check(t_list *rdy_last)
-{
-	t_ready	*rdy;
-	
-	rdy = rdy_last->content;
-	if (rdy == NULL || rdy->input == NULL)
-		shmode = 1100;
-	return (rdy);
-}
-
 
 void	*parse(t_list *cur_rdylst)
 {
@@ -224,7 +91,7 @@ void	handle_shmode(t_minish *sh)
 	if (shmode % 10 != 0)
 	{
 		if (shmode < 0)
-			exit();
+			exit(EXIT_SUCCESS);
 		else if (shmode / 10 == 1)
 			err_syntax();
 	}
@@ -245,10 +112,10 @@ int main(int ac, char **av, char **envp)
     cur_rdylst = NULL; 
 	while (shmode >= 0)
 	{
-		prompt(cur_rdylst);
+		prompt(cur_rdylst, &sh);
 		if (shmode == PROMPT_OK)
 			cur_rdylst = parse(cur_rdylst);
-		handle_shmode(sh.ready);
+		handle_shmode(&sh);
 	}
     rl_clear_history();
 	return 0;

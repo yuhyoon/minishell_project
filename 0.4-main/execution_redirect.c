@@ -1,0 +1,88 @@
+#include "main.h"
+#include "stack.h"
+#include "error.h"
+
+void	sort_io(t_stack *in, t_stack *out, t_ready *rdy)
+{
+	t_list		*tmp;
+	t_redrct	*rd;
+	int			n;
+
+	n = rdy->rdrct_num;
+	tmp = rdy->rdrct;
+	while (n)
+	{
+		rd = (t_redrct *)(tmp)->content;
+		if (rd->type == IN_RD)
+			push(in, rd);
+		else if (rd->type == OUT_RD)
+			push(out, rd);
+		n--;
+		tmp = (tmp)->next;
+	}
+}
+
+void	set_io(t_ready *rdy, t_stack *in, t_stack *out)
+{
+	(rdy)->rdrct_in = (t_redrct *)pop2(in);
+	if (rdy->rdrct_in && rdy->rdrct_in->parts == 2 && rdy->rdrct_in->type == IN_RD)
+        printf("rdy->in->fd heredoc FD: %d\n", rdy->rdrct_in->fd);
+	else if (rdy->rdrct_in)
+	{
+		if (rdy->rdrct_in->parts == 1)
+			rdy->rdrct_in->fd = open(rdy->rdrct_in->obj, O_RDONLY); //printf("rdy->in->fd: %d\n", rdy->rdrct_in->fd);
+	}
+	(rdy)->rdrct_out = (t_redrct *)pop2(out);
+	if (rdy->rdrct_out)
+	{
+		if (rdy->rdrct_out->parts == 1)
+			rdy->rdrct_out->fd = open(rdy->rdrct_out->obj, O_TRUNC | O_WRONLY | O_CREAT, 0644);
+		else if (rdy->rdrct_out->parts == 2)
+			rdy->rdrct_out->fd = open(rdy->rdrct_out->obj, O_APPEND | O_WRONLY | O_CREAT, 0644);
+		//printf("rdy->out->fd:%d\n", rdy->rdrct_out->fd);
+	}
+	
+}
+
+int valid_rdrct(t_ready *rdy)
+{
+    t_list	*lst;
+	t_redrct	*rdrct;
+	int		n;
+
+	lst = rdy->rdrct;
+	errno = 0;
+	n = rdy->rdrct_num;
+	while (n && errno == 0)
+	{
+		rdrct = (t_redrct *)(lst->content);printf("first rdrct obj:%s\n", rdrct->obj);
+		access(rdrct->obj, F_OK);//printf("errno: %d\n", errno);
+		if ((rdrct->type == OUT_RD && rdrct->parts == 1) || (rdrct->type == IN_RD && rdrct->parts == 2))
+			errno = 0;
+		if (errno != 0)
+			err_such(1, rdrct);
+		if (errno == 0 && rdrct->type == IN_RD && 
+			rdrct->parts == 1 && 
+			access(rdrct->obj, R_OK) != 0)
+			err_permission(1, rdrct);
+		lst = lst->next;
+		n--;
+	}
+	return (errno);
+}
+
+int	redirect(t_list **rd_list, t_ready *rdy)
+{
+	t_stack	in;
+	t_stack out;
+
+	if (rdy == NULL)
+		return (-1);
+	init_stack(&in, NULL, 0);
+	init_stack(&out, NULL, 0);
+	sort_io(&in, &out, rdy);
+	set_io(rdy, &in, &out);
+	del_stack(&in);
+	del_stack(&out);
+	return (0);	
+}

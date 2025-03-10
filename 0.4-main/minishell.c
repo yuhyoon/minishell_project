@@ -47,7 +47,7 @@ int		read_input(t_ready *rdy)
 	if (g_shmode == PROMPT_OK)
 	{
 		add_history(input);
-		rdy->line = input;
+		rdy->src = input;
 	}
 	return (1);
 }

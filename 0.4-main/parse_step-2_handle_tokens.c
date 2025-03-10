@@ -28,7 +28,7 @@ int	handle_pipe(t_list **lst, t_ready *current_rdy,  t_list **rdrct, int save)
 
 	if (*rdrct != NULL)
 		current_rdy->rdrct_num = ft_lstsize(*rdrct);
-	create_text_list(current_rdy, current_rdy->src[save], current_rdy->mask[save]);
+	create_text_list(current_rdy, current_rdy->line[save], current_rdy->mask[save]);
 	next_rdy = create_rdy();
 	next_lst = ft_lstnew(next_rdy);
 	ft_lstadd_back(lst, next_lst);
@@ -40,7 +40,7 @@ void *parsing(const t_list *cur_rdylst, int len)
 	int		i;
 	t_ready	*rdy;
 	int		save;
-	t_list	*lst
+	t_list	*lst;
 
 	i = 0;
 	save = i;
@@ -61,6 +61,6 @@ void *parsing(const t_list *cur_rdylst, int len)
 	}
 	if (rdy->rdrct != NULL)
 		rdy->rdrct_num = ft_lstsize(rdy->rdrct);
-	create_text_list(rdy, &rdy->src[save], &rdy->mask[save], sh);
+	create_text_list(rdy, &rdy->src[save], &rdy->mask[save]);
 	return (lst);
 }

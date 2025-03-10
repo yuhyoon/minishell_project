@@ -34,17 +34,17 @@ int		read_input(t_ready *rdy)
 {
 	char 		*input;
 	
-	while (shmode == 0)
+	while (g_shmode == 0)
 	{
 		input = readline("minishell> ");
 		if (input == NULL)
-			shmode = -1;
+			g_shmode = -1;
 		else if (ft_strlen(input) == 0)
 			free(input);
 		else
-			shmode = PROMPT_OK;
+			g_shmode = PROMPT_OK;
 	}
-	if (shmode == PROMPT_OK)
+	if (g_shmode == PROMPT_OK)
 	{
 		add_history(input);
 		rdy->line = input;
@@ -64,12 +64,12 @@ void	*parse(t_list *cur_rdylst)
 	{
 		free(mask);
 		mask = NULL;
-		shmode = 12;
+		g_shmode = 12;
 		rdy->exit_code = 2;
 	}
 	else
 		rdy->mask = mask;
-	if (shmode % 10 == 0)
+	if (g_shmode % 10 == 0)
 		next_rdylst = parsing(cur_rdylst, ft_strlen_delim(rdy->mask, '\n'));
 }
 
@@ -88,15 +88,15 @@ void    prompt(t_list *cur_rdylst, t_minish *sh)
 
 void	handle_shmode(t_minish *sh)
 {
-	if (shmode % 10 != 0)
+	if (g_shmode % 10 != 0)
 	{
-		if (shmode < 0)
+		if (g_shmode < 0)
 			exit(EXIT_SUCCESS);
-		else if (shmode / 10 == 1)
-			err_syntax();
+		else if (g_shmode / 10 == 1)
+			err_syntax(sh);
 	}
 	//sh->last_exit = ft_lstlast(sh->ready); //이거 나중에
-	shmode = 0;
+	g_shmode = 0;
 	
 }
 
@@ -110,10 +110,10 @@ int main(int ac, char **av, char **envp)
 	set_signal(before_readline);
 	init_minish(&sh);
     cur_rdylst = NULL; 
-	while (shmode >= 0)
+	while (g_shmode >= 0)
 	{
 		prompt(cur_rdylst, &sh);
-		if (shmode == PROMPT_OK)
+		if (g_shmode == PROMPT_OK)
 			cur_rdylst = parse(cur_rdylst);
 		handle_shmode(&sh);
 	}

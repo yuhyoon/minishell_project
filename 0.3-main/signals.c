@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:55:43 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/02/23 20:56:09 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/10 16:27:26 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,19 @@ void	before_readline(int signal)
 	// 	(void)signal;
 	// }
 }
+
+// void	during_heredoc(int signal)
+// {
+// 	if (signal == SIGINT)
+// 	{
+// 		write(1, )
+// 	}
+// }
+
+// void	set_heredoc_signal(void *handler)
+// {
+// 	during_heredoc(SIGINT, )
+// }
 
 void	set_signal(void *handler)
 {

@@ -41,4 +41,10 @@ void	before_readline(int signal);
 
 void    f_init_envps(t_minish *sh);
 
+//builtins
+int f_cd(t_minish *sh);
+int f_echo(t_minish *sh);
+int f_pwd(t_minish *sh);
+int f_exit(t_minish *sh);
+
 #endif

@@ -65,9 +65,11 @@ int		read_input(t_minish *sh)
 	}
 	else if (ft_strlen(input) == 0) 
 	{
+		printf("%ld\n", ft_strlen(input));
 		free(input); //todo: continue
-		return (0);
+		return (2);
 	}
+	printf("%ld\n", ft_strlen(input));
 	add_history(input);
 	sh->src = input;
 	return (1);
@@ -100,21 +102,46 @@ void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
 	}
 }
 
-int	is_builtin(char *cmd_name)
+int is_builtin(char *cmd_name, t_minish *sh)
 {
-	return (0);
+	int	res;
+
+	res = 0;
+	printf("????%s\n", cmd_name);
+	printf("%ld\n", ft_strlen(cmd_name));
+    if (ft_strncmp(cmd_name, "cd", 2) == 0)
+	{
+		printf("cd\n");
+        res = f_cd(sh);
+	}
+    else if (ft_strncmp(cmd_name, "echo", 4) == 0)
+        res = f_echo(sh);
+    else if (ft_strncmp(cmd_name, "pwd", 3) == 0)
+	{
+		printf("pwd\n");
+        res = f_pwd(sh);
+	}
+    // else if (ft_strncmp(cmd_name, "export", 7) == 0)
+    //     res = f_export(sh);
+    // else if (ft_strncmp(cmd_name, "unset", 6) == 0)
+    //     res = f_unset(sh);
+    // else if (ft_strncmp(cmd_name, "env", 4) == 0)
+    //     res = f_env(sh);
+    else if (ft_strncmp(cmd_name, "exit", 4) == 0)
+        res = f_exit(sh);
+    return res; //0정상종료 1 비정상종료
 }
 
 void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
 {
 	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
 	{
-		printf("??");
-		del_ready(rdy);
 
+		del_ready(rdy);
 	}
 	if (rdy == NULL)
 	{
+		printf("rdy가 NULL");
 		if (pp != NULL)
 		{
 			close(pp[0]);
@@ -124,8 +151,10 @@ void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
 	}
 	set_pipe(i, pp, rdy, sh);
 	rdy->cmd = create_str_2(&rdy->text);
-	if (is_builtin(rdy->cmd[0]))
-		printf("here builtin\n");
+	if (is_builtin(rdy->cmd[0], sh)) //0정상종료 1 비정상종료
+	{
+		printf("빌트인 아님");
+	}
 	else
 	{
 		char *access_path = get_acesspath(rdy, pp);
@@ -156,9 +185,7 @@ pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
 		pipe(pp); //todo: err handling
 	pid = fork();
 	if (pid == 0)
-	{
 		child_process(rdy, pp, i, sh);
-	}
 	else
 	{
 		sh->child_pids[i] = pid;
@@ -209,16 +236,17 @@ int main(int ac, char **av, char **envp)
 
 	set_signal(before_readline);
 	init_minish(&sh, envp);
-
-	res = 1;
 	while ((res = read_input(&sh)))
 	{
-		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
+		if (res == 1)
 		{
-			printf("exitcode:%d\n", exitcode);
-			free_minish(&sh);
-		 }
-		execute(&sh);
+			if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
+			{
+				printf("exitcode:%d\n", exitcode);
+				free_minish(&sh);
+			 }
+			execute(&sh);
+		}
 		//verify_exitcode();
 		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		

@@ -13,6 +13,7 @@ void    handle_heredoc_child(int write_fd, char *delimeter)
 	close_fd(write_fd - 1);
 	printf("close : %d\n", write_fd - 1);
 	printf("write_fd : %d\n", write_fd);
+	// set_heredoc_signal(during_heredoc);
 	while (1)
 	{
 		line = readline("> ");
@@ -34,7 +35,7 @@ void    handle_heredoc_child(int write_fd, char *delimeter)
 	}
 	close_fd(write_fd);
 	exitcode = 0;
-	return ;
+	exit(0);
 }
 
 void    create_heredoc_pipe(int *read_fd, int *write_fd)
@@ -51,6 +52,7 @@ void handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd, pid_t chi
 {
     int status;
 
+	write(1, "child\n", 6);
     close_fd(write_fd);
     rdrct->fd = read_fd;
     if (waitpid(child_pid, &status, 0) == -1) 
@@ -58,7 +60,7 @@ void handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd, pid_t chi
     if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
     {
 		// close_fd(read_fd);
-        // rdrct->fd = -1;
+        rdrct->fd = -1;
 		exit(EXIT_FAILURE);
     }
 }
@@ -69,25 +71,14 @@ void	f_heredoc(t_redrct *rdrct)
 	int		read_fd;
 	int		write_fd;
 
-	if (!rdrct->obj || ft_strlen(rdrct->obj) < 1)
-	{
-		write(2, "bash: syntax error near unexpected token `newline'\n", 51);
-		return ;
-	}
 	create_heredoc_pipe(&read_fd, &write_fd);
 	pid = fork();
 	if (pid == -1)
 		exit(EXIT_FAILURE);
 	if (pid == 0)
-	{
-		// printf("child\n");
 		handle_heredoc_child(write_fd, rdrct->obj);
-	}
 	else
-	{
-		// printf("parent %d\n", pid);		
 		handle_heredoc_parent(rdrct, read_fd, write_fd, pid);
-	}
 }
 
 t_redrct	*init_rdrct(void)
@@ -124,7 +115,14 @@ int create_rdrct(char *src, char *mask, t_list **head)
 	new->obj = str; //리다이렉트 다 만든 상태
 	//히어독일때 fd 갱신 처리
 	if (new->parts == 2 && new->type == IN_RD)
+	{
+		if (!(new->obj) || ft_strlen(new->obj) < 1)
+		{
+			write(2, "1bash: syntax error near unexpected token `newline'\n", 52);
+			return (i + len);
+		}
 		f_heredoc(new);
+	}
 	ft_lstadd_back(head, lst);
 	return (i + len);
 }

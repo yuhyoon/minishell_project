@@ -29,6 +29,7 @@ void    dengling(void *content, int size_type)
 void	free_minish(t_minish *minish)
 {
 	t_list	**head;
+	t_ready	*ready_content;
 
 	if (minish->mask)
 		dengling(minish->mask, 1);
@@ -40,7 +41,7 @@ void	free_minish(t_minish *minish)
 		t_list	*current = minish->ready;
 		while (current)
 		{
-			t_ready *ready_content = (t_ready *)(current->content);
+			ready_content = (t_ready *)(current->content);
 			if (ready_content && ready_content->text)
 				ft_lstclear(&(ready_content->text), del_text);
 			current = current->next;

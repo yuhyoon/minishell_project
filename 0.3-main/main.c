@@ -142,7 +142,6 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 		}
 	}	
 }
-
 int	execute(t_minish *sh)
 {
 	t_list	*lst;
@@ -162,6 +161,8 @@ int	execute(t_minish *sh)
 	i = 0;
 	while (i < sh->cmd_count)
 	{
+		if (i == sh->cmd_count - 1)
+			exitcode = WEXITSTATUS(status);
 		waitpid(sh->child_pids[i], &status, 0);
 		i++;
 	}

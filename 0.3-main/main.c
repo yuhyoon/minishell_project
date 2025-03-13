@@ -53,68 +53,68 @@ int		read_input(t_minish *sh)
 	return (1);
 }
 
-void	set_pipe_old(int i, int *pipes, t_ready *rdy, t_minish *sh)
-{
-	rdy->input = STDIN_FILENO;
-	if (sh->prev_for_pipe != -1)
-	{
-		dup2(sh->prev_for_pipe, rdy->input);
-		close(sh->prev_for_pipe);
-	}
-	if (rdy->rdrct_in)
-	{
-		dup2(rdy->rdrct_in->fd, rdy->input); //n copy to rdy->input;
-		close(rdy->rdrct_in->fd);
-	}
-	rdy->output = STDOUT_FILENO;
-	if (rdy->rdrct_out)
-	{
-		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
-		close(rdy->rdrct_out->fd);
-	}
-	if (rdy->num < sh->cmd_count)
-	{
-		dup2(pipes[1], rdy->output);
-		close(pipes[1]);
-		close(pipes[0]);
-	}
-}
+// void	set_pipe_old(int i, int *pipes, t_ready *rdy, t_minish *sh)
+// {
+// 	rdy->input = STDIN_FILENO;
+// 	if (sh->prev_for_pipe != -1)
+// 	{
+// 		dup2(sh->prev_for_pipe, rdy->input);
+// 		close(sh->prev_for_pipe);
+// 	}
+// 	if (rdy->rdrct_in)
+// 	{
+// 		dup2(rdy->rdrct_in->fd, rdy->input); //n copy to rdy->input;
+// 		close(rdy->rdrct_in->fd);
+// 	}
+// 	rdy->output = STDOUT_FILENO;
+// 	if (rdy->rdrct_out)
+// 	{
+// 		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
+// 		close(rdy->rdrct_out->fd);
+// 	}
+// 	if (rdy->num < sh->cmd_count)
+// 	{
+// 		dup2(pipes[1], rdy->output);
+// 		close(pipes[1]);
+// 		close(pipes[0]);
+// 	}
+// }
 
-void	child_process_old(t_ready *rdy, int *pp, t_minish *sh)
-{
-	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
-		del_ready(rdy);
-	if (rdy == NULL)
-	{
-		if (pp != NULL)
-		{
-			close(pp[0]);
-			close(pp[1]);
-		}
-		exit(EXIT_FAILURE);
-	}
-	//set_pipe_old(pp, rdy, sh);
-	rdy->cmd = create_str_2(&rdy->text);
-	if (is_builtin(rdy->cmd[0]))
-		printf("here builtin\n");
-	else
-	{
-		char *access_path = get_acesspath(rdy, pp);
-		if (access_path == NULL)
-		{
-			err_exec(127, rdy->cmd[0]);
-			del_ready(rdy);
-			free(access_path);
-			access_path = NULL;
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			if (execve(access_path, &rdy->cmd[0], NULL) == -1)
-				exit(EXIT_FAILURE);
-		}
-	}
-}
+// void	child_process_old(t_ready *rdy, int *pp, t_minish *sh)
+// {
+// 	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
+// 		del_ready(rdy);
+// 	if (rdy == NULL)
+// 	{
+// 		if (pp != NULL)
+// 		{
+// 			close(pp[0]);
+// 			close(pp[1]);
+// 		}
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	//set_pipe_old(pp, rdy, sh);
+// 	rdy->cmd = create_str_2(&rdy->text);
+// 	if (is_builtin(rdy->cmd[0]))
+// 		printf("here builtin\n");
+// 	else
+// 	{
+// 		char *access_path = get_acesspath(rdy, pp);
+// 		if (access_path == NULL)
+// 		{
+// 			err_exec(127, rdy->cmd[0]);
+// 			del_ready(rdy);
+// 			free(access_path);
+// 			access_path = NULL;
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		else
+// 		{
+// 			if (execve(access_path, &rdy->cmd[0], NULL) == -1)
+// 				exit(EXIT_FAILURE);
+// 		}
+// 	}
+// }
 
 pid_t	create_process(t_ready *rdy, t_minish *sh)
 {
@@ -125,6 +125,8 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 
 	if (rdy->num < sh->cmd_count)
 		pipe(pp); //todo: err handling
+	else
+		pp = NULL;
 	pid = fork();
 	if (pid == 0)
 	{

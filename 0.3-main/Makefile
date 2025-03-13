@@ -22,8 +22,9 @@ builtin_export.c \
 builtin_pwd.c \
 builtin_unset.c \
 builtin_utils.c \
+builtin_utils1.c \
 bulitin_env.c\
-builtin_exit.c
+builtin_exit.c \
 #heredoc_1.c
 
 READLINEFLG = -lreadline

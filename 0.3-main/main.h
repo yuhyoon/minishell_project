@@ -21,6 +21,22 @@
 
 extern unsigned char exitcode;
 
+/*
+
+typedef struct s_ready
+{
+	t_list	*text;
+	t_list	*rdrct;
+	int		rdrct_num;
+	char		**cmd;
+	t_redrct	*rdrct_in;
+	t_redrct	*rdrct_out;
+	int		input;
+	int		output;
+}t_ready;
+#endif
+
+*/
 typedef struct s_minish
 {
 	char	*src;
@@ -46,5 +62,7 @@ int f_cd(t_minish *sh);
 int f_echo(t_minish *sh);
 int f_pwd(t_minish *sh);
 int f_exit(t_minish *sh);
+int	f_env(t_minish *sh);
+
 
 #endif

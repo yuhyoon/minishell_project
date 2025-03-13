@@ -39,16 +39,15 @@ void	init_minish(t_minish *sh, char **envp)
 
 	envp_length = f_count_char(envp);
 	ft_memset(sh, 0, sizeof(t_minish));
-	//main에서 받은 envps 저장
 	sh->prev_for_pipe = -1;
-	sh->envp = (char **)malloc(sizeof(char *) * (envp_length + 1));
+	sh->envp = (char **)malloc(sizeof(char *) * (envp_length + 1)); //main에서 받은 envps 저장
 	if (!(sh->envp))
 		return ;
 	i = -1;
 	while (++i < envp_length)
 		sh->envp[i] = ft_strdup(envp[i]);
-	f_init_env(sh->envp, &(sh->n_envs));
-	f_sort_and_store_envp(sh->envp, &(sh->n_export));
+	f_init_env(sh->envp, &(sh->n_envs)); //env node
+	f_sort_and_store_envp(sh->envp, &(sh->n_export));  //export node
 }
 
 
@@ -113,12 +112,12 @@ int is_builtin(char *cmd_name, t_minish *sh)
         res = f_echo(sh);
     else if (ft_strncmp(cmd_name, "pwd", 3) == 0)
         res = f_pwd(sh);
-    // else if (ft_strncmp(cmd_name, "export", 7) == 0)
-    //     res = f_export(sh);
+	// else if (ft_strncmp(cmd_name, "export", 7) == 0)
+	//     res = f_export(sh);
+	else if (ft_strncmp(cmd_name, "env", 4) == 0)
+	    res = f_env(sh);
     // else if (ft_strncmp(cmd_name, "unset", 6) == 0)
     //     res = f_unset(sh);
-    // else if (ft_strncmp(cmd_name, "env", 4) == 0)
-    //     res = f_env(sh);
     // else if (ft_strncmp(cmd_name, "exit", 4) == 0)
     //     res = f_exit(sh);
     return (res); //0정상종료 1 비정상종료
@@ -230,7 +229,6 @@ int main(int ac, char **av, char **envp)
 	init_minish(&sh, envp);
 	while ((res = read_input(&sh)))
 	{
-		printf("res : %d\n", res);
 		if (res == 1)
 		{
 			if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))

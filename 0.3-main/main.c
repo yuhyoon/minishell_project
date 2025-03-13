@@ -235,8 +235,6 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 
 	if (rdy->num < sh->cmd_count)
 		pipe(pp); //todo: err handling
-	else
-		pp = NULL;
 	pid = fork();
 	if (pid == 0)
 	{

@@ -93,7 +93,7 @@ void	child_process_old(t_ready *rdy, int *pp, t_minish *sh)
 		}
 		exit(EXIT_FAILURE);
 	}
-	set_pipe_old(pp, rdy, sh);
+	//set_pipe_old(pp, rdy, sh);
 	rdy->cmd = create_str_2(&rdy->text);
 	if (is_builtin(rdy->cmd[0]))
 		printf("here builtin\n");

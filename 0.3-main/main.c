@@ -123,7 +123,7 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 {
 	pid_t	pid;
 
-	int		status;
+	int		a;
 	int		pp[2];
 
 	if (rdy->num < sh->cmd_count)
@@ -131,7 +131,9 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 	pid = fork();
 	if (pid == 0)
 	{
-		child_process(rdy, pp, sh);
+		printf("df\n");
+		a = child_process(rdy, pp, sh);
+		exit(a);
 	}
 	else
 	{

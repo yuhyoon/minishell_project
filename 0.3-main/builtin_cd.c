@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 02:12:09 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/10 01:38:05 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/13 23:13:17 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,25 +123,6 @@ int f_cd_root()
     return (0);
 }
 
-// f_getenv 수정 (이거 env.c 옮겨놓기)
-char    *f_getenv(char **custom_envp, char *name)
-{
-    size_t name_len;
-    int i;
-    
-    i = 0;
-    if (!name || !custom_envp || ft_strlen(name) == 0)
-        return (NULL);
-    name_len = ft_strlen(name);
-    while (custom_envp[i])
-    {
-        if (ft_strncmp(custom_envp[i], name, name_len) == 0 && custom_envp[i][name_len] == '=')
-            return (&custom_envp[i][name_len + 1]);
-        i++;
-    }
-    return (NULL);
-}
-
 // f_cd_goto 수정
 int f_cd_goto(char *location)
 {
@@ -227,32 +208,35 @@ int f_cd(t_minish *sh)
     int	size; 
 	int	res;
     char    *current_pwd;
-    t_list  *commands;
+    // t_list  *commands;
+    char    **commands;
 
     res = 0;
     current_pwd = getcwd(NULL, 0);
     if (!current_pwd)
         return (1);
-    commands = (((t_ready *)(sh->ready->content))->text);
-    size = ft_lstsize(commands);
+    commands = ((t_ready *)sh->ready->content)->cmd;
+    size = f_count_char(commands);
+    // printf("size : %d\n", size);
     if (size == 1)
         res = f_cd_home(sh);
-    if (size > 1)
+    else if (size > 1)
     {
-        res = f_check_params((char *)commands->next->content, ((int)ft_strlen((char *)commands->next->content)));
+        res = f_check_params(commands[1], ft_strlen(commands[1]));
+        // printf("res : %d\n ", res);
         if (res == 1)
-            res = f_cd_go_back(sh);
+            res = f_cd_go_back(sh); //cd home으로 이동 하도록 수정
         else if (res == 2)
             res = f_cd_home(sh);
         else if (res == 3)
             res = f_cd_root();
         else if (res == 4)
-            res = f_cd_goto((char *)commands->next->content);
+            res = f_cd_goto(commands[1]);
         else //아직까진 괜찮음 이건 합치고도 다시 확인 
             printf("Unexpected condition\n");
     }
-    if (res == 0)
-        f_update_pwds(sh, current_pwd);
+    // if (res == 0) // 수정..
+    //     f_update_pwds(sh, current_pwd);
     free(current_pwd); //free 여기서 해도 괜찮?
     return (res);
 }

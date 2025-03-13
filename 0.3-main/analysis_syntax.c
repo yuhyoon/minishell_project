@@ -5,16 +5,22 @@ int	valid_meta(int token, char *mask)
 	int	max;
 	int	i;
 	int	rsult;
+	int	j;
 
 	i = 0;
 	rsult = 0;
 	if (token == IN_RD || token == OUT_RD)
 		max = 3;
 	else if (token == PIPE)
+	{
 		max = 2;
+		j = 1;
+		while (mask[i + j] == 0 && mask[i + j] != '\n')
+			j++;
+	}
 	while (i < max && mask[i] == token)
 		i++;
-	if (i == max)
+	if (i == max || mask[j] == '\n')
 		rsult = 3;
 	return (rsult);
 }

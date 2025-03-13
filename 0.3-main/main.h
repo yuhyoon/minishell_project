@@ -19,7 +19,7 @@
 #include "delete.h"
 #include "errno.h"
 
-extern unsigned char exitcode;
+extern int exitcode;
 
 typedef struct s_minish
 {

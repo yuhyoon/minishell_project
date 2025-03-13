@@ -31,13 +31,13 @@ typedef struct s_char_state
 
 typedef struct s_ready
 {
-	int		num;
 	t_list	*text;
 	t_list	*rdrct;
 	int		rdrct_num;
 	char		**cmd;
 	t_redrct	*rdrct_in;
 	t_redrct	*rdrct_out;
+	int		num;
 	int		input;
 	int		output;
 }t_ready;

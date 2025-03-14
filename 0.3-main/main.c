@@ -33,7 +33,6 @@ void	init_minish(t_minish *sh)
 int		read_input(t_minish *sh)
 {
 	char 		*input;
-	unsigned char exitcode;
 	
 	input = readline("minishell> ");
 	if (input == NULL)
@@ -131,7 +130,7 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 	if (pid == 0)
 	{
 		result = child_process(rdy, pp, sh);
-		//result = 0;
+	//	result = 0;
 		printf("child result:%d\n", result);
 		exit(result);
 		

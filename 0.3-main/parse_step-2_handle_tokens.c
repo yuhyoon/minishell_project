@@ -2,7 +2,7 @@
 #include "parse.h"
 #include "analysis.h"
 #include "parse_step.h"
-
+#include "execution.h"
 void	*create_rdy()
 {
 	t_ready *rdy;
@@ -64,5 +64,6 @@ void *parsing(t_minish *sh, int len)
 	if (rdy->rdrct != NULL)
 		rdy->rdrct_num = ft_lstsize(rdy->rdrct);
 	create_text_list(rdy, &sh->src[save], &sh->mask[save], sh);
+//	rdy->cmd = create_str_2(&rdy->text);
 	return (sh->ready);
 }

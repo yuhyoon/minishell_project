@@ -14,10 +14,10 @@ void	free_splited(char **abs)
 		abs[i] = NULL;
 		i++;
 	}
-	free(abs[i]);
-	abs[i] = NULL;
+//	free(abs[i]);
+//	abs[i] = NULL;
 	free(abs);
-	abs = NULL;
+//	abs = NULL;
 }
 
 char	**create_str_2(t_list **head)
@@ -37,7 +37,7 @@ char	**create_str_2(t_list **head)
 		i++;
 		tmp = tmp->next;
     }
-	str[i] = NULL;
+	str[i] = '\0';
 	//ft_lstclear(head, del_text);
 	return (str);
 }

@@ -23,11 +23,14 @@ void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 		close_pp(child, sh);
 	else if (child->state == STATE_CHECK_CMD)
 		err_exec(127, child->cmd[0]);
+	child->state = 0;
 }
 
 void	*valid_exepath(t_child_process *child, t_ready *rdy)
 {
 	child->cmd = create_str_2(&rdy->text);
+//	char *hmm[] = {"q"};
+//	child->cmd = hmm;
 	if (is_builtin(child->cmd[0]) == true)
 	{
 		child->state = STATE_EXEC_BUILTIN;
@@ -46,6 +49,7 @@ void	init_child_process(t_child_process *child, int *pp, t_ready *rdy, t_minish 
 {
 	child->num = rdy->num;
 	child->pp = pp;
+	//child->cmd = rdy->cmd;
 	child->cmd = NULL;
 	child->input_fd = STDIN_FILENO;
 	if (sh->cmd_count > 1 && child->num < sh->cmd_count)
@@ -96,6 +100,7 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 	t_child_process	child;
 
 	init_child_process(&child, pp, rdy, sh);
+
 	while (rdy != NULL && child.state < STATE_COMPLETE)
 	{
 		if (child.state == STATE_CHECK_RDRCT)
@@ -109,6 +114,8 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 		else if (child.state == STATE_EXEC_CMD)
 			execute_cmd(&child);
 	}
+	
 	child_process_handle(&child, rdy, sh);
+	
 	return (child.state);
 }

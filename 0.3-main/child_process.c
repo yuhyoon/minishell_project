@@ -104,7 +104,7 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 	while (rdy != NULL && child.state < STATE_COMPLETE)
 	{
 		if (child.state == STATE_CHECK_RDRCT)
-			valid_redirect(&child, rdy);
+			rdy = valid_redirect(&child, rdy);
 		else if (child.state == STATE_CHECK_CMD)
 			rdy = valid_exepath(&child, rdy);
 		else if (child.state == STATE_EXEC_BUILTIN)

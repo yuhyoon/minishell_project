@@ -47,7 +47,7 @@ void *parsing(t_minish *sh, int len)
 	i = 0;
 	save = i;
 	lst = init_parsing_structure(&sh->ready);
-	while (i < len && exitcode == 0)
+	while (i < len)
 	{
 		rdy = ((t_ready *)lst->content);
 		if (sh->mask[i] == IN_RD || sh->mask[i] == OUT_RD)

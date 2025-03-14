@@ -195,8 +195,9 @@ int main(int ac, char **av, char **envp)
 		{
 			printf("exitcode:%d\n", exitcode);
 			free_minish(&sh);
-		 }
-		execute(&sh);
+		}
+		else
+			execute(&sh);
 		//verify_exitcode();
 		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		

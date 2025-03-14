@@ -54,6 +54,8 @@ char *generate_mask(t_minish *sh)
 	struct stat	st;
 
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (mask_fd == -1)
+		return (NULL);
 	write_replace_spaces(sh->src, mask_fd);
 	close(mask_fd);
 	mask_fd = open("mask_fd", O_RDONLY);

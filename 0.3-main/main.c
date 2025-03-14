@@ -122,8 +122,8 @@ int		read_input(t_minish *sh)
 pid_t	create_process(t_ready *rdy, t_minish *sh)
 {
 	pid_t	pid;
-
-	int		status;
+	
+	int		result;
 	int		pp[2];
 
 	if (rdy->num < sh->cmd_count)
@@ -131,7 +131,9 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 	pid = fork();
 	if (pid == 0)
 	{
-		child_process(rdy, pp, sh);
+		result = child_process(rdy, pp, sh);
+		printf("child result:%d\n", result);
+		exit(result);
 	}
 	else
 	{
@@ -166,8 +168,11 @@ int	execute(t_minish *sh)
 	{
 		
 		waitpid(sh->child_pids[i], &status, 0);
-		// if (i == sh->cmd_count - 1)
-		// 	exitcode = WEXITSTATUS(status);
+		 if (i == sh->cmd_count - 1)
+		 {
+		 	exitcode = WEXITSTATUS(status);
+		 	printf("exitcode: %d\n", exitcode);
+		 }
 		i++;
 	}
 	free_minish(sh);
@@ -183,7 +188,7 @@ int main(int ac, char **av, char **envp)
 	set_signal(before_readline);
 	init_minish(&sh);
 	//init_minish(&sh, envp);
-	while (read_input(&sh) == -1)
+	while (read_input(&sh) != -1)
 	{
 		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
 		{

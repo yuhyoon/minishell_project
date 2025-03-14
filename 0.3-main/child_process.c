@@ -1,6 +1,6 @@
 
 #include "child_process.h"
-
+#include "free.h"
 
 
 
@@ -39,6 +39,7 @@ void	valid_exepath(t_child_process *child, t_ready *rdy)
 	if (child->exe_path == NULL)
 	{
 		del_ready(rdy);
+		rdy = NULL;
 		dengling(child->exe_path, 1);
 		return ;
 	}

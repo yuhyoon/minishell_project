@@ -7,6 +7,7 @@ signals.c \
 stack.c \
 delete.c \
 error.c \
+free.c \
 child_process.c \
 analysis_redirect.c \
 analysis_quote.c \

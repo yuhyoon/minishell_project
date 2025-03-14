@@ -4,7 +4,7 @@
 #include "analysis.h"
 #include "execution.h"
 #include "error.h"
-#include "free.c"
+#include "free.h"
 #include "child_process.h"
 
 /*****
@@ -185,12 +185,8 @@ int main(int ac, char **av, char **envp)
 	set_signal(before_readline);
 	init_minish(&sh);
 	//init_minish(&sh, envp);
-	while (true)
+	while (read_input(&sh) == -1)
 	{
-		if (read_input(&sh) == 0)
-			continue ;
-		else if (read_input(&sh) == -1)
-			break;
 		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
 		{
 			printf("exitcode:%d\n", exitcode);

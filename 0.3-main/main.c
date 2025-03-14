@@ -131,8 +131,11 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 	if (pid == 0)
 	{
 		result = child_process(rdy, pp, sh);
+		//result = 0;
 		printf("child result:%d\n", result);
 		exit(result);
+		
+		
 	}
 	else
 	{

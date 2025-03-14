@@ -38,7 +38,7 @@ char	**create_str_2(t_list **head)
 		tmp = tmp->next;
     }
 	str[i] = NULL;
-	ft_lstclear(head, del_text);
+	//ft_lstclear(head, del_text);
 	return (str);
 }
 

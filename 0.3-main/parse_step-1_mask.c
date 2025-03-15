@@ -5,6 +5,7 @@
 #include "analysis.h"
 #include "parse_utils.h"
 #include "error.h"
+#include "free.h"
 
 void	set_char_state(char *s, t_char_state *char_state)
 {
@@ -47,12 +48,26 @@ int write_replace_spaces(char *s, int replace_fd)
 	return (0);
 }
 
+char	*read_maskfd(int mask_fd, int *len)
+{
+	struct stat	st;
+	char		*mask;
+
+	fstat(mask_fd, &st);
+	*len = (int)st.st_size;
+	if (*len == 0)
+		return (NULL);
+	mask = malloc(sizeof(char) * (*len));
+	read(mask_fd, mask, *len);
+	return (mask);
+}
+
 char *generate_mask(t_minish *sh)
 {
 	int	mask_fd;
 	char	*mask;
-	int	len;
-	struct stat	st;
+	int	syntax_result;
+	int		*len;
 
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (mask_fd == -1)
@@ -60,11 +75,15 @@ char *generate_mask(t_minish *sh)
 	write_replace_spaces(sh->src, mask_fd);
 	close(mask_fd);
 	mask_fd = open("mask_fd", O_RDONLY);
-	fstat(mask_fd, &st);
-	len = (int)st.st_size;
-	mask = malloc(sizeof(char) * len);
-	read(mask_fd, mask, len);
-	err_syntax(syntax_analysis(mask), mask);	
+	mask = read_maskfd(mask_fd, len);
+	syntax_result = syntax_analysis(mask, len);
+	if (syntax_result > 0)
+	{
+		free(mask);
+		mask = NULL;
+		err_syntax(syntax_result);
+		exitcode = 2;
+	}	
 	close(mask_fd);
 	unlink("mask_fd");
 	sh->mask = mask;

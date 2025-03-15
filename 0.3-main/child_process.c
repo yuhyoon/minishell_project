@@ -29,7 +29,7 @@ void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 void	*valid_exepath(t_child_process *child, t_ready *rdy)
 {
 	child->cmd = create_str_2(&rdy->text);
-//	char *hmm[] = {"q"};
+	//	char *hmm[] = {"q"};
 //	child->cmd = hmm;
 	if (is_builtin(child->cmd[0]) == true)
 	{

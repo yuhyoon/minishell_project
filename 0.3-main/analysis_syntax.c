@@ -27,20 +27,26 @@ int	valid_meta(int token, char *mask)
 	return (rsult);
 }
 
-int	syntax_analysis(char *mask)
+int	syntax_analysis(char *mask, int *len)
 {
 	int	i;
 	int	cnt;
 	int	meta;
 	int	err_flg;
 
+	if (mask == NULL)
+		return (1);
 	i = 0;
 	cnt = 0;
 	err_flg = 0;
 	meta = 0;
-	if (mask[i] > 1)
-		meta = mask[i];
-	if (meta > 0)
-		err_flg = valid_meta(mask[i], &mask[i]);
+	while (i < *len && err_flg == 0)
+	{
+		if (mask[i] > 1 && mask[i] != '\n')
+			meta = mask[i];
+		if (meta > 0)
+			err_flg = valid_meta(mask[i], &mask[i]);
+		i++;
+	}
 	return (err_flg);
 }

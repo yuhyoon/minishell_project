@@ -67,9 +67,30 @@ void	*valid_redirect(t_child_process *child, t_ready *rdy)
 		rdy = NULL;
 	else
 	{
-		child->state = STATE_CHECK_CMD;
+		
+		child->state = STATE_CHECK_PIPE;
 	}
 	return (rdy);
+}
+
+void	redirect_input(t_child_process *child, t_ready *rdy)
+{
+		if (rdy->rdrct_in)
+		{
+			dup2(rdy->rdrct_in->fd, child->input_fd); //n copy to rdy->input;
+			child->input_fd = rdy->rdrct_in->fd;
+			close(rdy->rdrct_in->fd);
+		}
+}
+
+void	redirect_output(t_child_process *child, t_ready *rdy)
+{
+		if (rdy->rdrct_out)
+		{
+		      dup2(rdy->rdrct_out->fd, child->output_fd); //n copy to rdy->input;
+		      child->output_fd = rdy->rdrct_out->fd;
+			  close(rdy->rdrct_out->fd);
+		}
 }
 
 void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
@@ -79,13 +100,15 @@ void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
 		dup2(sh->prev_for_pipe, child->input_fd);
 		close(sh->prev_for_pipe);
 	}
+	redirect_input(child, rdy);
+	redirect_output(child, rdy);
 	if (child->num < sh->cmd_count && sh->cmd_count > 1)
 	{
 		dup2(child->pp[1], child->output_fd);
 		close(child->pp[1]);
 		close(child->pp[0]);
 	}
-	child->state = STATE_EXEC_CMD;
+	child->state = STATE_CHECK_CMD;
 }
 
 void	execute_cmd(t_child_process *child)

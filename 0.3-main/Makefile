@@ -19,6 +19,7 @@ execution_redirect.c \
 parse_step-1_utils.c \
 parse_step-1_mask.c \
 parse_step-2_handle_tokens.c \
+builtin_init.c \
 builtin_cd.c \
 builtin_echo.c \
 builtin_export.c \

@@ -35,20 +35,16 @@ int exitcode = 0;
 
 void	init_minish(t_minish *sh, char **envp)
 {
-	int	envp_length;
+	int	result;
 	int	i;
-
-	envp_length = f_count_char(envp);
+	
+	sh->envp = NULL;
 	ft_memset(sh, 0, sizeof(t_minish));
-	sh->prev_for_pipe = -1;
-	sh->envp = (char **)malloc(sizeof(char *) * (envp_length + 1)); //main에서 받은 envps 저장
-	if (!(sh->envp))
+	if (!envp)
+    	return;
+	result = init_builtin(sh, envp);
+	if (result == -1)
 		return ;
-	i = -1;
-	while (++i < envp_length)
-		sh->envp[i] = ft_strdup(envp[i]);
-	f_init_env(sh->envp, &(sh->n_envs)); //env node
-	f_sort_and_store_envp(sh->envp, &(sh->n_export));  //export node
 }
 
 
@@ -62,13 +58,13 @@ int		read_input(t_minish *sh)
 		write(STDOUT_FILENO, "exit\n", 5);
 		return (0);
 	}
-	else if (ft_strlen(input) == 0) 
+	else if (input && ft_strlen(input) == 0) 
 	{
-		printf("%ld\n", ft_strlen(input));
+		// printf("%ld\n", ft_strlen(input));
 		free(input); //todo: continue
 		return (2);
 	}
-	printf("%ld\n", ft_strlen(input));
+	// printf("%ld\n", ft_strlen(input));
 	add_history(input);
 	sh->src = ft_strdup(input);
 	return (1);
@@ -226,10 +222,7 @@ int main(int ac, char **av, char **envp)
 		if (res == 1)
 		{
 			if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
-			{
-				printf("exitcode:%d\n", exitcode);
 				free_minish(&sh);
-			 }
 			else
 				execute(&sh);
 		}
@@ -239,5 +232,3 @@ int main(int ac, char **av, char **envp)
     rl_clear_history();
 	return (0);
 }
-
-

@@ -19,9 +19,9 @@ void	free_splited(char **abs);
 
 
 //bulitins
-int is_builtin(char *cmd_name, t_minish *sh);
+// int is_builtin(char *cmd_name, t_minish *sh);
 // int execute_builtin(t_ready *rdy, t_minish *sh, int flag);
 // int execute_builtin(t_ready *rdy, t_minish *sh);
-int    execute_bulitin(int bulitin_num, t_minish *sh);
+
 
 #endif

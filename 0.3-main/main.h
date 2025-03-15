@@ -64,6 +64,6 @@ int f_pwd(t_minish *sh);
 int f_exit(t_minish *sh);
 int	f_env(t_minish *sh);
 int f_export(t_minish *sh);
-
+int	    init_builtin(t_minish *sh, char **envp);
 
 #endif

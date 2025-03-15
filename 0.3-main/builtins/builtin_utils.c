@@ -6,18 +6,21 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:31:38 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/02/23 20:52:27 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/15 13:09:09 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include <unistd.h>
 
 int	f_count_char(char **envp)
 {
 	int count;
 
 	count = 0;
-	while (envp[count])
+	if (!envp)
+		return (count); // envp가 NULL이면 0 반환
+	while (envp[count] != NULL)
 		count++;
 	return (count);
 }

@@ -54,7 +54,7 @@ char	*read_maskfd(int mask_fd, int *len)
 	char		*mask;
 
 	fstat(mask_fd, &st);
-	*len = (int)st.st_size;
+	*len = (int)(st.st_size);
 	if (*len == 0)
 		return (NULL);
 	mask = malloc(sizeof(char) * ((*len) + 1));
@@ -68,7 +68,7 @@ char *generate_mask(t_minish *sh)
 	int	mask_fd;
 	char	*mask;
 	int	syntax_result;
-	int		*len;
+	int		len;
 
 	mask_fd = open("mask_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (mask_fd == -1)
@@ -76,8 +76,8 @@ char *generate_mask(t_minish *sh)
 	write_replace_spaces(sh->src, mask_fd);
 	close(mask_fd);
 	mask_fd = open("mask_fd", O_RDONLY);
-	mask = read_maskfd(mask_fd, len);
-	syntax_result = syntax_analysis(mask, len);
+	mask = read_maskfd(mask_fd, &len);
+	syntax_result = syntax_analysis(mask, &len);
 	if (syntax_result > 0)
 	{
 		free(mask);

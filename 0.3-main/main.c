@@ -138,7 +138,8 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 	}
 	else
 	{
-		sh->child_pids[rdy->num - 1] = pid;
+		if (sh->child_pids != NULL)
+			sh->child_pids[rdy->num - 1] = pid;
 		if (sh->prev_for_pipe != -1)
 			close(sh->prev_for_pipe);
     	if (sh->cmd_count > 1 && rdy->num < sh->cmd_count)

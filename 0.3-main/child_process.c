@@ -23,7 +23,6 @@ void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 		close_pp(child, sh);
 	else if (child->state == STATE_CHECK_CMD)
 		err_exec(127, child->cmd[0]);
-	child->state = 0;
 }
 
 void	*valid_exepath(t_child_process *child, t_ready *rdy)

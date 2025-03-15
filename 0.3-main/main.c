@@ -46,8 +46,9 @@ int		read_input(t_minish *sh)
 		free(input); //todo: continue
 		return (0);
 	}
-	add_history(input);
 	sh->src = ft_strdup(input);
+	add_history(sh->src);
+	free(input);
 	return (1);
 }
 

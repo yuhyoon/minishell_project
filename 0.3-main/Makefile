@@ -12,6 +12,7 @@ analysis_quote.c \
 analysis_syntax.c \
 analysis_dollar.c \
 execution_cmd.c \
+execution_builtins.c \
 execution_redirect.c \
 parse_step-1_utils.c \
 parse_step-1_mask.c \

@@ -26,13 +26,14 @@ void bubble_sort_envp(char **envp, int count);
 // void	f_sort_and_store_envp(char *envp, t_envp **sorted_envp);
 void f_sort_and_store_envp(char **envp, t_envp **sorted_envp);
 
-void	free_n_envps(t_envp **envp);
+// void	free_n_envps(t_envp **envp);
+void	free_node_t_envp(t_envp **envp); //전이름 : free_n_envps
 int	add_envp_node(t_envp **head, char *key, char *value);
 
 int		update_envp_node(t_envp **head, char *key, char *value);
 // void	update_or_add_envp_node(t_envp **head, char *key, char *value);
 void	update_or_add_envp_node(t_envp **head, char *set);
-void	delete_envp_node(t_envp **head, char *key);
+void	delete_t_envp(t_envp **head, char *key); // void	delete_envp_node(t_envp **head, char *key);
 
 
 #endif

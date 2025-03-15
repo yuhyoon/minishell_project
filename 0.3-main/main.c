@@ -4,7 +4,8 @@
 #include "analysis.h"
 #include "execution.h"
 #include "error.h"
-#include "free.c"
+#include "free.h"
+#include "child_process.h"
 
 /*****
  * 
@@ -19,7 +20,7 @@
 
 #include <errno.h>
 
-unsigned char exitcode = 0;
+int exitcode = 0;
 
 // void    f_init_envps(t_minish *sh)
 // {
@@ -54,7 +55,6 @@ void	init_minish(t_minish *sh, char **envp)
 int		read_input(t_minish *sh)
 {
 	char 		*input;
-	unsigned char exitcode;
 	
 	input = readline("minishell> ");
 	if (input == NULL)
@@ -70,111 +70,101 @@ int		read_input(t_minish *sh)
 	}
 	printf("%ld\n", ft_strlen(input));
 	add_history(input);
-	sh->src = input;
+	sh->src = ft_strdup(input);
 	return (1);
 }
 
-void	set_pipe(int i, int *pipes, t_ready *rdy, t_minish *sh)
-{
-	rdy->input = STDIN_FILENO;
-	if (sh->prev_for_pipe != -1)
-	{
-		dup2(sh->prev_for_pipe, rdy->input);
-		close(sh->prev_for_pipe);
-	}
-	if (rdy->rdrct_in)
-	{
-		dup2(rdy->rdrct_in->fd, rdy->input); //n copy to rdy->input;
-		close(rdy->rdrct_in->fd);
-	}
-	rdy->output = STDOUT_FILENO;
-	if (rdy->rdrct_out)
-	{
-		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
-		close(rdy->rdrct_out->fd);
-	}
-	if (i + 1 < sh->cmd_num)
-	{
-		dup2(pipes[1], rdy->output);
-		close(pipes[1]);
-		close(pipes[0]);
-	}
-}
+// void	set_pipe_old(int i, int *pipes, t_ready *rdy, t_minish *sh)
+// {
+// 	rdy->input = STDIN_FILENO;
+// 	if (sh->prev_for_pipe != -1)
+// 	{
+// 		dup2(sh->prev_for_pipe, rdy->input);
+// 		close(sh->prev_for_pipe);
+// 	}
+// 	if (rdy->rdrct_in)
+// 	{
+// 		dup2(rdy->rdrct_in->fd, rdy->input); //n copy to rdy->input;
+// 		close(rdy->rdrct_in->fd);
+// 	}
+// 	rdy->output = STDOUT_FILENO;
+// 	if (rdy->rdrct_out)
+// 	{
+// 		dup2(rdy->rdrct_out->fd, rdy->output); //n copy to rdy->input;
+// 		close(rdy->rdrct_out->fd);
+// 	}
+// 	if (rdy->num < sh->cmd_count)
+// 	{
+// 		dup2(pipes[1], rdy->output);
+// 		close(pipes[1]);
+// 		close(pipes[0]);
+// 	}
+// }
 
-int is_builtin(char *cmd_name, t_minish *sh)
-{
-	int	res;
+// void	child_process_old(t_ready *rdy, int *pp, t_minish *sh)
+// {
+// 	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
+// 		del_ready(rdy);
+// 	if (rdy == NULL)
+// 	{
+// 		if (pp != NULL)
+// 		{
+// 			close(pp[0]);
+// 			close(pp[1]);
+// 		}
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	//set_pipe_old(pp, rdy, sh);
+// 	rdy->cmd = create_str_2(&rdy->text);
+// 	if (is_builtin(rdy->cmd[0]))
+// 		printf("here builtin\n");
+// 	else
+// 	{
+// 		char *access_path = get_acesspath(rdy, pp);
+// 		if (access_path == NULL)
+// 		{
+// 			err_exec(127, rdy->cmd[0]);
+// 			del_ready(rdy);
+// 			free(access_path);
+// 			access_path = NULL;
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		else
+// 		{
+// 			if (execve(access_path, &rdy->cmd[0], NULL) == -1)
+// 				exit(EXIT_FAILURE);
+// 		}
+// 	}
+// }
 
-	res = 1;
-    if (ft_strncmp(cmd_name, "cd", 2) == 0)
-        res = f_cd(sh);
-    else if (ft_strncmp(cmd_name, "echo", 4) == 0)
-        res = f_echo(sh);
-    else if (ft_strncmp(cmd_name, "pwd", 3) == 0)
-        res = f_pwd(sh);
-	// else if (ft_strncmp(cmd_name, "export", 7) == 0)
-	//     res = f_export(sh);
-	else if (ft_strncmp(cmd_name, "env", 4) == 0)
-	    res = f_env(sh);
-    // else if (ft_strncmp(cmd_name, "unset", 6) == 0)
-    //     res = f_unset(sh);
-    // else if (ft_strncmp(cmd_name, "exit", 4) == 0)
-    //     res = f_exit(sh);
-    return (res); //0정상종료 1 비정상종료
-}
 
-void	child_process(t_ready *rdy, int *pp, int i, t_minish *sh)
-{
-	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
-		del_ready(rdy);
-	if (rdy == NULL)
-	{
-		if (pp != NULL)
-		{
-			close(pp[0]);
-			close(pp[1]);
-		}
-		exit(EXIT_FAILURE);
-	}
-	set_pipe(i, pp, rdy, sh);
-	rdy->cmd = create_str_2(&rdy->text);
-	if (is_builtin(rdy->cmd[0], sh) == 1) //0정상종료 1 비정상종료
-	{
-		char *access_path = get_acesspath(rdy, pp);
-		if (access_path == NULL)
-		{
-			err_exec(127, rdy->cmd[0]);
-			del_ready(rdy);
-			free(access_path);
-			access_path = NULL;
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			if (execve(access_path, &rdy->cmd[0], NULL) == -1)
-				exit(EXIT_FAILURE);
-		}
-	}
-}
 
-pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
+
+
+pid_t	create_process(t_ready *rdy, t_minish *sh)
 {
 	pid_t	pid;
-
-	int		status;
+	int		result;
 	int		pp[2];
 
-	if (i + 1 < sh->cmd_num)
+	if (rdy->num < sh->cmd_count)
 		pipe(pp); //todo: err handling
 	pid = fork();
 	if (pid == 0)
-		child_process(rdy, pp, i, sh);
+	{
+		result = child_process(rdy, pp, sh);
+	//	result = 0;
+		printf("child result:%d\n", result);
+		exit(result);
+		
+		
+	}
 	else
 	{
-		sh->child_pids[i] = pid;
+		sh->child_pids[rdy->num - 1] = pid;
 		if (sh->prev_for_pipe != -1)
 			close(sh->prev_for_pipe);
-    	if (i + 1 < sh->cmd_num)
+    	if (sh->cmd_count > 1 && rdy->num < sh->cmd_count)
 		{
         	close(pp[1]);
     		sh->prev_for_pipe = pp[0];
@@ -182,12 +172,12 @@ pid_t	create_process(t_ready *rdy, int i, t_minish *sh)
 	}	
 }
 
-int execute_builtin(t_ready *rdy, t_minish *sh)
-{
-    if (is_builtin((char *)rdy->text->content, sh))
-        return (0);// 빌트인 아님
-    return (1); // 빌트인임
-}
+// int execute_builtin(t_ready *rdy, t_minish *sh)
+// {
+//     if (is_builtin((char *)rdy->text->content, sh))
+//         return (0);// 빌트인 아님
+//     return (1); // 빌트인임
+// }
 
 int	execute(t_minish *sh)
 {
@@ -196,25 +186,28 @@ int	execute(t_minish *sh)
 	int		i;
 	int		status;
 
-	sh->cmd_num = ft_lstsize(sh->ready);
-	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_num);
+	sh->cmd_count = ft_lstsize(sh->ready);
+	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_count);
 	lst = sh->ready;
-	i = 0;
 	while (lst)
 	{
 		rdy = (t_ready *)(lst->content);
-		if (sh->cmd_num == 1 && execute_builtin(rdy, sh) == 1)
-			break;
-		create_process(rdy, i, sh);
-		i++;
+		create_process(rdy, sh);
 		lst = lst->next;
 	}
-	//아래 부분 수정 WEXITSTATE
-	// if (sh->cmd_num == 1 && execute_builtin(rdy, sh) == 1) 이 조건일땐 waitpid가 없어서 그 부분 처리도 해야함
-	i = -1;
-	while (++i < sh->cmd_num)
+	i = 0;
+	while (i < sh->cmd_count)
+	{
+		
 		waitpid(sh->child_pids[i], &status, 0);
-	free_minish(sh); //main에서 처리하면 로직이 보여서 좋을듯 (꼭해야하는 이유가 있지 않다면)
+		 if (i == sh->cmd_count - 1)
+		 {
+		 	exitcode = WEXITSTATUS(status);
+		 	printf("exitcode: %d\n", exitcode);
+		 }
+		i++;
+	}
+	free_minish(sh);
 }
 
 //cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
@@ -235,9 +228,9 @@ int main(int ac, char **av, char **envp)
 			{
 				printf("exitcode:%d\n", exitcode);
 				free_minish(&sh);
-				return (1); //비정상 종료로 인식? bash 에서 프로그램 $? 했을 때 나올 수
 			 }
-			execute(&sh);
+			else
+				execute(&sh);
 		}
 		//verify_exitcode();
 	}

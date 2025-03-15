@@ -19,7 +19,7 @@
 #include "delete.h"
 #include "errno.h"
 
-extern unsigned char exitcode;
+extern int exitcode;
 
 /*
 
@@ -39,14 +39,14 @@ typedef struct s_ready
 */
 typedef struct s_minish
 {
-	char	*src;
-	char	*mask;
-	t_list	*ready;
-	pid_t	*child_pids;
-	int		cmd_num;
+	char	*src; //free
+	char	*mask; //free
+	t_list	*ready; //free
+	pid_t	*child_pids; //free
+	int		cmd_count; 
 	int		prev_for_pipe;
 	//pid_t	pid;
-	char	**envp;
+	char	**envp; //-> free_t_envp하나 만들어서 free_minish에 넣기
 	struct s_envp	*n_envs;
 	struct s_envp	*n_export;
 	char	*pwd;

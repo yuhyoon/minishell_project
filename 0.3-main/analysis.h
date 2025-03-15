@@ -5,7 +5,7 @@
 # include "parse_utils.h"
 
 //syntax
-int			syntax_analysis(char *mask);
+int			syntax_analysis(const char *m, int *len);
 int			valid_meta(int token, char *mask);
 
 //quote

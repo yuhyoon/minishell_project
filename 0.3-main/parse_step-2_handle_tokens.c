@@ -2,13 +2,15 @@
 #include "parse.h"
 #include "analysis.h"
 #include "parse_step.h"
-
+#include "execution.h"
 void	*create_rdy()
 {
 	t_ready *rdy;
-
+	static int	cnt;
 	rdy = malloc(sizeof(t_ready));
 	ft_memset(rdy, 0, sizeof(t_ready));
+	cnt++;
+	rdy->num = cnt;
 	return (rdy);
 }
 
@@ -45,7 +47,7 @@ void *parsing(t_minish *sh, int len)
 	i = 0;
 	save = i;
 	lst = init_parsing_structure(&sh->ready);
-	while (i < len && exitcode == 0)
+	while (i < len)
 	{
 		rdy = ((t_ready *)lst->content);
 		if (sh->mask[i] == IN_RD || sh->mask[i] == OUT_RD)
@@ -62,5 +64,6 @@ void *parsing(t_minish *sh, int len)
 	if (rdy->rdrct != NULL)
 		rdy->rdrct_num = ft_lstsize(rdy->rdrct);
 	create_text_list(rdy, &sh->src[save], &sh->mask[save], sh);
+//	rdy->cmd = create_str_2(&rdy->text);
 	return (sh->ready);
 }

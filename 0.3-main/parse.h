@@ -37,6 +37,7 @@ typedef struct s_ready
 	char		**cmd;
 	t_redrct	*rdrct_in;
 	t_redrct	*rdrct_out;
+	int		num;
 	int		input;
 	int		output;
 }t_ready;

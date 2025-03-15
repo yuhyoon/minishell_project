@@ -26,3 +26,15 @@ void    err_exec(int exit, char *cmd_name)
 	write(2, cmd_name, (unsigned int)ft_strlen(cmd_name));
 	write(2, ": command not found\n", 20);
 }
+
+void	err_syntax(int syntax_result)
+{
+	if (syntax_result == 0)
+		return ;
+	write(2, "minish: ", 8);
+	if (syntax_result == 1)
+		write(2, "syntax error!\n", 14);
+	else if (syntax_result == 2)
+		write(2, "syntax error! minishell don't support.\n", 39);
+	
+}

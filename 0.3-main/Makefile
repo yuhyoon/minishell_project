@@ -7,6 +7,8 @@ signals.c \
 stack.c \
 delete.c \
 error.c \
+free.c \
+child_process.c \
 analysis_redirect.c \
 analysis_quote.c \
 analysis_syntax.c \
@@ -46,7 +48,7 @@ $(NAME): $(OBJS) $(LIBFTA)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFTA) $(READLINEFLG) -o $(NAME)
 
 clean:
-	make -C libft clean
+	make bonus -C libft clean
 	rm -f $(OBJS)
 
 fclean: clean

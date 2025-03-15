@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:47:10 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/08 01:51:02 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/13 13:51:29 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,40 +65,3 @@ int f_echo(t_minish *sh)
     }
     return (0);
 }
-
-// int main(int argc, char const *argv[])
-// {
-//     t_minish sh;
-
-//     t_ready ready1 = { .text = NULL, .rdrct = NULL, .in = NULL, .out = NULL };
-//     t_ready ready2 = { .text = NULL, .rdrct = NULL, .in = NULL, .out = NULL };
-//     t_ready ready3 = { .text = NULL, .rdrct = NULL, .in = NULL, .out = NULL };
-
-//     t_list *text1_node1 = ft_lstnew("echo");
-//     t_list *text1_node2 = ft_lstnew("hello");
-//     text1_node1->next = text1_node2;
-
-//     t_list *text2_node1 = ft_lstnew("echo");
-//     t_list *text2_node2 = ft_lstnew("-nnnnnn");
-// 	t_list *text2_node3 = ft_lstnew("hi");
-//     text2_node1->next = text2_node2;
-// 	text2_node2->next = text2_node3;
-
-//     t_list *text3_node1 = ft_lstnew("echo");
-
-//     ready1.text = text1_node1;
-//     ready2.text = text2_node1;
-//     ready3.text = text3_node1;
-
-//     t_list node1 = { .content = &ready1, .next = NULL };
-//     t_list node2 = { .content = &ready2, .next = NULL };
-//     t_list node3 = { .content = &ready3, .next = NULL };
-
-//     node1.next = &node2;
-//     node2.next = &node3;
-
-//     sh.ready = &node1;
-
-//     f_echo(&sh);
-//     return 0;
-// }

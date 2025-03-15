@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:31:38 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/13 23:30:33 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/13 23:57:18 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,33 @@ t_envp	*new_node(char **envp, int idx)
 }
 
 //노드 삭제
-int	delete_t_envp(t_envp *node, char *key)
+void	delete_t_envp(t_envp **head, char *key)
 {
-	
+	t_envp *current;
+	t_envp *prev;
+
+	if (!head || !*head)
+		return;
+
+	current = *head;
+	prev = NULL;
+
+	while (current)
+	{
+		if (ft_strncmp(current->key, key, ft_strlen(current->key)) == 0)
+		{
+			if (prev == NULL)
+				*head = current->next;
+			else
+				prev->next = current->next;
+			free(current->key);
+			free(current->value);
+			free(current);
+			return;
+		}
+		prev = current;
+		current = current->next;
+	}
 }
 
 //노드 수정 (value 값만 수정)

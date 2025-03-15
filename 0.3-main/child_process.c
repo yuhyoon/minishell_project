@@ -4,6 +4,8 @@
 
 
 
+//결과값 알아서
+//builtin 확인만 하는 함수
 bool	is_builtin(char *cmd_name)
 {
 	return (false);
@@ -27,12 +29,14 @@ void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 
 void	*valid_exepath(t_child_process *child, t_ready *rdy)
 {
+	//[[cd], [/libft]]
 	child->cmd = create_str_2(&rdy->text);
 	//	char *hmm[] = {"q"};
-//	child->cmd = hmm;
+	//	child->cmd = hmm;
 	if (is_builtin(child->cmd[0]) == true)
 	{
 		child->state = STATE_EXEC_BUILTIN;
+		//추가 rdy =NULL;
 		return (rdy);
 	}
 	child->exe_path = find_exepath(child->cmd[0]);
@@ -88,8 +92,16 @@ void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
 	child->state = STATE_EXEC_CMD;
 }
 
+//환경변수 매크로?
+// void	execute_bulitin(t_child_process *child)
+// {
+// 	// if (execve(child->exe_path, &child->cmd[0], NULL) != -1)
+// 	// 	child->state = STATE_COMPLETE;
+// }
+
 void	execute_cmd(t_child_process *child)
 {
+	//3번째 변수는 sh->envp
 	if (execve(child->exe_path, &child->cmd[0], NULL) != -1)
 		child->state = STATE_COMPLETE;
 }
@@ -99,7 +111,6 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 	t_child_process	child;
 
 	init_child_process(&child, pp, rdy, sh);
-
 	while (rdy != NULL && child.state < STATE_COMPLETE)
 	{
 		if (child.state == STATE_CHECK_RDRCT)
@@ -108,6 +119,7 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 			rdy = valid_exepath(&child, rdy);
 		else if (child.state == STATE_EXEC_BUILTIN)
 			printf("exec_bulitin(rdy, sh, &child)\n");
+		// execute_builtin(&child)
 		else if (child.state == STATE_CHECK_PIPE)
 			set_pipe(&child, sh, rdy);
 		else if (child.state == STATE_EXEC_CMD)

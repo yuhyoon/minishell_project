@@ -20,7 +20,7 @@ typedef struct s_child_process
 	int				num;
 	t_child_state	state;
 	int				*pp;
-	char			**cmd;
+	char			**cmd; //[epxort, "key=value"]
 	char			*exe_path;
 	int				input_fd;
 	int				output_fd;

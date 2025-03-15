@@ -137,10 +137,6 @@ int		read_input(t_minish *sh)
 // 	}
 // }
 
-
-
-
-
 pid_t	create_process(t_ready *rdy, t_minish *sh)
 {
 	pid_t	pid;
@@ -187,6 +183,11 @@ int	execute(t_minish *sh)
 	int		status;
 
 	sh->cmd_count = ft_lstsize(sh->ready);
+	// if(sh->cmd_count == 1 && is_bulitin(sh))
+	// {
+	// 	//execute_single_builtin() //실행하는 애
+	// 	return (0);
+	// }
 	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_count);
 	lst = sh->ready;
 	while (lst)
@@ -203,7 +204,7 @@ int	execute(t_minish *sh)
 		 if (i == sh->cmd_count - 1)
 		 {
 		 	exitcode = WEXITSTATUS(status);
-		 	printf("exitcode: %d\n", exitcode);
+			 printf("exitcode: %d\n", exitcode);
 		 }
 		i++;
 	}

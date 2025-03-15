@@ -36,6 +36,8 @@ void	free_minish(t_minish *minish)
         ft_lstclear(&minish->ready, del_ready);
 	if (minish->child_pids)
 		dengling(minish->child_pids, 4);
-    //free_str_array(minish->envp);
+	ft_memset(minish, 0, sizeof(t_minish));
+	minish->prev_for_pipe = -1;
+	//free_str_array(minish->envp);
     //exitcode = 0;
 }

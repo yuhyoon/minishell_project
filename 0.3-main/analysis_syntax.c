@@ -20,8 +20,10 @@ int	valid_meta(int token, char *mask)
 	}
 	while (i < max && mask[i] == token)
 		i++;
-	if (i == max || mask[j] == '\n')
-		rsult = 3;
+	if (mask[j] == '\n')
+		rsult = 2;
+	else if (i == max)
+		rsult = 1;
 	return (rsult);
 }
 

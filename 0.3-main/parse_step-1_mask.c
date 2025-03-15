@@ -4,6 +4,7 @@
 #include "stack.h"
 #include "analysis.h"
 #include "parse_utils.h"
+#include "error.h"
 
 void	set_char_state(char *s, t_char_state *char_state)
 {
@@ -63,12 +64,7 @@ char *generate_mask(t_minish *sh)
 	len = (int)st.st_size;
 	mask = malloc(sizeof(char) * len);
 	read(mask_fd, mask, len);
-	if (syntax_analysis(mask) > 0)
-	{
-		free(mask);
-		mask = NULL;
-		exitcode = 2;
-	}
+	err_syntax(syntax_analysis(mask), mask);	
 	close(mask_fd);
 	unlink("mask_fd");
 	sh->mask = mask;

@@ -57,7 +57,8 @@ char	*read_maskfd(int mask_fd, int *len)
 	*len = (int)st.st_size;
 	if (*len == 0)
 		return (NULL);
-	mask = malloc(sizeof(char) * (*len));
+	mask = malloc(sizeof(char) * ((*len) + 1));
+	ft_memset(mask, 0, (*len) + 1);
 	read(mask_fd, mask, *len);
 	return (mask);
 }

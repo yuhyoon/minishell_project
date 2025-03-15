@@ -24,7 +24,7 @@ void    err_exec(int exit, char *cmd_name)
 	exitcode = exit;
 	write(2, "minish: ", 8);
 	write(2, cmd_name, (unsigned int)ft_strlen(cmd_name));
-	write(2, " command not found\n", 18);
+	write(2, ": command not found\n", 20);
 }
 
 void	err_syntax(int syntax_result)

@@ -22,13 +22,35 @@
 
 int exitcode = 0;
 
-void	init_minish(t_minish *sh)
+// void    f_init_envps(t_minish *sh)
+// {
+//     t_envp **n_envps;
+//     t_envp *sorted_envps;
+
+//     n_envps = (t_envp **)malloc(sizeof(t_envp *));
+//     sorted_envps= NULL;
+//     f_init_env(sh->envp, sh->n_envs);
+//     f_sort_and_store_envp(sh->envp, sh->n_export); //이름 변경
+// }
+
+void	init_minish(t_minish *sh, char **envp)
 {
-	
+	int	envp_length;
+	int	i;
+
+	envp_length = f_count_char(envp);
 	ft_memset(sh, 0, sizeof(t_minish));
-	//main에서 받은 envps 저장
 	sh->prev_for_pipe = -1;
+	sh->envp = (char **)malloc(sizeof(char *) * (envp_length + 1)); //main에서 받은 envps 저장
+	if (!(sh->envp))
+		return ;
+	i = -1;
+	while (++i < envp_length)
+		sh->envp[i] = ft_strdup(envp[i]);
+	f_init_env(sh->envp, &(sh->n_envs)); //env node
+	f_sort_and_store_envp(sh->envp, &(sh->n_export));  //export node
 }
+
 
 int		read_input(t_minish *sh)
 {
@@ -37,15 +59,16 @@ int		read_input(t_minish *sh)
 	input = readline("minishell> ");
 	if (input == NULL)
 	{
-		//todo: exitcode = 
-		printf("%s\n","exit"); //todo: exit
-		return (-1);
+		write(STDOUT_FILENO, "exit\n", 5);
+		return (0);
 	}
 	else if (ft_strlen(input) == 0) 
 	{
+		printf("%ld\n", ft_strlen(input));
 		free(input); //todo: continue
-		return (0);
+		return (2);
 	}
+	add_history(input);
 	sh->src = ft_strdup(input);
 	add_history(sh->src);
 	free(input);
@@ -150,6 +173,14 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 		}
 	}	
 }
+
+// int execute_builtin(t_ready *rdy, t_minish *sh)
+// {
+//     if (is_builtin((char *)rdy->text->content, sh))
+//         return (0);// 빌트인 아님
+//     return (1); // 빌트인임
+// }
+
 int	execute(t_minish *sh)
 {
 	t_list	*lst;
@@ -186,26 +217,28 @@ int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
+	int	res;
 	t_minish	sh;
 
 	set_signal(before_readline);
-	init_minish(&sh);
-	//init_minish(&sh, envp);
-	while (read_input(&sh) != -1)
+	init_minish(&sh, envp);
+	while ((res = read_input(&sh)))
 	{
-		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
+		if (res == 1)
 		{
-			printf("exitcode:%d\n", exitcode);
-			free_minish(&sh);
+			if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
+			{
+				printf("exitcode:%d\n", exitcode);
+				free_minish(&sh);
+			 }
+			else
+				execute(&sh);
 		}
-		else
-			execute(&sh);
 		//verify_exitcode();
-		// f_init_envps(&sh);
-		//excute_commands(); //builtin&path_functions		
 	}
+	//free_minish()
     rl_clear_history();
-	return 0;
+	return (0);
 }
 
 

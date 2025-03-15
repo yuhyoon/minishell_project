@@ -15,32 +15,55 @@
 #include <dirent.h>
 #include <errno.h>
 #include "libft/libft.h"
-#include "builtins/builtin.h"
+#include "builtin.h"
 #include "delete.h"
 #include "errno.h"
 
 extern int exitcode;
 
+/*
+
+typedef struct s_ready
+{
+	t_list	*text;
+	t_list	*rdrct;
+	int		rdrct_num;
+	char		**cmd;
+	t_redrct	*rdrct_in;
+	t_redrct	*rdrct_out;
+	int		input;
+	int		output;
+}t_ready;
+#endif
+
+*/
 typedef struct s_minish
 {
-	char	*src;
-	char	*mask;
-	t_list	*ready;
-	pid_t	*child_pids;
-	int		cmd_count;
+	char	*src; //free
+	char	*mask; //free
+	t_list	*ready; //free
+	pid_t	*child_pids; //free
+	int		cmd_count; 
 	int		prev_for_pipe;
 	//pid_t	pid;
-	char	**envp;
-	t_envp	*n_envs;
-	t_envp	*n_export;
+	char	**envp; //-> free_t_envp하나 만들어서 free_minish에 넣기
+	struct s_envp	*n_envs;
+	struct s_envp	*n_export;
 	char	*pwd;
 }t_minish;
-
-
 
 void	set_signal(void *handler);
 void	before_readline(int signal);
 
 void    f_init_envps(t_minish *sh);
+
+//builtins
+int f_cd(t_minish *sh);
+int f_echo(t_minish *sh);
+int f_pwd(t_minish *sh);
+int f_exit(t_minish *sh);
+int	f_env(t_minish *sh);
+int f_export(t_minish *sh);
+
 
 #endif

@@ -16,4 +16,12 @@ char	*get_acesspath(t_ready *rdy, int *pipe);
 char	*find_exepath(char *name);
 char	**create_str_2(t_list **head);
 void	free_splited(char **abs);
+
+
+//bulitins
+int is_builtin(char *cmd_name, t_minish *sh);
+// int execute_builtin(t_ready *rdy, t_minish *sh, int flag);
+// int execute_builtin(t_ready *rdy, t_minish *sh);
+int    execute_bulitin(int bulitin_num, t_minish *sh);
+
 #endif

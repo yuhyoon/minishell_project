@@ -3,18 +3,18 @@
 
 static void	free_str_array(char **arr)
 {
-    int	i;
+		int	i;
 
-    if (!arr)
-        return ;
-    i = 0;
-    while (arr[i])
-    {
-        free(arr[i]);
-        arr[i] = NULL;
-        i++;
-    }
-    free(arr);
+		if (!arr)
+				return ;
+		i = 0;
+		while (arr[i])
+		{
+				free(arr[i]);
+				arr[i] = NULL;
+				i++;
+		}
+		free(arr);
 }
 
 void    dengling(void *content, int size_type)
@@ -28,16 +28,29 @@ void    dengling(void *content, int size_type)
 
 void	free_minish(t_minish *minish)
 {
-    if (minish->mask)
+	t_list	**head;
+	t_ready	*ready_content;
+
+	if (minish->mask)
 		dengling(minish->mask, 1);
-    if (minish->src)
+	if (minish->src)
 		dengling(minish->src, 1);
-    if (minish->ready)
-        ft_lstclear(&minish->ready, del_ready);
+	if (minish->ready)
+	{
+		ft_lstclear(&minish->ready, del_ready);
+		t_list	*current = minish->ready;
+		while (current)
+		{
+			ready_content = (t_ready *)(current->content);
+			if (ready_content && ready_content->text)
+				ft_lstclear(&(ready_content->text), del_text);
+			current = current->next;
+		}
+		ft_lstclear(&minish->ready, del_ready);
+	}
 	if (minish->child_pids)
 		dengling(minish->child_pids, 4);
 	ft_memset(minish, 0, sizeof(t_minish));
 	minish->prev_for_pipe = -1;
 	//free_str_array(minish->envp);
-    //exitcode = 0;
 }

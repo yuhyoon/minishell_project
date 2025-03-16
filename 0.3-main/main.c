@@ -35,20 +35,16 @@ int exitcode = 0;
 
 void	init_minish(t_minish *sh, char **envp)
 {
-	int	envp_length;
+	int	result;
 	int	i;
-
-	envp_length = f_count_char(envp);
+	
+	sh->envp = NULL;
 	ft_memset(sh, 0, sizeof(t_minish));
-	sh->prev_for_pipe = -1;
-	sh->envp = (char **)malloc(sizeof(char *) * (envp_length + 1)); //main에서 받은 envps 저장
-	if (!(sh->envp))
+	if (!envp)
+    	return;
+	result = init_builtin(sh, envp);
+	if (result == -1)
 		return ;
-	i = -1;
-	while (++i < envp_length)
-		sh->envp[i] = ft_strdup(envp[i]);
-	f_init_env(sh->envp, &(sh->n_envs)); //env node
-	f_sort_and_store_envp(sh->envp, &(sh->n_export));  //export node
 }
 
 
@@ -64,7 +60,7 @@ int		read_input(t_minish *sh)
 	}
 	else if (ft_strlen(input) == 0) 
 	{
-		printf("%ld\n", ft_strlen(input));
+		// printf("%ld\n", ft_strlen(input));
 		free(input); //todo: continue
 		return (2);
 	}
@@ -201,7 +197,7 @@ int	execute(t_minish *sh)
 	i = 0;
 	while (i < sh->cmd_count)
 	{
-		printf("***child_pids %ld***\n", sh->child_pids[i]);	
+		printf("***child_pids %d***\n", sh->child_pids[i]);	
 		waitpid(sh->child_pids[i], &status, 0);
 		 if (i == sh->cmd_count - 1)
 		 {
@@ -218,7 +214,6 @@ int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
-	int	res;
 	t_minish	sh;
 	int			res;
 

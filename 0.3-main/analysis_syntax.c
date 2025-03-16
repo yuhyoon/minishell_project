@@ -20,7 +20,7 @@ int	valid_meta(int token, char *mask)
 	}
 	while (i < max && mask[i] == token)
 		i++;
-	if (mask[j] == '\n')
+	if (token == PIPE && mask[j] == '\n')
 		rsult = 2;
 	else if (i == max)
 		rsult = 1;

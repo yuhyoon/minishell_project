@@ -1,7 +1,7 @@
 #include "main.h"
 
 
-static void	free_str_array(char **arr)
+void	free_str_array(char **arr)
 {
 		int	i;
 
@@ -22,7 +22,7 @@ void    dengling(void *content, int size_type)
 	if (size_type == 1)
 		free((char *)content);
 	if (size_type == 4)
-		free((int *)content);
+		free((pid_t *)content);
 	content = NULL;
 }
 

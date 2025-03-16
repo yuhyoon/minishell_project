@@ -6,11 +6,9 @@
 void	*create_rdy()
 {
 	t_ready *rdy;
-	static int	cnt;
 	rdy = malloc(sizeof(t_ready));
 	ft_memset(rdy, 0, sizeof(t_ready));
-	cnt++;
-	rdy->num = cnt;
+	rdy->num = 1;
 	return (rdy);
 }
 
@@ -31,8 +29,10 @@ int	handle_pipe(t_minish *sh, t_ready *current_rdy,  t_list **rdrct, int save)
 	if (*rdrct != NULL)
 		current_rdy->rdrct_num = ft_lstsize(*rdrct);
 	create_text_list(current_rdy, &sh->src[save], &sh->mask[save], sh);
+	current_rdy->cmd = create_str_2(&current_rdy->text);
 	next_rdy = create_rdy();
-	next_lst = ft_lstnew(next_rdy);
+	next_rdy->num = current_rdy->num + 1;
+	next_lst = ft_lstnew(next_rdy); 
 	ft_lstadd_back(&sh->ready, next_lst);
 	return (1);
 }
@@ -64,6 +64,6 @@ void *parsing(t_minish *sh, int len)
 	if (rdy->rdrct != NULL)
 		rdy->rdrct_num = ft_lstsize(rdy->rdrct);
 	create_text_list(rdy, &sh->src[save], &sh->mask[save], sh);
-//	rdy->cmd = create_str_2(&rdy->text);
+	rdy->cmd = create_str_2(&rdy->text);
 	return (sh->ready);
 }

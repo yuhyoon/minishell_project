@@ -127,30 +127,32 @@ void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
 
 int    execute_bulitin(t_child_process *child, t_minish *sh)
 {
-    int res;
-	char	*cmd;
-	t_ready *rdy;
-    t_list *lst;
+    int	res;
+	// char	*cmd;
+	// t_ready *rdy;
+    // t_list *lst;
 	
-    lst = sh->ready;
-	rdy = (t_ready *)(lst->content);
-	cmd = (char *)rdy->text->content;
+    // lst = sh->ready;
+	// rdy = (t_ready *)(lst->content);
+	// cmd = (char *)rdy->text->content;
     res = 0;
-	printf("exe : %s\n", cmd);
-    // if (child->bulitin_code == 1)
-    //     res = f_cd(sh);            
-    // else if (child->bulitin_code == 2)
-    //     res = f_echo(sh);            
-    // else if (child->bulitin_code == 3)
-    //     res = f_pwd(sh);            
-    // else if (child->bulitin_code == 4)
-    //     res = f_export(sh);            
-    // else if (child->bulitin_code == 5)
-    //     res = f_env(sh);            
-    // else if (child->bulitin_code == 6)
-    //     res = 0; //f_unset
-    // else if (child->bulitin_code == 7)
-    //     res = f_exit(sh);
+    if (child->bulitin_code == 1)
+		res = f_cd(sh);
+	else if (child->bulitin_code == 2)
+        res = f_echo(sh);            
+    else if (child->bulitin_code == 3)
+        res = f_pwd(sh);            
+    else if (child->bulitin_code == 4)
+        res = f_export(sh);            
+    else if (child->bulitin_code == 5)
+        res = f_env(sh);            
+    else if (child->bulitin_code == 6)
+        res = 0; //f_unset
+    else if (child->bulitin_code == 7)
+        res = f_exit(sh);
+	else
+		printf("bc : %d\n", child->bulitin_code);
+    
 	child->state = STATE_COMPLETE;
     return (res);
 }

@@ -51,8 +51,8 @@ void	init_child_process(t_child_process *child, int *pp, t_ready *rdy, t_minish 
 	//child->cmd = rdy->cmd;
 	child->cmd = NULL;
 	child->input_fd = STDIN_FILENO;
-	if (sh->cmd_count > 1 && child->num < sh->cmd_count)
-	 	child->input_fd = sh->prev_for_pipe;
+	//if (sh->cmd_count > 1 && child->num < sh->cmd_count)
+	// 	child->input_fd = sh->prev_for_pipe;
 	child->output_fd = STDOUT_FILENO;
 	child->exe_path = NULL;
 	if (rdy->rdrct != NULL)

@@ -138,7 +138,7 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 		
 	}
 	else
-	{
+	{printf("@@@ rdy->num: %d@@@\n", rdy->num);
 		if (sh->child_pids != NULL)
 			sh->child_pids[rdy->num - 1] = pid;
 		if (sh->prev_for_pipe != -1)
@@ -158,6 +158,7 @@ int	execute(t_minish *sh)
 	int		status;
 
 	sh->cmd_count = ft_lstsize(sh->ready);
+	printf("### cmd_count:%d\n", sh->cmd_count);
 	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_count);
 	lst = sh->ready;
 	while (lst)
@@ -169,7 +170,7 @@ int	execute(t_minish *sh)
 	i = 0;
 	while (i < sh->cmd_count)
 	{
-		
+		printf("***child_pids %ld***\n", sh->child_pids[i]);	
 		waitpid(sh->child_pids[i], &status, 0);
 		 if (i == sh->cmd_count - 1)
 		 {

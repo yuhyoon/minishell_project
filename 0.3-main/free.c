@@ -48,6 +48,8 @@ void	free_minish(t_minish *minish)
 		}
 		ft_lstclear(&minish->ready, del_ready);
 	}
+	if (minish->pwd)
+		free(minish->pwd);
 	if (minish->child_pids)
 		dengling(minish->child_pids, 4);
 	ft_memset(minish, 0, sizeof(t_minish));

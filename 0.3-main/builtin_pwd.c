@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:59:30 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/08 01:47:54 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/16 17:13:51 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,18 @@
 
 int f_pwd(t_minish *sh)
 {
-    char *new_pwd;
+    char    *new_pwd;
+
     new_pwd = getcwd(NULL, 0);
     if (!new_pwd)
     {
         exitcode = 1;
         return (1);
     }
-    write(2, sh->pwd, ft_strlen(sh->pwd));
-    write(2, "\n", 1);
+    sh->pwd = new_pwd;
+    //env export 노드에도 업데이트 
+    ft_putstr_fd(sh->pwd, 2);
+    ft_putstr_fd("\n", 2);
     exitcode = 0;
     return (0);
 }

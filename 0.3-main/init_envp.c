@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:13:14 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/16 16:45:43 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/16 17:09:05 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ int	init_envp(t_minish *sh, char **envp)
     
     envp_length = f_count_char(envp);
 	sh->prev_for_pipe = -1;
+	sh->pwd = getcwd(NULL, 0);
+	if (!sh->pwd)
+		return (-1); // todo : 할당 실패에 에러 핸들링
 	sh->envp = (char **)malloc(sizeof(char *) * (envp_length + 1)); //main에서 받은 envps 저장
 	if (!sh->envp)
 		return (-1);

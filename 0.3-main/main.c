@@ -39,12 +39,12 @@ int		read_input(t_minish *sh)
 	{
 		//todo: exitcode = 
 		printf("%s\n","exit"); //todo: exit
-		return (-1);
+		return (0);
 	}
 	else if (ft_strlen(input) == 0) 
 	{
 		free(input); //todo: continue
-		return (0);
+		return (2);
 	}
 	sh->src = ft_strdup(input);
 	add_history(sh->src);
@@ -187,12 +187,15 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	t_minish	sh;
+	int			res;
 
 	set_signal(before_readline);
 	init_minish(&sh);
 	//init_minish(&sh, envp);
-	while (read_input(&sh) != -1)
+	while ((res = read_input(&sh)))
 	{
+		if (res == 1)
+		{
 		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
 		{
 			printf("exitcode:%d\n", exitcode);
@@ -200,6 +203,7 @@ int main(int ac, char **av, char **envp)
 		}
 		else
 			execute(&sh);
+		}
 		//verify_exitcode();
 		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		

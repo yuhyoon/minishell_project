@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_init.c                                     :+:      :+:    :+:   */
+/*   init_envp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:13:14 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/16 12:29:31 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/16 16:45:43 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-int init_envp(t_minish *sh, char **envp)
+int	init_envp(t_minish *sh, char **envp)
 {
     int envp_length;
     int i;

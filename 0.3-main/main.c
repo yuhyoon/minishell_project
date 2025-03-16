@@ -8,7 +8,7 @@
 #include "child_process.h"
 
 /*****
- * 
+ *
  * 실행순서
  * 1. libft 폴더 내부에서 make bonus 실행 (o 파일은 gitignore되어있음)
  * 2. 0.1-main 내부에서 아래 명령어 실행
@@ -36,32 +36,31 @@ int exitcode = 0;
 void	init_minish(t_minish *sh, char **envp)
 {
 	int	result;
-	int	i;
-	
+
 	sh->envp = NULL;
+	sh->built_code = 0;
 	ft_memset(sh, 0, sizeof(t_minish));
 	if (!envp)
-    	return;
-	result = init_builtin(sh, envp);
+		return;
+	result = init_envp(sh, envp);
 	if (result == -1)
 		return ;
 }
 
-
-int		read_input(t_minish *sh)
+int	read_input(t_minish *sh)
 {
-	char 		*input;
-	
+	char	*input;
+
 	input = readline("minishell> ");
 	if (input == NULL)
 	{
 		write(STDOUT_FILENO, "exit\n", 5);
 		return (0);
 	}
-	else if (ft_strlen(input) == 0) 
+	else if (ft_strlen(input) == 0)
 	{
 		// printf("%ld\n", ft_strlen(input));
-		free(input); //todo: continue
+		free(input); // todo: continue
 		return (2);
 	}
 	add_history(input);
@@ -134,10 +133,6 @@ int		read_input(t_minish *sh)
 // 	}
 // }
 
-
-
-
-
 pid_t	create_process(t_ready *rdy, t_minish *sh)
 {
 	pid_t	pid;
@@ -145,72 +140,116 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 	int		pp[2];
 
 	if (rdy->num < sh->cmd_count)
-		pipe(pp); //todo: err handling
+		pipe(pp); // todo: err handling
 	pid = fork();
 	if (pid == 0)
 	{
 		result = child_process(rdy, pp, sh);
-	//	result = 0;
+		//	result = 0;
 		printf("child result:%d\n", result);
 		exit(result);
-		
-		
 	}
 	else
-	{printf("@@@ rdy->num: %d@@@\n", rdy->num);
+	{
+		printf("@@@ rdy->num: %d@@@\n", rdy->num);
 		if (sh->child_pids != NULL)
 			sh->child_pids[rdy->num - 1] = pid;
 		if (sh->prev_for_pipe != -1)
 			close(sh->prev_for_pipe);
-    	if (sh->cmd_count > 1 && rdy->num < sh->cmd_count)
+		if (sh->cmd_count > 1 && rdy->num < sh->cmd_count)
 		{
-        	close(pp[1]);
-    		sh->prev_for_pipe = pp[0];
+			close(pp[1]);
+			sh->prev_for_pipe = pp[0];
 		}
-	}	
+	}
 }
 
-// int execute_builtin(t_ready *rdy, t_minish *sh)
-// {
-//     if (is_builtin((char *)rdy->text->content, sh))
-//         return (0);// 빌트인 아님
-//     return (1); // 빌트인임
-// }
-
-int	execute(t_minish *sh)
+// int    execute_single_builtin(int bulitin_code, char **cmds, t_minish *sh)
+int	execute_single_builtin(int bulitin_code, t_minish *sh) //sh->ready->content->cmd (char **)
 {
-	t_list	*lst;
+	int	res;
+
+	res = -1;
+	if (bulitin_code == 1)
+		res = f_cd(sh);
+    else if (bulitin_code == 2)
+        res = f_echo(sh);            
+    else if (bulitin_code == 3)
+        res = f_pwd(sh);            
+    else if (bulitin_code == 4)
+        res = f_export(sh);            
+    else if (bulitin_code == 5)
+        res = f_env(sh);            
+    else if (bulitin_code == 6)
+        res = 0; //f_unset
+    else if (bulitin_code == 7)
+        res = f_exit(sh);
+	//정상종료일때랑 아닐때
+    return (res);
+}
+
+int	execute_single_is_builtin(t_list *lst, t_minish *sh)
+{
 	t_ready	*rdy;
 	int		i;
-	int		status;
+	int		bulitin_code;
+	int		result;
+
+	rdy = (t_ready *)(lst->content);
+	i = 0;
+	bulitin_code = is_builtin(rdy->cmd[0]);
+	result = bulitin_code;
+	if (bulitin_code != 0) //bulitin이 아니면 result 0으로 종료
+	{
+		result = execute_single_builtin(bulitin_code, sh);
+		if (result == 0)
+			result = bulitin_code; //정상종료 된 bulitin
+		else
+			result = -1; //비정상 종료
+	}	
+	return (result);
+}
+
+//printf 지워도 30줄
+int	execute(t_minish *sh)
+{
+	t_list		*lst;
+	t_ready		*rdy;
+	int 		i;
+	int 		status;
 
 	sh->cmd_count = ft_lstsize(sh->ready);
 	printf("### cmd_count:%d\n", sh->cmd_count);
-	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_count);
 	lst = sh->ready;
-	while (lst)
+	if (sh->cmd_count == 1)
+		sh->built_code = execute_single_is_builtin(lst, sh);
+	if (sh->built_code == 0)
 	{
-		rdy = (t_ready *)(lst->content);
-		create_process(rdy, sh);
-		lst = lst->next;
-	}
-	i = 0;
-	while (i < sh->cmd_count)
-	{
-		printf("***child_pids %d***\n", sh->child_pids[i]);	
-		waitpid(sh->child_pids[i], &status, 0);
-		 if (i == sh->cmd_count - 1)
-		 {
-		 	exitcode = WEXITSTATUS(status);
-		 	printf("exitcode: %d\n", exitcode);
-		 }
-		i++;
+		sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_count);
+		while (lst)
+		{
+			rdy = (t_ready *)(lst->content);
+			create_process(rdy, sh);
+			lst = lst->next;
+		}
+		i = 0;
+		while (i < sh->cmd_count)
+		{
+			printf("***child_pids %d***\n", sh->child_pids[i]);
+			waitpid(sh->child_pids[i], &status, 0);
+			if (i == sh->cmd_count - 1)
+			{
+				exitcode = WEXITSTATUS(status);
+				printf("exitcode: %d\n", exitcode);
+			}
+			i++;
+		}
 	}
 	free_minish(sh);
 }
 
-//cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
-int main(int ac, char **av, char **envp) 
+// cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
+int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
@@ -227,15 +266,13 @@ int main(int ac, char **av, char **envp)
 			{
 				printf("exitcode:%d\n", exitcode);
 				free_minish(&sh);
-			 }
+			}
 			else
 				execute(&sh);
 		}
-		//verify_exitcode();
+		// verify_exitcode();
 	}
-	//free_minish()
-    rl_clear_history();
+	// free_minish()
+	rl_clear_history();
 	return (0);
 }
-
-

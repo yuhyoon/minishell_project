@@ -49,6 +49,7 @@ typedef struct s_minish
 	char	**envp; //-> free_t_envp하나 만들어서 free_minish에 넣기
 	struct s_envp	*n_envs;
 	struct s_envp	*n_export;
+	int		built_code;
 	char	*pwd;
 }t_minish;
 

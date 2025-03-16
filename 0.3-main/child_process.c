@@ -48,8 +48,8 @@ void	init_child_process(t_child_process *child, int *pp, t_ready *rdy, t_minish 
 {
 	child->num = rdy->num;
 	child->pp = pp;
-	//child->cmd = rdy->cmd;
-	child->cmd = NULL;
+	child->cmd = rdy->cmd;
+	//child->cmd = NULL;
 	child->input_fd = STDIN_FILENO;
 	//if (sh->cmd_count > 1 && child->num < sh->cmd_count)
 	// 	child->input_fd = sh->prev_for_pipe;
@@ -78,7 +78,7 @@ void	redirect_input(t_child_process *child, t_ready *rdy)
 		if (rdy->rdrct_in)
 		{
 			dup2(rdy->rdrct_in->fd, child->input_fd); //n copy to rdy->input;
-			child->input_fd = rdy->rdrct_in->fd;
+			//child->input_fd = rdy->rdrct_in->fd;
 			close(rdy->rdrct_in->fd);
 		}
 }
@@ -88,7 +88,7 @@ void	redirect_output(t_child_process *child, t_ready *rdy)
 		if (rdy->rdrct_out)
 		{
 		      dup2(rdy->rdrct_out->fd, child->output_fd); //n copy to rdy->input;
-		      child->output_fd = rdy->rdrct_out->fd;
+		      //child->output_fd = rdy->rdrct_out->fd;
 			  close(rdy->rdrct_out->fd);
 		}
 }

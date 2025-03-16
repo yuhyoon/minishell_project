@@ -1,7 +1,7 @@
 #include "main.h"
 
 
-static void	free_str_array(char **arr)
+void	free_str_array(char **arr)
 {
     int	i;
 

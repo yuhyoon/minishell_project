@@ -25,11 +25,8 @@ void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 		err_exec(127, child->cmd[0]);
 }
 
-void	*valid_exepath(t_child_process *child, t_ready *rdy)
+void	*valid_exepath(t_child_process *child, t_ready *rdy, t_minish *sh)
 {
-	//child->cmd = create_str_2(&rdy->text);
-	//	char *hmm[] = {"q"};
-//	child->cmd = hmm;
 	if (is_builtin(child->cmd[0]) == true)
 	{
 		child->state = STATE_EXEC_BUILTIN;
@@ -41,7 +38,10 @@ void	*valid_exepath(t_child_process *child, t_ready *rdy)
 		rdy = NULL;
 		return (rdy);
 	}
-	child->state = STATE_EXEC_CMD;
+	if (sh->cmd_count > 1)
+		child->state = STATE_CHECK_PIPE;
+	else
+		child->state = STATE_EXEC_CMD;
 }
 
 void	init_child_process(t_child_process *child, int *pp, t_ready *rdy, t_minish *sh)
@@ -66,10 +66,7 @@ void	*valid_redirect(t_child_process *child, t_ready *rdy)
 	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
 		rdy = NULL;
 	else
-	{
-		
-		child->state = STATE_CHECK_PIPE;
-	}
+		child->state = STATE_CHECK_CMD;
 	return (rdy);
 }
 
@@ -111,7 +108,7 @@ void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
 		close(child->pp[1]);
 		close(child->pp[0]);
 	}
-	child->state = STATE_CHECK_CMD;
+	child->state = STATE_EXEC_CMD;
 }
 
 void	execute_cmd(t_child_process *child)
@@ -131,7 +128,7 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 		if (child.state == STATE_CHECK_RDRCT)
 			rdy = valid_redirect(&child, rdy);
 		else if (child.state == STATE_CHECK_CMD)
-			rdy = valid_exepath(&child, rdy);
+			rdy = valid_exepath(&child, rdy, sh);
 		else if (child.state == STATE_EXEC_BUILTIN)
 			printf("exec_bulitin(rdy, sh, &child)\n");
 		else if (child.state == STATE_CHECK_PIPE)

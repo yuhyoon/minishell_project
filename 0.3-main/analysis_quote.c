@@ -73,7 +73,7 @@ int	valid_quote(char *s, int quote, t_char_state *state)
 	char	*ss;
 	int		i = 1;
 
-	init_stack(&stack, NULL, ft_strlen(s));
+	init_stack(&stack, NULL, 0);
 	ss = s;
 	push(&stack, ss);
 	while (is_emthy(&stack) == false && ss[i] != '\0')

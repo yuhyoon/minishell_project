@@ -2,8 +2,8 @@
 
 void	init_stack(t_stack *stack, void *top, int size)
 {
-	stack->top = NULL;
-	stack->size = 0;
+	stack->top = top;
+	stack->size = size;
 }
 
 int		is_emthy(t_stack *stack)
@@ -28,10 +28,10 @@ void    push(t_stack *stack, void *data)
 int pop(t_stack *stack)
 {
     t_list  *tmp;
-    char     *value;
+    //char     *value;
 
     tmp = stack->top;
-    value = tmp->content;
+    //value = tmp->content;
     stack->top = tmp->next;
 	free(tmp);
 	stack->size--;

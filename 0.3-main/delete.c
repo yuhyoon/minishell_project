@@ -13,6 +13,8 @@ void	del_redrct(void *rd)
 	redrct = rd;
 	if (redrct == NULL)
 		return ;
+	if (redrct->type == IN_RD && redrct->parts == 2)
+		close(redrct->fd);
 	free(redrct->obj);
 	redrct->obj = NULL;
 	free(redrct);

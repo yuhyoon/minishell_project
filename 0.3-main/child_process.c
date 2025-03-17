@@ -32,7 +32,7 @@ void	*valid_exepath(t_child_process *child, t_ready *rdy, t_minish *sh)
 		child->state = STATE_EXEC_BUILTIN;
 		return (rdy);
 	}
-	child->exe_path = find_exepath(child->cmd[0]);
+	child->exe_path = get_exepath(rdy);
 	if (child->exe_path == NULL)
 	{
 		rdy = NULL;

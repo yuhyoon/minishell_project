@@ -67,13 +67,15 @@ char	*find_exepath(char *name)
 	return (exe_path);
 }
 
-char	*get_acesspath(t_ready *rdy, int *pipe)
+char	*get_exepath(t_ready *rdy)
 {
 	char	*name;
 	char	*exe_path;
 
 	name = (rdy->cmd[0]);
-	//printf("%s\n", *name);   
-	exe_path = find_exepath(name);
+	if (ft_strchr(name, '/') == NULL)
+		exe_path = find_exepath(name);
+	else
+		exe_path = name;
 	return (exe_path);
 }

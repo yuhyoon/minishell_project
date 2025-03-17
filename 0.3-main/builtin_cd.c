@@ -6,28 +6,12 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 02:12:09 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/14 01:36:54 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/17 07:19:39 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_cd.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/24 02:12:09 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/10 01:38:05 by hyeyeom          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 
 //header는 합칠때 다시 만지기...
 #include "builtin.h"
-
-// unsigned char exitcode = 0;
 
 char *f_getenv(char **custom_envp,  char *name);
 
@@ -165,7 +149,6 @@ int f_cd_home(t_minish *sh)
     char *home;
 
     home = f_getenv(sh->envp, "HOME");
-    
     if (!home)
     {
         ft_putstr_fd("bash: cd: HOME not set\n", 2);

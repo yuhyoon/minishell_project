@@ -27,7 +27,7 @@ void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 
 void	*valid_exepath(t_child_process *child, t_ready *rdy)
 {
-	child->cmd = create_str_2(&rdy->text);
+	//child->cmd = create_str_2(&rdy->text);
 	//	char *hmm[] = {"q"};
 //	child->cmd = hmm;
 	if (is_builtin(child->cmd[0]) == true)
@@ -95,6 +95,8 @@ void	redirect_output(t_child_process *child, t_ready *rdy)
 
 void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
 {
+	printf("[[[[[set_pipe\n");
+	printf("prev for pipe: %d, child num:%d\n", sh->prev_for_pipe, child->num);
 	if (sh->prev_for_pipe != -1)
 	{
 		dup2(sh->prev_for_pipe, child->input_fd);
@@ -104,6 +106,7 @@ void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
 	redirect_output(child, rdy);
 	if (child->num < sh->cmd_count && sh->cmd_count > 1)
 	{
+		printf("{{{{{{{{{{{{child num:%d, dup2,\n", child->num);
 		dup2(child->pp[1], child->output_fd);
 		close(child->pp[1]);
 		close(child->pp[0]);
@@ -122,7 +125,7 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 	t_child_process	child;
 
 	init_child_process(&child, pp, rdy, sh);
-
+	printf("[[[[[child_process\n");
 	while (rdy != NULL && child.state < STATE_COMPLETE)
 	{
 		if (child.state == STATE_CHECK_RDRCT)

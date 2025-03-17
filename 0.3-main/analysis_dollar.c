@@ -24,7 +24,7 @@ char	*valid_env(char *tmp)
 		if (*tmp == '?') //todo: exitcode로 변경 
 		{
 			free(env);
-			env = ft_strjoin("$", tmp);
+			env = ft_itoa(exitcode);
 		}
 	}
 	else

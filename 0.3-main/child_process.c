@@ -61,14 +61,6 @@ void	init_child_process(t_child_process *child, int *pp, t_ready *rdy, t_minish 
 		child->state = STATE_CHECK_CMD;
 }
 
-void	*valid_redirect(t_child_process *child, t_ready *rdy)
-{
-	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
-		rdy = NULL;
-	else
-		child->state = STATE_CHECK_CMD;
-	return (rdy);
-}
 
 void	redirect_input(t_child_process *child, t_ready *rdy)
 {
@@ -90,17 +82,30 @@ void	redirect_output(t_child_process *child, t_ready *rdy)
 		}
 }
 
+void	*valid_redirect(t_child_process *child, t_ready *rdy)
+{
+	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
+		rdy = NULL;
+	else
+	{
+		redirect_input(child, rdy);
+		redirect_output(child, rdy);
+		child->state = STATE_CHECK_CMD;
+	}
+	return (rdy);
+}
+
 void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
 {
-	printf("[[[[[set_pipe\n");
-	printf("prev for pipe: %d, child num:%d\n", sh->prev_for_pipe, child->num);
+	//printf("[[[[[set_pipe\n");
+	//printf("prev for pipe: %d, child num:%d\n", sh->prev_for_pipe, child->num);
 	if (sh->prev_for_pipe != -1)
 	{
 		dup2(sh->prev_for_pipe, child->input_fd);
 		close(sh->prev_for_pipe);
 	}
-	redirect_input(child, rdy);
-	redirect_output(child, rdy);
+	//redirect_input(child, rdy);
+	//redirect_output(child, rdy);
 	if (child->num < sh->cmd_count && sh->cmd_count > 1)
 	{
 		printf("{{{{{{{{{{{{child num:%d, dup2,\n", child->num);

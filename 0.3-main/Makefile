@@ -1,7 +1,7 @@
-NAME = minish
+NAME = w-minish
 
 CC = cc
-CFLAGS = -g #-Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror 
 SRCS = main.c \
 signals.c \
 stack.c \

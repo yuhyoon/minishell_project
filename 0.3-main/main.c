@@ -134,8 +134,6 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 	//	result = 0;
 		printf("child result:%d\n", result);
 		exit(result);
-		
-		
 	}
 	else
 	{//printf("@@@ rdy->num: %d@@@\n", rdy->num);
@@ -148,7 +146,8 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
         	close(pp[1]);
     		sh->prev_for_pipe = pp[0];
 		}
-	}	
+	}
+	return (0);
 }
 int	execute(t_minish *sh)
 {
@@ -180,10 +179,11 @@ int	execute(t_minish *sh)
 		i++;
 	}
 	free_minish(sh);
+	return (0);
 }
 
-//cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
-int main(int ac, char **av, char **envp) 
+//03.17: -WWW:temp:: delete envp
+int main(int ac, char **av) 
 {
 	(void)ac;
 	(void)av;
@@ -205,6 +205,7 @@ int main(int ac, char **av, char **envp)
 		else
 			execute(&sh);
 		}
+		//temp: -WWW comfile 
 		//verify_exitcode();
 		// f_init_envps(&sh);
 		//excute_commands(); //builtin&path_functions		

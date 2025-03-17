@@ -127,7 +127,7 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 	t_child_process	child;
 
 	init_child_process(&child, pp, rdy, sh);
-	printf("[[[[[child_process\n");
+	//printf("[[[[[child_process\n");
 	while (rdy != NULL && child.state < STATE_COMPLETE)
 	{
 		if (child.state == STATE_CHECK_RDRCT)

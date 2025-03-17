@@ -16,9 +16,9 @@ typedef enum s_token
 typedef struct s_redrct
 {
 	char	*obj;
+	int		fd;
 	int		parts;
 	int		access;
-	int		fd;
 	char	type;
 }t_redrct;
 

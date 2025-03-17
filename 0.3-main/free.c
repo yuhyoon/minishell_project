@@ -33,7 +33,7 @@ void	free_minish(t_minish *minish)
     if (minish->src)
 		dengling(minish->src, 1);
     if (minish->ready)
-        ft_lstclear(&minish->ready, del_ready);
+		ft_lstclear(&minish->ready, del_ready);
 	if (minish->child_pids)
 		dengling(minish->child_pids, 4);
 	ft_memset(minish, 0, sizeof(t_minish));

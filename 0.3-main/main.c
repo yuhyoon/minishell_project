@@ -263,10 +263,12 @@ int main(int ac, char **av, char **envp)
 	{
 		if (res == 1)
 		{
-		if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
-		{
-			//printf("exitcode:%d\n", exitcode);
-			free_minish(&sh);
+			if (!generate_mask(&sh) || !parsing(&sh, ft_strlen_delim(sh.mask, '\n')))
+			{
+				//printf("exitcode:%d\n", exitcode);
+				free_minish(&sh);
+			}
+			execute(&sh);
 		}
 		// verify_exitcode();
 	}

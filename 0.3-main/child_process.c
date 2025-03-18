@@ -24,6 +24,7 @@ int	is_builtin(char *cmd_name)
 }
 
 
+
 void	close_pp(t_child_process *child, t_minish *sh)
 {
 	if (child->num < sh->cmd_count)
@@ -42,26 +43,27 @@ void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 
 void	*valid_exepath(t_child_process *child, t_ready *rdy, t_minish *sh)
 {
-	if (is_builtin(child->cmd[0]) == true)
-	{
+	child->bulitin_code = is_builtin(child->cmd[0]);	
+	if (child->bulitin_code != 0) //1-7 이면 빌트인
 		child->state = STATE_EXEC_BUILTIN;
-		return (rdy);
-	}
-	child->exe_path = get_exepath(rdy);
-	if (child->exe_path == NULL)
+	else
 	{
-		child->exe_path = find_exepath(child->cmd[0]);
+		child->exe_path = get_exepath(rdy);
 		if (child->exe_path == NULL)
 		{
-			rdy = NULL;
-			return (rdy);
+			child->exe_path = find_exepath(child->cmd[0]);
+			if (child->exe_path == NULL)
+			{
+				rdy = NULL;
+				return (rdy);
+			}
+			child->state = STATE_EXEC_CMD;
 		}
-		child->state = STATE_EXEC_CMD;
+		if (sh->cmd_count > 1)
+			child->state = STATE_CHECK_PIPE;
+		else
+			child->state = STATE_EXEC_CMD;
 	}
-	if (sh->cmd_count > 1)
-		child->state = STATE_CHECK_PIPE;
-	else
-		child->state = STATE_EXEC_CMD;
 }
 
 void	init_child_process(t_child_process *child, int *pp, t_ready *rdy, t_minish *sh)

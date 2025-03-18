@@ -62,6 +62,7 @@ run: $(NAME)
 		--show-leak-kinds=all \
 		--suppressions=suppression_readline.supp \
 		--show-reachable=yes \
+		--track-origins=yes \
 		--track-fds=yes ./$(NAME) #2> $(VALGRIND_LOG)
 
 re: fclean all

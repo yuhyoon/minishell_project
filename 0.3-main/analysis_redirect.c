@@ -34,7 +34,7 @@ void    handle_heredoc_child(int write_fd, char *delimeter)
 		free(line);
 	}
 	close_fd(write_fd);
-	exitcode = 0;
+	// exitcode = 0;
 	exit(0);
 }
 
@@ -52,17 +52,13 @@ void handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd, pid_t chi
 {
     int status;
 
-	write(1, "child\n", 6);
-    close_fd(write_fd);
-    rdrct->fd = read_fd;
-    if (waitpid(child_pid, &status, 0) == -1) 
-        exit(EXIT_FAILURE);
-    if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-    {
-		// close_fd(read_fd);
-        rdrct->fd = -1;
+	close_fd(write_fd);
+	if (wait(&status) == -1)
 		exit(EXIT_FAILURE);
-    }
+	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+		exit(EXIT_FAILURE);
+	rdrct->fd = read_fd;
+	printf("heredoc_p : %d\n", rdrct->fd);
 }
 
 void	f_heredoc(t_redrct *rdrct)
@@ -72,6 +68,7 @@ void	f_heredoc(t_redrct *rdrct)
 	int		write_fd;
 
 	create_heredoc_pipe(&read_fd, &write_fd);
+	printf("init heredoc pipe: %d, %d\n", read_fd, write_fd);
 	pid = fork();
 	if (pid == -1)
 		exit(EXIT_FAILURE);

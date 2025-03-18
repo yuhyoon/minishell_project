@@ -161,6 +161,7 @@ pid_t	create_process(t_ready *rdy, t_minish *sh)
 			sh->prev_for_pipe = pp[0];
 		}
 	}
+	return (0);
 }
 
 // int    execute_single_builtin(int bulitin_code, char **cmds, t_minish *sh)
@@ -238,6 +239,7 @@ int	execute(t_minish *sh)
 		i++;
 	}
 	free_minish(sh);
+	return (0);
 }
 
 void	free_init_envps(t_minish *sh)
@@ -249,8 +251,8 @@ void	free_init_envps(t_minish *sh)
 	free_envps(&(sh->n_export));
 }
 
-// cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
-int main(int ac, char **av, char **envp)
+//03.17: -WWW:temp:: delete envp
+int main(int ac, char **av) 
 {
 	(void)ac;
 	(void)av;
@@ -270,7 +272,10 @@ int main(int ac, char **av, char **envp)
 			}
 			execute(&sh);
 		}
-		// verify_exitcode();
+		//temp: -WWW comfile 
+		//verify_exitcode();
+		// f_init_envps(&sh);
+		//excute_commands(); //builtin&path_functions		
 	}
 	// if (&(sh.pwd))
 	// 	free(sh.pwd);

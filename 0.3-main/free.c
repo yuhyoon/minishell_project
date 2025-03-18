@@ -78,19 +78,21 @@ void	free_minish(t_minish *minish)
 		dengling(minish->mask, 1);
 	if (minish->src)
 		dengling(minish->src, 1);
-	if (minish->ready)
-	{
+	// if (minish->ready)
+	// {
+	// 	ft_lstclear(&minish->ready, del_ready);
+	// 	current = minish->ready;
+	// 	while (current)
+	// 	{
+	// 		ready_content = (t_ready *)(current->content);
+	// 		if (ready_content && ready_content->text)
+	// 			ft_lstclear(&(ready_content->text), del_text);
+	// 		current = current->next;
+	// 	}
+	// 	ft_lstclear(&minish->ready, del_ready);
+	// }
+    if (minish->ready)
 		ft_lstclear(&minish->ready, del_ready);
-		current = minish->ready;
-		while (current)
-		{
-			ready_content = (t_ready *)(current->content);
-			if (ready_content && ready_content->text)
-				ft_lstclear(&(ready_content->text), del_text);
-			current = current->next;
-		}
-		ft_lstclear(&minish->ready, del_ready);
-	}
 	if (minish->child_pids)
 		dengling(minish->child_pids, 4);
 	minish->prev_for_pipe = -1;

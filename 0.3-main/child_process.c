@@ -35,6 +35,7 @@ void	close_pp(t_child_process *child, t_minish *sh)
 }
 void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 {
+	(void) rdy;
 	if (child->state == STATE_CHECK_RDRCT || child->state == STATE_CHECK_PIPE)
 		close_pp(child, sh);
 	else if (child->state == STATE_CHECK_CMD)
@@ -51,23 +52,20 @@ void	*valid_exepath(t_child_process *child, t_ready *rdy, t_minish *sh)
 		child->exe_path = get_exepath(rdy);
 		if (child->exe_path == NULL)
 		{
-			child->exe_path = find_exepath(child->cmd[0]);
-			if (child->exe_path == NULL)
-			{
-				rdy = NULL;
-				return (rdy);
-			}
-			child->state = STATE_EXEC_CMD;
+			rdy = NULL;
 		}
 		if (sh->cmd_count > 1)
 			child->state = STATE_CHECK_PIPE;
 		else
 			child->state = STATE_EXEC_CMD;
+		return (rdy);
 	}
 }
 
 void	init_child_process(t_child_process *child, int *pp, t_ready *rdy, t_minish *sh)
 {
+	(void) sh;
+
 	child->num = rdy->num;
 	child->pp = pp;
 	child->cmd = rdy->cmd;
@@ -106,7 +104,7 @@ void	redirect_output(t_child_process *child, t_ready *rdy)
 
 void	*valid_redirect(t_child_process *child, t_ready *rdy)
 {
-	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
+	if (valid_rdrct(rdy) != 0 || redirect(rdy) != 0)
 		rdy = NULL;
 	else
 	{
@@ -119,6 +117,7 @@ void	*valid_redirect(t_child_process *child, t_ready *rdy)
 
 void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
 {
+	(void) rdy;
 	//printf("[[[[[set_pipe\n");
 	//printf("prev for pipe: %d, child num:%d\n", sh->prev_for_pipe, child->num);
 	if (sh->prev_for_pipe != -1)

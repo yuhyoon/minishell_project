@@ -152,3 +152,5 @@ lib/libft/ft_toupper.o
 0.1-main/libft/ft_atoi.o
 0.3-main/suppression_readline.supp
 0.3-main/minish
+0.3-main/test.c
+.vscode/settings.json

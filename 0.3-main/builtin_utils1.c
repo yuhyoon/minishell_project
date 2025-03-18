@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:31:38 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/13 23:57:18 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/18 07:00:29 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_envp	*new_node(char **envp, int idx)
         first->value = ft_strdup("\0");
     else
         first->value = ft_strdup(split_envp[1]);
-    first->o_envp = envp;
+    // first->o_envp = envp;
     first->count = count;
     first->next = 0;
 	free_double_char(split_envp);
@@ -137,7 +137,6 @@ void	update_or_add_envp_node(t_envp **head, char *set)
 	}
 	if (update_envp_node(head, key, value) == 1)
 		add_envp_node(head, key, value);
-	
 	free(key);
 	free(value);
 	free(sets[0]);
@@ -155,10 +154,9 @@ int	add_envp_node(t_envp **head, char *key, char *value)
 		return (-1);
 	new_node->key = ft_strdup(key);
 	new_node->value = ft_strdup(value);
-	new_node->o_envp = NULL;
+	// new_node->o_envp = NULL;
 	new_node->count = 0;
 	new_node->next = NULL;
-
 	if (*head == NULL)
 	{
 		*head = new_node;

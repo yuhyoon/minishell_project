@@ -6,7 +6,7 @@
 //환경변수 관리용 구조체
 typedef struct s_envp
 {
-	char	**o_envp; //원래 envp;
+	// char	**o_envp; //원래 envp;
 	int		count;
 	char	*key;
 	char	*value;

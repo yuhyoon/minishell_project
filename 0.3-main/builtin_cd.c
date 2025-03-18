@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 02:12:09 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/17 07:19:39 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/17 14:51:51 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ int update_envps(t_minish *sh, char *newpwd, char *oldpwd)
     int i;
 
     res = 0;
-    if (update_envp_node(sh->n_envs, "PWD", newpwd) != 0)
-        add_envp_node(sh->n_envs, "PWD", newpwd);
-    if (update_envp_node(sh->n_envs, "OLDPWD", oldpwd) != 0)
-        add_envp_node(sh->n_envs, "OLDPWD", oldpwd);
-    if (update_envp_node(sh->n_export, "PWD", newpwd) != 0)
-        add_envp_node(sh->n_export, "PWD", newpwd);
-    if (update_envp_node(sh->n_export, "OLDPWD", oldpwd) != 0)
-        add_envp_node(sh->n_export, "OLDPWD", oldpwd);
+    if (update_envp_node(&(sh->n_envs), "PWD", newpwd) != 0)
+        add_envp_node(&(sh->n_envs), "PWD", newpwd);
+    if (update_envp_node(&(sh->n_envs), "OLDPWD", oldpwd) != 0)
+        add_envp_node(&(sh->n_envs), "OLDPWD", oldpwd);
+    if (update_envp_node(&(sh->n_export), "PWD", newpwd) != 0)
+        add_envp_node(&(sh->n_export), "PWD", newpwd);
+    if (update_envp_node(&(sh->n_export), "OLDPWD", oldpwd) != 0)
+        add_envp_node(&(sh->n_export), "OLDPWD", oldpwd);
     sh->pwd = newpwd;
     res = update_sh_pwd(sh, newpwd);
     if (res == -1)

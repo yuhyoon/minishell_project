@@ -10,7 +10,7 @@ int			valid_meta(int token, char *mask);
 
 //quote
 int			valid_quote(char *s, int quote, t_char_state *state);
-void		store_quote_seq(t_char_state *char_state, int len, char *ss);
+void		store_quote_seq(t_char_state *char_state, int len);
 int			putchar_quote_state_zero(char *current, int fd);
 int			read_store_fd(int fd);
 

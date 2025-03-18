@@ -42,11 +42,12 @@ int read_store_fd(int fd)
 	unlink("quote_fd");
 	return (size);
 }
-void	store_quote_seq(t_char_state *char_state, int len, char *ss)
+void	store_quote_seq(t_char_state *char_state, int len)
 {
 	int		quote_fd;
-	int	i = 0;
+	int		i;
 
+	i = 0;
 	quote_fd = open("quote_fd", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	while (i < len)
 	{
@@ -86,6 +87,6 @@ int	valid_quote(char *s, int quote, t_char_state *state)
 	}
 	if (is_emthy(&stack) == false && ss[i] == '\0')
 		state->quote *= -1;
-	store_quote_seq(state, i, ss);
+	store_quote_seq(state, i);
 	return (0);
 }

@@ -87,7 +87,7 @@ void	redirect_output(t_child_process *child, t_ready *rdy)
 
 void	*valid_redirect(t_child_process *child, t_ready *rdy)
 {
-	if (valid_rdrct(rdy) != 0 || redirect(&(rdy->rdrct), rdy) != 0)
+	if (valid_rdrct(rdy) != 0 || redirect(rdy) != 0)
 		rdy = NULL;
 	else
 	{

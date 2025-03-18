@@ -71,7 +71,7 @@ int valid_rdrct(t_ready *rdy)
 	return (errno);
 }
 
-int	redirect(t_list **rd_list, t_ready *rdy)
+int	redirect(t_ready *rdy)
 {
 	t_stack	in;
 	t_stack out;

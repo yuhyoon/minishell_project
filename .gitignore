@@ -1,5 +1,6 @@
 minitalk/
 0.01-dummy/libft
+*.out
 *.a
 *.o
 lib/libft/ft_atoi.o
@@ -149,3 +150,5 @@ lib/libft/ft_toupper.o
 0.1-main/libft/ft_tolower.o
 0.1-main/libft/ft_toupper.o
 0.1-main/libft/ft_atoi.o
+0.3-main/suppression_readline.supp
+0.3-main/minish

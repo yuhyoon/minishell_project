@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 15:05:44 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/17 11:56:04 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/17 14:55:22 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	exit_err_msg(char *copy_str, int code)
 {
-    ft_putchar_fd("exit\n", 2);
+    ft_putstr_fd("exit\n", 2);
 	ft_putstr_fd("minishell: exit: ", 2);
 	if (copy_str)
     {
@@ -39,9 +39,9 @@ int check_exit_cmd(char *second_cmd)
     {
         if (ft_isalnum(*tmp) != 4)
             break;
-        tmp++;
+        (*tmp)++;
     }
-    if (*tmp != NULL)
+    if (*tmp != '\0')
         code = -1;
     else
         code = ft_atoi(second_cmd);
@@ -80,13 +80,13 @@ void    f_exit_with_msg(int size, char *second_cmd)
 //free_minish 입력 시 void로 변경
 int f_exit(t_minish *sh)
 {
+    // t_list  *commands;
+    // commands = (((t_ready *)(sh->ready->content))->text);
     char    **cmds;
-    t_list  *commands;
     int     size;
-
-    cmds = ((t_ready *)(sh->ready->content))->cmd;
-    commands = (((t_ready *)(sh->ready->content))->text);
-    size = ft_lstsize(commands);
+    
+    cmds = ((t_ready *)sh->ready->content)->cmd;
+    size = f_count_char(cmds);
     if (size == 1)
         f_exit_only(0);
     else if (size > 2)

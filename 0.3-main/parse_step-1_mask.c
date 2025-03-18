@@ -31,11 +31,8 @@ int	handle_putchar(t_char_state *char_state, int fd)
 int write_replace_spaces(char *s, int replace_fd)
 {
 	t_char_state	char_state;
-	int				i;
-	int	len;
 	
 	init_char_state(&char_state, s);
-	i = 0;
 	while (*(char_state.current) != '\0')
 	{
 		set_char_state(char_state.current, &char_state);

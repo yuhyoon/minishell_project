@@ -34,13 +34,13 @@ char	*valid_env(char *tmp)
 
 int get_plain_text(char *s1, char *s2, char *src, t_list **head)
 {
-    int i;
+    int		i;
 	char	*rsult;
 	t_list	*new;
 
     i = 0;
-    while (s1[i] == (*s2 - '0'))
-        i++;
+	while (s1[i] == (*s2 - '0'))
+		i++;
 	rsult = malloc(sizeof(char) * (i + 1));
 	ft_memcpy(rsult, src, i);
 	rsult[i] = '\0';
@@ -71,7 +71,7 @@ void    create_text_list(t_ready *rdy, char *src, char *mask, t_minish *sh)
 {
     int 	i;
     t_list  *head;
-    t_list  *lst;
+	(void)	sh;
 
     i = 0;
     head = NULL;

@@ -222,7 +222,10 @@ int	execute(t_minish *sh)
 	printf("### cmd_count:%d\n", sh->cmd_count);
 	lst = sh->ready;
 	if (sh->cmd_count == 1)
+	{
+		//free_minish->memset이 기존 evnp 변수들 다 지움
 		sh->built_code = execute_single_is_builtin(lst, sh);
+	}
 	if (sh->built_code == 0)
 	{
 		sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_count);
@@ -246,6 +249,15 @@ int	execute(t_minish *sh)
 		}
 	}
 	free_minish(sh);
+}
+
+void	free_init_envps(t_minish *sh)
+{
+	if (sh->pwd)
+		free(sh->pwd);
+	free_double_char(sh->envp);
+	free_envps(&(sh->n_envs));
+	free_envps(&(sh->n_export));
 }
 
 // cc -g main.c token_step-1_utils.c libft/libft.a -lreadline -o 1
@@ -272,6 +284,10 @@ int main(int ac, char **av, char **envp)
 		}
 		// verify_exitcode();
 	}
+	// if (&(sh.pwd))
+	// 	free(sh.pwd);
+	free_init_envps(&sh);
+	// ft_memset(&sh, 0, sizeof(t_minish));
 	// free_minish()
 	rl_clear_history();
 	return (0);

@@ -1,24 +1,19 @@
 #include "main.h"
 #include "parse.h"
 
-void    err_such(int exit, t_redrct *rdrct)
+void    err_such(int exit, char *obj)
 {
-    char *obj;
 
     exitcode = exit;
-    obj = rdrct->obj;
 	write(2, "minish: ", 8);
 	write(2, obj, ft_strlen(obj));
 	write(2, ": ", 2);
     write(2, "No such file or directory\n", 25);
 }
 
-void    err_permission(int exit, t_redrct *rdrct)
+void    err_permission(int exit, char *obj)
 {
-	char *obj;
-
 	exitcode = exit;
-    obj = rdrct->obj;
 	write(2, "minish: ", 8);
 	write(2, obj, ft_strlen(obj));
 	write(2, ": ", 2);

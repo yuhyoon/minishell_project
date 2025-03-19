@@ -23,8 +23,33 @@ void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 	(void) rdy;
 	if (child->state == STATE_CHECK_RDRCT || child->state == STATE_CHECK_PIPE)
 		close_pp(child, sh);
-	else if (child->state == STATE_CHECK_CMD)
-		err_exec(127, child->cmd[0]);
+}
+
+void	*access_exepath(t_child_process *child, t_ready *rdy)
+{
+	int	ok;
+	int	n;
+	t_ready	*rsult;
+
+	ok = F_OK;
+	n = -1;
+	rsult = NULL;
+	while (child->exe_path != NULL && \
+			access(child->exe_path, ok) == 0 && ++n < 2) 
+		ok = X_OK;
+	if (n < 2)
+	{
+		if (ok == F_OK && (ft_strchr(rdy->cmd[0], '/') == NULL))
+			err_exec(127, rdy->cmd[0]);
+		else if (ok == F_OK)
+			err_such(127, rdy->cmd[0]);
+		else if (ok == X_OK)
+			err_permission(126, rdy->cmd[0]);
+		free(child->exe_path);
+	}
+	else
+		rsult = rdy;
+	return (rsult);
 }
 
 void	*valid_exepath(t_child_process *child, t_ready *rdy, t_minish *sh)
@@ -32,15 +57,13 @@ void	*valid_exepath(t_child_process *child, t_ready *rdy, t_minish *sh)
 	if (is_builtin(child->cmd[0]) == true)
 	{
 		child->state = STATE_EXEC_BUILTIN;
+		return (rdy);
 	}
 	child->exe_path = get_exepath(rdy);
-	if (child->exe_path == NULL)
-	{
-		rdy = NULL;
-	}
-	if (sh->cmd_count > 1)
+	rdy = access_exepath(child, rdy);
+	if (rdy != NULL && sh->cmd_count > 1)
 		child->state = STATE_CHECK_PIPE;
-	else
+	else if (rdy != NULL && sh->cmd_count < 2 )
 		child->state = STATE_EXEC_CMD;
 	return (rdy);
 }
@@ -138,7 +161,7 @@ int	prmssn_rdrct(t_redrct *rdrct)
 	else if (rdrct->type == OUT_RD && rdrct->parts == 2)
 		flg = access(rdrct->obj, W_OK);
 	if (flg != 0)
-		err_permission(1, rdrct);
+		err_permission(1, rdrct->obj);
 	return (flg);
 }
 
@@ -183,9 +206,7 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 			set_pipe(&child, sh, rdy);
 		else if (child.state == STATE_EXEC_CMD)
 			execute_cmd(&child);
-	}
-	
-	child_process_handle(&child, rdy, sh);
-	
-	return (child.state);
+	}	
+	child_process_handle(&child, rdy, sh);	
+	return (exitcode);
 }

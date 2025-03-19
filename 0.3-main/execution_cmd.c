@@ -76,6 +76,6 @@ char	*get_exepath(t_ready *rdy)
 	if (ft_strchr(name, '/') == NULL)
 		exe_path = find_exepath(name);
 	else
-		exe_path = name;
+		exe_path = ft_strdup(name);
 	return (exe_path);
 }

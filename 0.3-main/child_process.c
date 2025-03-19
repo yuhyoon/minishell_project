@@ -85,7 +85,7 @@ void	redirect_output(t_child_process *child, t_ready *rdy)
 		}
 }
 
-void	*valid_redirect(t_child_process *child, t_ready *rdy)
+void	*valid_redirect_old(t_child_process *child, t_ready *rdy)
 {
 	if (valid_rdrct(rdy) != 0 || redirect(rdy) != 0)
 		rdy = NULL;
@@ -112,7 +112,7 @@ void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy)
 	//redirect_output(child, rdy);
 	if (child->num < sh->cmd_count && sh->cmd_count > 1)
 	{
-		printf("{{{{{{{{{{{{child num:%d, dup2,\n", child->num);
+		//printf("{{{{{{{{{{{{child num:%d, dup2,\n", child->num);
 		dup2(child->pp[1], child->output_fd);
 		close(child->pp[1]);
 		close(child->pp[0]);
@@ -126,6 +126,44 @@ void	execute_cmd(t_child_process *child)
 		child->state = STATE_COMPLETE;
 }
 
+int	prmssn_rdrct(t_redrct *rdrct)
+{
+	int	flg;
+
+	flg = 0;
+	if (rdrct == NULL)
+		return (flg);
+	if (rdrct->type == IN_RD && rdrct->parts == 1)
+		flg = access(rdrct->obj, R_OK);
+	else if (rdrct->type == OUT_RD && rdrct->parts == 2)
+		flg = access(rdrct->obj, W_OK);
+	if (flg != 0)
+		err_permission(1, rdrct);
+	return (flg);
+}
+
+void	*valid_redirect(t_child_process *child, t_ready *rdy)
+{
+	int	v;
+
+	v = valid_rdrct(rdy);
+	if (v == 0)
+	{
+		redirect(rdy);
+		if (prmssn_rdrct(rdy->rdrct_in) != 0 || prmssn_rdrct(rdy->rdrct_out) != 0)
+			rdy = NULL;
+		else
+		{
+			redirect_input(child, rdy);
+			redirect_output(child, rdy);
+			child->state = STATE_CHECK_CMD;
+		}
+	}
+	else
+		rdy = NULL;
+	return (rdy);
+}
+
 int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 {
 	t_child_process	child;
@@ -134,6 +172,7 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh)
 	//printf("[[[[[child_process\n");
 	while (rdy != NULL && child.state < STATE_COMPLETE)
 	{
+			
 		if (child.state == STATE_CHECK_RDRCT)
 			rdy = valid_redirect(&child, rdy);
 		else if (child.state == STATE_CHECK_CMD)

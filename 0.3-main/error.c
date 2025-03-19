@@ -17,7 +17,7 @@ void    err_permission(int exit, t_redrct *rdrct)
 {
 	char *obj;
 
-    exitcode = exit;
+	exitcode = exit;
     obj = rdrct->obj;
 	write(2, "minish: ", 8);
 	write(2, obj, ft_strlen(obj));

@@ -7,7 +7,7 @@
 
 typedef enum s_child_state
 {
-	STATE_CHECK_RDRCT,
+	STATE_CHECK_RDRCT = 1,
 	STATE_EXEC_BUILTIN,
 	STATE_CHECK_CMD = 127,
 	STATE_CHECK_PIPE,
@@ -30,6 +30,7 @@ int	child_process(t_ready *rdy, int *pp, t_minish *sh);
 void	execute_cmd(t_child_process *child);
 void	set_pipe(t_child_process *child, t_minish *sh, t_ready *rdy);
 void	*valid_redirect(t_child_process *child, t_ready *rdy);
+int	prmssn_rdrct(t_redrct *rdrct);
 void	init_child_process(t_child_process *child, int *pp, t_ready *rdy, t_minish *sh);
 void	*valid_exepath(t_child_process *child, t_ready *rdy, t_minish *sh);
 void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh);

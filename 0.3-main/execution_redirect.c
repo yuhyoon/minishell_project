@@ -49,14 +49,18 @@ int valid_rdrct(t_ready *rdy)
     t_list	*lst;
 	t_redrct	*rdrct;
 	int		n;
+	int		acc_flg;
 
 	lst = rdy->rdrct;
 	errno = 0;
 	n = rdy->rdrct_num;
-	while (n && errno == 0)
+	acc_flg = 0;
+	while (n && acc_flg == 0)
 	{
 		rdrct = (t_redrct *)(lst->content);printf("first rdrct obj:%s\n", rdrct->obj);
-		access(rdrct->obj, F_OK);//printf("errno: %d\n", errno);
+		if (rdrct->type == IN_RD && rdrct->parts == 1)
+			acc_flg = access(rdrct->obj, F_OK);//printf("errno: %d\n", errno);
+		/*
 		if ((rdrct->type == OUT_RD && rdrct->parts == 1) || (rdrct->type == IN_RD && rdrct->parts == 2))
 			errno = 0;
 		if (errno != 0)
@@ -65,10 +69,13 @@ int valid_rdrct(t_ready *rdy)
 			rdrct->parts == 1 && 
 			access(rdrct->obj, R_OK) != 0)
 			err_permission(1, rdrct);
+		*/
 		lst = lst->next;
 		n--;
 	}
-	return (errno);
+	if (acc_flg != 0)
+		err_such(1, rdrct);
+	return (acc_flg);
 }
 
 int	redirect(t_ready *rdy)

@@ -49,6 +49,8 @@ char	*find_exepath(char *name)
 	char	*cmd_path;
 	char	*exe_path;
 
+	if (*name == '\0')
+		return (NULL);
 	env_paths = ft_split(getenv("PATH"), ':');
 	cmd_path = ft_strjoin("/", name);
 	i = 0;

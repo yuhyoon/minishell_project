@@ -21,14 +21,19 @@ char	*valid_env(char *tmp)
 	{
 		env = malloc(sizeof(char));
 		*env = '\0';
-		if (*tmp == '?') //todo: exitcode로 변경 
+		/*
+		if (*(tmp) == '?') //todo: exitcode로 변경 
 		{
 			free(env);
 			env = ft_itoa(exitcode);
 		}
+		*/
 	}
 	else
+	{
 		env = ft_strdup(env);
+		free(tmp);
+	}
 	return (env);
 }
 
@@ -53,18 +58,21 @@ int	get_variable(char *mask, char *src, t_list **head)
 {
 	int		i;
 	char	*rsult;
-	char	*tmp;
 	t_list	*new;
 
-	i = 0;
-	i++;
-	while (mask[i] == 1)
-		i++;
-	tmp = ft_substr(&src[i - (i - 1)], 0, i - 1); //$HOME| 처럼 뒤에 바로 파이프가 올수도있으니까..
-	rsult = valid_env(tmp); //널반환하는지 확인
+	i = 1;
+	if (mask[i] == 0 || mask[i] == '\n')
+		rsult = ft_substr(src, 0, 1);
+	else if (src[i++] == '?')
+		rsult = ft_itoa(exitcode);
+	else
+	{
+		while (mask[i] == 1)
+			i++;
+		rsult = valid_env(ft_substr(src, 1, i));
+	}
 	new = ft_lstnew(rsult);
 	ft_lstadd_back(head, new);
-	free(tmp);
 	return (i);
 }
 void    create_text_list(t_ready *rdy, char *src, char *mask, t_minish *sh)

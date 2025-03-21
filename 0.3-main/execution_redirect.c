@@ -74,7 +74,7 @@ int valid_rdrct(t_ready *rdy)
 		n--;
 	}
 	if (acc_flg != 0)
-		err_such(1, rdrct);
+		err_such(1, rdrct->obj);
 	return (acc_flg);
 }
 

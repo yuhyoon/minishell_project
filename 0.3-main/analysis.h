@@ -30,7 +30,8 @@ int			count_text(char *mask);
 void    close_fd(int fd);
 void    handle_heredoc_child(int write_fd, char *delimeter);
 void    create_heredoc_pipe(int *read_fd, int *write_fd);
-void    handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd, pid_t pid);
+// void    handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd, pid_t pid);
+void    handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd);
 void    f_heredoc(t_redrct *rdrct);
 
 #endif

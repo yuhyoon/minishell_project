@@ -11,30 +11,29 @@ void    handle_heredoc_child(int write_fd, char *delimeter)
 	char	*line;
 
 	close_fd(write_fd - 1);
-	printf("close : %d\n", write_fd - 1);
-	printf("write_fd : %d\n", write_fd);
-	// set_heredoc_signal(during_heredoc);
-	while (1)
+	set_signal_heredoc();
+	while (line = readline("> "))
 	{
-		line = readline("> ");
 		if (!line)
 		{
 			//> bash: warning: here-document at line ?? delimited by end-of-file (wanted `eof')
 			write(write_fd, "\n", 1);
 			break;
 		}
-		if (ft_strncmp(line, delimeter, ft_strlen(delimeter)) == 0)
+		else
 		{
-			if (line)
-				free(line);
-			break;
-		}
+			if (ft_strncmp(line, delimeter, ft_strlen(delimeter)) == 0)
+			{
+				if (line)
+					free(line);
+				break;
+			}
 		write(write_fd, line, ft_strlen(line));
 		write(write_fd, "\n", 1);
 		free(line);
+		}
 	}
 	close_fd(write_fd);
-	// exitcode = 0;
 	exit(0);
 }
 
@@ -48,7 +47,7 @@ void    create_heredoc_pipe(int *read_fd, int *write_fd)
 	*write_fd = fd[1];
 }
 
-void handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd, pid_t child_pid)
+void handle_heredoc_parent(t_redrct *rdrct, int read_fd, int write_fd)
 {
     int status;
 
@@ -75,7 +74,7 @@ void	f_heredoc(t_redrct *rdrct)
 	if (pid == 0)
 		handle_heredoc_child(write_fd, rdrct->obj);
 	else
-		handle_heredoc_parent(rdrct, read_fd, write_fd, pid);
+		handle_heredoc_parent(rdrct, read_fd, write_fd);
 }
 
 t_redrct	*init_rdrct(void)
@@ -95,6 +94,7 @@ int create_rdrct(char *src, char *mask, t_list **head)
 	int			len;
 	t_list		*lst;
 
+	set_signal_fork();
 	lst = ft_lstnew(init_rdrct());
 	i = 0;
 	new = ((t_redrct *)((lst)->content));

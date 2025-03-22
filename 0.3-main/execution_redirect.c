@@ -57,7 +57,7 @@ int valid_rdrct(t_ready *rdy)
 	acc_flg = 0;
 	while (n && acc_flg == 0)
 	{
-		rdrct = (t_redrct *)(lst->content);printf("first rdrct obj:%s\n", rdrct->obj);
+		rdrct = (t_redrct *)(lst->content);//printf("first rdrct obj:%s\n", rdrct->obj);
 		if (rdrct->type == IN_RD && rdrct->parts == 1)
 			acc_flg = access(rdrct->obj, F_OK);//printf("errno: %d\n", errno);
 		/*

@@ -93,7 +93,7 @@ void	redirect_input(t_child_process *child, t_ready *rdy)
 		if (rdy->rdrct_in)
 		{
 			dup2(rdy->rdrct_in->fd, child->input_fd); //n copy to rdy->input;
-			//child->input_fd = rdy->rdrct_in->fd;
+			child->input_fd = rdy->rdrct_in->fd;
 			close(rdy->rdrct_in->fd);
 		}
 }
@@ -103,7 +103,7 @@ void	redirect_output(t_child_process *child, t_ready *rdy)
 		if (rdy->rdrct_out)
 		{
 		      dup2(rdy->rdrct_out->fd, child->output_fd); //n copy to rdy->input;
-		      //child->output_fd = rdy->rdrct_out->fd;
+		      child->output_fd = rdy->rdrct_out->fd;
 			  close(rdy->rdrct_out->fd);
 		}
 }

@@ -1,4 +1,4 @@
-NAME = 0321-minish
+NAME = 0322-minish
 
 CC = cc
 CFLAGS = -g -Wall -Wextra -Werror 

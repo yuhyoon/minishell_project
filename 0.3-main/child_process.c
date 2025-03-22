@@ -19,11 +19,8 @@ int	is_builtin(char *cmd_name)
         return (6);
     else if (ft_strncmp(cmd_name, "exit", ft_strlen(cmd_name)) == 0)
         return (7);
-    // printf("res %d\n", res);
     return (0);
 }
-
-
 
 void	close_pp(t_child_process *child, t_minish *sh)
 {
@@ -33,6 +30,7 @@ void	close_pp(t_child_process *child, t_minish *sh)
 		close(child->pp[1]);
 	}
 }
+
 void    child_process_handle(t_child_process *child, t_ready *rdy, t_minish *sh)
 {
 	(void) rdy;
@@ -47,7 +45,7 @@ void	*valid_exepath(t_child_process *child, t_ready *rdy, t_minish *sh)
 	child->bulitin_code = is_builtin(child->cmd[0]);	
 	if (child->bulitin_code != 0) //1-7 이면 빌트인
 		child->state = STATE_EXEC_BUILTIN;
-	else
+	else if (child->bulitin_code == 0)
 	{
 		child->exe_path = get_exepath(rdy);
 		if (child->exe_path == NULL)
@@ -58,8 +56,8 @@ void	*valid_exepath(t_child_process *child, t_ready *rdy, t_minish *sh)
 			child->state = STATE_CHECK_PIPE;
 		else
 			child->state = STATE_EXEC_CMD;
-		return (rdy);
 	}
+	return (rdy); //todo : 확인 요망
 }
 
 void	init_child_process(t_child_process *child, int *pp, t_ready *rdy, t_minish *sh)
@@ -159,13 +157,14 @@ int    execute_bulitin(t_child_process *child, t_minish *sh)
     else if (child->bulitin_code == 5)
         res = f_env(sh);            
     else if (child->bulitin_code == 6)
-        res = 0; //f_unset
+        res = f_unset(sh);
     else if (child->bulitin_code == 7)
         res = f_exit(sh);
 	else
 		printf("bc : %d\n", child->bulitin_code);
-    
 	child->state = STATE_COMPLETE;
+    if (sh->cmd_count > 1) //todo: 확인 요망
+		child->state = STATE_CHECK_PIPE;
     return (res);
 }
 

@@ -53,10 +53,14 @@ typedef struct s_minish
 	char	*pwd;
 }t_minish;
 
+// signal
 void	set_signal(void *handler);
 void	before_readline(int signal);
+void	do_sigint_heredoc(int signum);
+void	set_signal_heredoc(void);
+void	set_signal_fork(void);
 
-void    f_init_envps(t_minish *sh);
+// void    f_init_envps(t_minish *sh);
 
 //builtins
 int init_envp(t_minish *sh, char **envp);
@@ -66,6 +70,7 @@ int f_pwd(t_minish *sh);
 int f_exit(t_minish *sh);
 int	f_env(t_minish *sh);
 int f_export(t_minish *sh);
+int	f_unset(t_minish *sh);
 
 
 #endif

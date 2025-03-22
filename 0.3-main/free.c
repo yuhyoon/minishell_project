@@ -38,7 +38,7 @@ void	free_envps(t_envp **node)
 {
 	t_envp	*current;
 	t_envp	*next;
-	int		i;
+
 	if (!node || !*node)
 		return;
 	current = *node;
@@ -70,9 +70,9 @@ void	free_envps(t_envp **node)
 
 void	free_minish(t_minish *minish)
 {
-	t_list	**head;
-	t_list	*current;
-	t_ready	*ready_content;
+	// t_list	**head;
+	// t_list	*current;
+	// t_ready	*ready_content;
 
 	if (minish->mask)
 		dengling(minish->mask, 1);

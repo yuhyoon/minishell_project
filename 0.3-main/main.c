@@ -177,11 +177,16 @@ int	execute_single_builtin(int bulitin_code, t_minish *sh) //sh->ready->content-
     else if (bulitin_code == 3)
         res = f_pwd(sh);            
     else if (bulitin_code == 4)
-        res = f_export(sh);            
+	{
+		// int i = -1;
+		// while (++i < ft_strlen(sh->mask))
+		// 	printf("mask ; %s\n",ft_itoa(sh->mask[i]));
+        res = f_export(sh);           
+	}
     else if (bulitin_code == 5)
         res = f_env(sh);            
     else if (bulitin_code == 6)
-        res = 0; //f_unset
+        res = f_unset(sh); //f_unset
     else if (bulitin_code == 7)
         res = f_exit(sh);
 	//정상종료일때랑 아닐때
@@ -191,12 +196,12 @@ int	execute_single_builtin(int bulitin_code, t_minish *sh) //sh->ready->content-
 int	execute_single_is_builtin(t_list *lst, t_minish *sh)
 {
 	t_ready	*rdy;
-	int		i;
+	// int		i;
 	int		bulitin_code;
 	int		result;
 
 	rdy = (t_ready *)(lst->content);
-	i = 0;
+	// i = 0;
 	bulitin_code = is_builtin(rdy->cmd[0]);
 	result = bulitin_code;
 	if (bulitin_code != 0) //bulitin이 아니면 result 0으로 종료
@@ -218,25 +223,37 @@ int	execute(t_minish *sh)
 	int 		i;
 	int 		status;
 
+	i = 0;
 	sh->cmd_count = ft_lstsize(sh->ready);
-	//printf("### cmd_count:%d\n", sh->cmd_count);
-	sh->child_pids = malloc(sizeof(pid_t) * sh->cmd_count);
+	printf("### cmd_count:%d\n", sh->cmd_count);
 	lst = sh->ready;
 	if (sh->cmd_count == 1)
 	{
+		
 		//free_minish->memset이 기존 evnp 변수들 다 지움
 		sh->built_code = execute_single_is_builtin(lst, sh);
 	}
 	if (sh->built_code == 0)
 	{
-		//printf("***child_pids %ld***\n", sh->child_pids[i]);	
-		waitpid(sh->child_pids[i], &status, 0);
-		 if (i == sh->cmd_count - 1)
-		 {
-		 	exitcode = WEXITSTATUS(status);
-		 	//printf("exitcode: %d\n", exitcode);
-		 }
-		i++;
+		printf("???");
+		while (lst)
+		{
+			rdy = (t_ready *)(lst->content);
+			create_process(rdy, sh);
+			lst = lst->next;
+		}
+		i = 0;
+		while (i < sh->cmd_count)
+		{
+			//printf("***child_pids %ld***\n", sh->child_pids[i]);	
+			waitpid(sh->child_pids[i], &status, 0);
+			 if (i == sh->cmd_count - 1)
+			 {
+				 exitcode = WEXITSTATUS(status);
+				 //printf("exitcode: %d\n", exitcode);
+			 }
+			i++;
+		}
 	}
 	free_minish(sh);
 	return (0);
@@ -252,7 +269,7 @@ void	free_init_envps(t_minish *sh)
 }
 
 //03.17: -WWW:temp:: delete envp
-int main(int ac, char **av) 
+int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
@@ -260,7 +277,7 @@ int main(int ac, char **av)
 	int			res;
 
 	set_signal(before_readline);
-	init_minish(&sh, envp);
+	init_minish(&sh, envp); 
 	while ((res = read_input(&sh)))
 	{
 		if (res == 1)
@@ -270,8 +287,14 @@ int main(int ac, char **av)
 				//printf("exitcode:%d\n", exitcode);
 				free_minish(&sh);
 			}
+			// int ii = -1;
+			// int e = ft_strlen(sh.mask);
+			// printf("e : %d\n", e);
+			// while (++ii < e)
+			// 	printf("mask ; %s\n",ft_itoa(sh.mask[ii]));
 			execute(&sh);
 		}
+		
 		//temp: -WWW comfile 
 		//verify_exitcode();
 		// f_init_envps(&sh);

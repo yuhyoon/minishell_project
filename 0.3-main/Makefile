@@ -1,7 +1,6 @@
 NAME = w-minish
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror 
+CC = cc # -Wall -Wextra -Werror 
 SRCS = main.c \
 signals.c \
 stack.c \
@@ -42,11 +41,17 @@ all: libft $(NAME)
 libft:
 	make -C libft
 
+# %.o: %.c
+# 	$(CC) $(CFLAGS) -c $< -o $@
+
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) -c $< -o $@
+
+# $(NAME): $(OBJS) $(LIBFTA)
+# 	$(CC) $(CFLAGS) $(OBJS) $(LIBFTA) $(READLINEFLG) -o $(NAME)
 
 $(NAME): $(OBJS) $(LIBFTA)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFTA) $(READLINEFLG) -o $(NAME)
+	$(CC) $(OBJS) $(LIBFTA) $(READLINEFLG) -o $(NAME)
 
 clean:
 	make bonus -C libft clean

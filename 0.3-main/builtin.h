@@ -30,6 +30,8 @@ void f_sort_and_store_envp(char **envp, t_envp **sorted_envp);
 void	free_node_t_envp(t_envp **envp); //전이름 : free_n_envps
 int	add_envp_node(t_envp **head, char *key, char *value);
 
+int	update_t_envp(t_envp *node, char *key, char *value);
+char	*find_get_t_envp(t_envp *node, char *key);
 int		update_envp_node(t_envp **head, char *key, char *value);
 // void	update_or_add_envp_node(t_envp **head, char *key, char *value);
 void	update_or_add_envp_node(t_envp **head, char *set);

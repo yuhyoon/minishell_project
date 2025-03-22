@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:31:38 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/18 07:00:29 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/22 10:33:13 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,9 @@ void	delete_t_envp(t_envp **head, char *key)
 	t_envp *prev;
 
 	if (!head || !*head)
-		return;
-
+		return ;
 	current = *head;
 	prev = NULL;
-
 	while (current)
 	{
 		if (ft_strncmp(current->key, key, ft_strlen(current->key)) == 0)
@@ -79,7 +77,7 @@ void	delete_t_envp(t_envp **head, char *key)
 			free(current->key);
 			free(current->value);
 			free(current);
-			return;
+			return ;
 		}
 		prev = current;
 		current = current->next;
@@ -89,14 +87,29 @@ void	delete_t_envp(t_envp **head, char *key)
 //노드 수정 (value 값만 수정)
 int	update_t_envp(t_envp *node, char *key, char *value)
 {
-
+	while (node != NULL) 
+	{
+        if (strcmp(node->key, key) == 0) 
+		{
+            free(node->value);
+            node->value = ft_strdup(value);
+            return (1);
+        }
+        node = node->next;
+    }
+    return (0);
 }
 
-
 //노드 key 조회
-int	find_get_t_envp(t_envp *node, char *key)
+char	*find_get_t_envp(t_envp *node, char *key)
 {
-	return (1);
+	while (node != NULL) 
+	{
+        if (ft_strncmp(node->key, key, ft_strlen(node->key)) == 0) 
+            return (node->value);
+        node = node->next;
+    }
+    return (NULL);
 }
 
 // f_getenv 수정 (이거 env.c 옮겨놓기)

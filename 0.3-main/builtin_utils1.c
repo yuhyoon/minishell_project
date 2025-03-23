@@ -6,7 +6,7 @@
 /*   By: hyeyeom <hyeyeom@42student.gyeongsan.kr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:31:38 by hyeyeom           #+#    #+#             */
-/*   Updated: 2025/03/22 10:33:13 by hyeyeom          ###   ########.fr       */
+/*   Updated: 2025/03/23 01:30:44 by hyeyeom          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,11 +137,18 @@ void	update_or_add_envp_node(t_envp **head, char *set)
 	char	*key;
 	char	*value;
 	char	**sets;
-	int	res;
+	int		res;
+	int		len;
+
+	len = ft_strlen(set);
 	sets = ft_split(set, '=');
 	key = ft_strdup(sets[0]);
-	if (!sets[1])
-		value = ft_strdup("\0");
+	if (sets[1] == NULL)
+	{
+		value = NULL;
+		if (set[(len - 1)] == '=')
+			value = ft_strdup("\0");
+	}
 	else
 	{
 		value = ft_strdup(sets[1]);
@@ -150,10 +157,14 @@ void	update_or_add_envp_node(t_envp **head, char *set)
 	}
 	if (update_envp_node(head, key, value) == 1)
 		add_envp_node(head, key, value);
+	
+	//**char free하는 걸로 바꾸기 */
 	free(key);
-	free(value);
 	free(sets[0]);
-	free(sets[1]);
+	if (!value)
+		free(value);
+	if (!sets[1])
+		free(sets[1]);
 	free(sets);
 }
 
@@ -166,7 +177,10 @@ int	add_envp_node(t_envp **head, char *key, char *value)
 	if (!new_node)
 		return (-1);
 	new_node->key = ft_strdup(key);
-	new_node->value = ft_strdup(value);
+	if (value)
+		new_node->value = ft_strdup(value);
+	else
+		value = NULL;
 	// new_node->o_envp = NULL;
 	new_node->count = 0;
 	new_node->next = NULL;
@@ -191,10 +205,13 @@ int	update_envp_node(t_envp **head, char *key, char *value)
 	{
 		if (ft_strncmp(current->key, key, ft_strlen(current->key)) == 0)
 		{
-			free(current->value);
-			current->value = ft_strdup(value);
-			if (!current->value)
-				return (-1);
+			if (*value != '\0')
+			{
+				free(current->value);
+				current->value = ft_strdup(value);
+				if (!current->value)
+					return (-1);
+			}
 			return (0);
 		}
 		current = current->next;

@@ -154,3 +154,5 @@ lib/libft/ft_toupper.o
 0.3-main/minish
 0.3-main/test.c
 .vscode/settings.json
+0.3-main/w-minish
+0.3-main/test_exec.c
